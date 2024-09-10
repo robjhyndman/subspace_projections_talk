@@ -26,12 +26,9 @@ abstract: Univariate, multivariate, and hierarchical forecasts can all be improv
 ---
 
 ```{r}
+#| label: load-packages
 source("setup.R")
 ```
-
-## Outline
-
-\vspace*{0.7cm}\tableofcontents
 
 # Improving hierarchical forecasts
 
@@ -39,7 +36,7 @@ source("setup.R")
 
 ```{r}
 #| label: ausmap
-#| fig-height: 3.5
+#| eval: false
 library(sf)
 # Use Okabe-Ito color-blind friendly color palette
 state_colors <- c(
@@ -52,6 +49,7 @@ state_colors <- c(
   `Tasmania` = "#cc79a7",
   `Australian Capital Territory` = "#cccccc"
 )
+Cairo::CairoPDF(here::here("figs/ausmap.pdf"), width = 15/1.5, height = 7/1.5)
 read_sf("tourism/Tourism_Regions_2020.shp") |>
   rename(State = "STE_NAME16") |>
   ggplot() +
@@ -59,7 +57,10 @@ read_sf("tourism/Tourism_Regions_2020.shp") |>
   theme_void() +
   theme(text = ggplot2::element_text(family = 'Fira Sans')) +
   scale_fill_manual(values = state_colors)
+crop::dev.off.crop(here::here("figs/aus_map.pdf"))
 ```
+
+\centerline{\includegraphics[width=14cm,height=8cm]{figs/aus_map.png}}
 
 \only<2>{\begin{textblock}{6.5}(9.2,1.4)
 \begin{block}{}%\fontsize{12}{13}\sf
@@ -81,19 +82,18 @@ read_sf("tourism/Tourism_Regions_2020.shp") |>
 
 ```{r}
 #| label: tourism_plots
-#| fig-width: 12
-#| fig-height: 5
+#| eval: false
 p1 <- tourism |>
   summarise(visitors = sum(visitors)) |>
   autoplot(visitors) +
-  ylab("Overnight trips") + xlab("Month") +
-  scale_y_log10() +
+  ylab("Visitor nights") + xlab("Month") +
+  #scale_y_log10() +
   ggtitle("Total domestic travel: Australia")
 p2 <- tourism |>
   group_by(state) |>
   summarise(visitors = sum(visitors)) |>
   autoplot(visitors) +
-  ylab("Overnight trips") + xlab("Month") +
+  ylab("Visitor nights") + xlab("Month") +
   scale_y_log10() +
   ggtitle("Total domestic travel: by state") +
   scale_color_manual(
@@ -113,128 +113,91 @@ p3 <- tourism |>
   filter(state == "NSW") |>
   group_by(zone) |>
   summarise(visitors = sum(visitors)) |>
-  mutate(zone = paste0("NSW/", zone)) |>
   autoplot(visitors) +
-  ylab("Overnight trips") + xlab("Month") +
-  scale_y_log10() +
-  ggtitle("Total domestic travel: NSW by zone") +
-  guides(colour = guide_legend(title = "state/zone"))
+  ylab("Visitor nights") + xlab("Month") +
+  #scale_y_log10() +
+  ggtitle("Total domestic travel: NSW by zone")
 p4 <- tourism |>
   filter(zone == "South NSW") |>
+  group_by(region) |>
+  summarise(visitors = sum(visitors)) |>
   autoplot(visitors) +
-  ylab("Overnight trips") + xlab("Month") +
-  scale_y_log10() +
+  ylab("Visitor nights") + xlab("Month") +
+  #scale_y_log10() +
   ggtitle("Total domestic travel: South NSW by region")
-aligned_plots <- align_patches(p1, p2, p3, p4)
+p5 <- tourism |>
+  group_by(purpose) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  ylab("Visitor nights") + xlab("Month") +
+  #scale_y_log10() +
+  ggtitle("Total domestic travel: by purpose of travel")
+p6 <- tourism |>
+  filter(region == "Snowy Mountains") |>
+  group_by(purpose) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  ylab("Visitor nights") + xlab("Month") +
+  #scale_y_log10() +
+  ggtitle("Total domestic travel: Snowy Mountains by purpose of travel")
+
+aligned_plots <- align_patches(p1, p2, p3, p4, p5, p6)
 for (i in seq_along(aligned_plots)) {
   fname <- paste0("./figs/tourism", i, ".pdf")
-  cairo_pdf(fname, width = 12 * .8, height = 5 * .8)
+  Cairo::CairoPDF(fname, width = 15/1.5, height = 7/1.5)
   print(aligned_plots[[i]])
   crop::dev.off.crop(fname)
 }
 ```
 
-\only<1>{\placefig{0.1}{1.4}{width=15.8cm}{tourism1}}
-\only<2>{\placefig{0.1}{1.4}{width=15.8cm}{tourism2}}
-\only<3>{\placefig{0.1}{1.4}{width=15.8cm}{tourism3}}
-\only<4>{\placefig{0.1}{1.4}{width=15.8cm}{tourism4}}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism4}}
+\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism5}}
+\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism6}}
 
-## Spectacle sales
+## Australian tourism data
 
-\placefig{7}{4.9}{width=8.7cm}{spectacles}
-\begin{textblock}{12}(0.3,1.2)
-\begin{itemize}\tightlist
-    \item Monthly UK sales data from 2000 -- 2014
-    \item Provided by a large spectacle \rlap{manufacturer}
-    \item Split by brand (26), gender (3), price range (6), materials (4), and stores (600)
-    \item About 1 million bottom-level series
+\begin{textblock}{6}(0.2,1.2)
+\centering\fontsize{12}{13}\sf
+\textbf{Geographical division}\\
+\includegraphics[width = 5.5cm, trim= 0 0 180 0, clip=true]{aus_map}\\[-0.4cm]
+\faTimes\\
+\textbf{Purpose of travel}\\
+{\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
+\end{textblock}
+
+\begin{textblock}{10}(6.1,1)
+\fontsize{11}{14}\sf\tabcolsep=0.12cm
+\begin{itemize}
+\item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
+
+\begin{tabular}{lccccc}
+\toprule
+  & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
+  \midrule
+  \textbf{geographical} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
+  \textbf{purpose} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
+  \midrule
+  \textbf{total} & 5 & 35 & 105 & 380 & \textbf{525}\\
+  \bottomrule
+\end{tabular}
+\centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
+
 \end{itemize}
 \end{textblock}
 
-## Hierarchical time series
-\vspace*{-0.2cm}
+\begin{textblock}{9.4}(6.1,6)
+\begin{alertblock}{}\fontsize{12}{15}\sf
+\begin{itemize}
+\item Need forecasts at all levels of aggregation.
+\item Independent forecasts will not add up.
+\item Impose constraints on the forecasts to ensure they are "coherent".
+\end{itemize}
+\end{alertblock}
+\end{textblock}
 
-A \alert{\textbf{hierarchical time series}} is a collection of several time series that are linked together in a hierarchical structure.
-
-\vspace*{-0.5cm}
-\begin{center}
-\begin{minipage}{9.6cm}
-\begin{block}{}
-\begin{tikzpicture}
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15]
-\tikzstyle[level distance=.1cm]
-\tikzstyle[sibling distance=7cm]
-\tikzstyle{level 1}=[sibling distance=33mm,set style={{every node}+=[fill=blue!15]}]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AA}}
-   child {node {AB}}
-   child {node {AC}}
- }
- child {node {B}
-   child {node {BA}}
-   child {node {BB}}
-   child {node {BC}}
- }
- child {node {C}
-   child {node {CA}}
-   child {node {CB}}
-   child {node {CC}}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{center}
-
-\pause\alert{Examples}\vspace*{-0.4cm}
-
- * Tourism by state and region
- * Retail sales by product groups, sub groups, and SKUs
-
-## Grouped time series
-
-A \alert{\textbf{grouped time series}} is a collection of time series that can be grouped together in a number of non-hierarchical ways.
-
-\vspace*{-0.2cm}\begin{center}
-\begin{minipage}{9.2cm}
-\begin{block}{}
-\begin{tikzpicture}[level distance=1.5cm]
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
-\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AX}}
-   child {node {AY}}
- }
- child {node {B}
-   child {node {BX}}
-   child {node {BY}}
- };
-\end{tikzpicture}\hspace*{1cm}
-\begin{tikzpicture}[level distance=1.5cm]
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
-\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
-\node{Total}[edge from parent fork down]
- child {node {X}
-   child {node {AX}}
-   child {node {BX}}
- }
- child {node {Y}
-   child {node {AY}}
-   child {node {BY}}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{center}
-
-\pause\alert{Examples}\vspace*{-0.4cm}
-
- * Tourism by state and purpose of travel
- * Retail sales by product groups/sub groups, and by countries/regions
 
 ## Hierarchical and grouped time series
 
@@ -243,9 +206,8 @@ Almost all collections of time series with linear constraints can be written \rl
 \centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
 \vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
 \item $\by_t=$ vector of all series at time $t$
-\item $ y_{\text{Total},t}= $ aggregate of all series at time
-$t$.
-\item $ y_{X,t}= $ value of series $X$ at time $t$.
+\item $y_{\text{Total},t}=$ aggregate of all series at time $t$.
+\item $y_{X,t}=$ value of series $X$ at time $t$.
 \item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
 \item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
 \end{itemize}
@@ -279,226 +241,17 @@ $t$.
   y_{B,t}\\
   y_{C,t}
   \end{pmatrix}  \\
-  &= {\color{blue}\underbrace{\begin{pmatrix}
-                1 & 1 & 1 \\
-                1 & 0 & 0 \\
-                0 & 1 & 0\\
-                0 & 0 & 1
-                \end{pmatrix}}_{\bS}}
-     {\color{red}\underbrace{\begin{pmatrix}
-       y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}}_{\bm{b}_{t}}}
-\end{align*}
-\end{textblock}
-
-## Hierarchical time series
-
-\begin{block}{}\hspace*{.6cm}{\centering\small
-\begin{tikzpicture}[level distance=1cm]
-\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-\tikzstyle[level distance=.01cm]
-\tikzstyle[sibling distance=12cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\scriptsize,set style={{every node}+=[fill=yellow]}]
-\tikzstyle{level 1}=[sibling distance=40mm,font=\footnotesize,set style={{every node}+=[fill=blue!15]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AX}}
-   child {node {AY}}
-   child {node {AZ}}
- }
- child {node {B}
-   child {node {BX}}
-   child {node {BY}}
-   child {node {BZ}}
- }
- child {node {C}
-   child {node {CX}}
-   child {node {CY}}
-   child {node {CZ}}
- };
-\end{tikzpicture}}
-\end{block}\vspace*{0.1cm}\pause\fontsize{8}{8}\sf
-
-\hbox{$\by_{t}= \begin{pmatrix}
-    y_{\text{Total},t}\\
-    y_{A,t}\\
-    y_{B,t}\\
-    y_{C,t}\\
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{AZ,t}\\
-    y_{BX,t}\\
-    y_{BY,t}\\
-    y_{BZ,t}\\
-    y_{CX,t}\\
-    y_{CY,t}\\
-    y_{CZ,t}\end{pmatrix}=
-    {\color{red}{\begin{pmatrix}
-                1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-                1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1\\
-                1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
-             \end{pmatrix}}}{\color{blue}{\begin{pmatrix}
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{AZ,t}\\
-    y_{BX,t}\\
-    y_{BY,t}\\
-    y_{BZ,t}\\
-    y_{CX,t}\\
-    y_{CY,t}\\
-    y_{CZ,t}\end{pmatrix}}}$}
-
-\only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
-
-## Grouped data
-
-\begin{block}{}
-\begin{center}\small
-\tikzstyle{every node}=[inner sep=2pt]
-\begin{tikzpicture}
-    \matrix[ampersand replacement=\&,column sep=0.3cm] {
-        \node[ellipse,draw,fill=yellow,font=\scriptsize,distance=1cm] {AX};~ \&
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {AY};~ \&
-        \node[ellipse,draw,fill=blue!15] {A}; \\[0.3cm]
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BX};~ \&
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BY};~ \&
-        \node[ellipse,draw,fill=blue!15] {B}; \\[0.3cm]
-        \node[ellipse,draw,fill=blue!15] {X};~ \&
-        \node[ellipse,draw,fill=blue!15] {Y};~ \&
-        \node[ellipse,draw,fill=red!15] {Total}; \\
-};
-\end{tikzpicture}
-\end{center}
-\end{block}\pause\fontsize{10}{11}\sf
-
-\hbox{$\by_{t}= \begin{pmatrix}
-    y_{\text{Total},t}\\
-    y_{A,t}\\
-    y_{B,t}\\
-    y_{X,t}\\
-    y_{Y,t}\\
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{BX,t}\\
-    y_{BY,t}
-    \end{pmatrix}=
-    \color{red}\begin{pmatrix}
-                1 & 1 & 1 & 1 \\
-                1 & 1 & 0 & 0 \\
-                0 & 0 & 1 & 1 \\
-                1 & 0 & 1 & 0 \\
-                0 & 1 & 0 & 1 \\
-                1 & 0 & 0 & 0 \\
-                0 & 1 & 0 & 0 \\
-                0 & 0 & 1 & 0 \\
-                0 & 0 & 0 & 1
-             \end{pmatrix}
-    \color{blue}\begin{pmatrix}
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{BX,t}\\
-    y_{BY,t}
-    \end{pmatrix}$}
-
-\vspace*{-1cm}
-
-\only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
-
-## The hierarchical forecasting problem
-
-* We want forecasts at all levels of aggregation.
-* If we model and forecast each series independently, the forecasts will almost certainly not add up.
-* We need to impose constraints on the forecasts to ensure they are "coherent".
-* We need to do this in a way that is computationally efficient.
-
-
-## Constraint notation
-
-\begin{textblock}{5.7}(11.4,0.1)
-\begin{minipage}{4cm}
-\begin{block}{}\centering
-\begin{tikzpicture}
-\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-\tikzstyle[level distance=.3cm]
-\tikzstyle[sibling distance=12cm]
-\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
- }
- child {node {B}
- }
- child {node {C}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{6}(0.5,1.5)
-\begin{block}{Aggregation matrix}\vspace*{-0.6cm}
-\begin{align*}
-\bY_{t} & =\color{blue}\bS\color{red}\bm{b}_{t} \\[0.3cm]
-\begin{pmatrix}
-   \textcolor{DarkYellow}{y_{\text{Total},t}}\\
-   \textcolor{red}{y_{A,t}}\\
-   \textcolor{red}{y_{B,t}}\\
-   \textcolor{red}{y_{C,t}}
-  \end{pmatrix}
   &= {\color{blue}\begin{pmatrix}
-                \textcolor{DarkYellow}1 & \textcolor{DarkYellow}1 & \textcolor{DarkYellow}1 \\
+                1 & 1 & 1 \\
                 1 & 0 & 0 \\
                 0 & 1 & 0\\
                 0 & 0 & 1
                 \end{pmatrix}}
      {\color{red}\begin{pmatrix}
        y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}} \\[0.2cm]
-  \begin{pmatrix}\textcolor{DarkYellow}{\bm{a}_t}\\\textcolor{red}{\bm{b}_t}\end{pmatrix}
-   & = \begin{pmatrix}\textcolor{DarkYellow}{\bm{A}}\\\bm{I}_{n_b}\end{pmatrix}\textcolor{red}{\bm{b}_t}
+       \end{pmatrix}}
 \end{align*}
-\end{block}
 \end{textblock}
-
-\begin{textblock}{7}(8.1,3.5)
-\begin{block}{Constraint matrix}\vspace*{-0.6cm}
-\begin{align*}
-\bm{C} \bY_t & = \bm{0} \\
-\text{where}\qquad
-\bm{C} & =  \begin{bmatrix} 1 & -1 & -1 & -1 \end{bmatrix} \\
-  & = \begin{bmatrix} \bm{I}_{n_a} & -\textcolor{DarkYellow}{\bm{A}} \end{bmatrix}
-\end{align*}
-\end{block}
-\end{textblock}
-
-
-## Constraint notation
-\vspace*{0.2cm}
-
-\begin{block}{Aggregation matrix $\bm{A}$}
-$$\bm{y}_t
-    = \begin{bmatrix}\bm{a}_t\\\bm{b}_t\end{bmatrix}
-    = \begin{bmatrix}\bm{A}\\\bm{I}_{n_b}\end{bmatrix}\bm{b}_t
-    = \bm{S}\bm{b}_t
-$$
-\end{block}\pause
-
-\begin{block}{Constraint matrix $\bm{C}$}
-\centerline{$\bm{C}\bm{y}_t = \bm{0}$}
-\end{block}\vspace*{-0.3cm}
-
-* Constraint matrix approach more general & more parsimonious.
-* $\bm{C} = [\bm{I}_{n_a} ~~~ {-\bm{A}}]$.
-* $\bm{S}$, $\bm{A}$ and $\bm{C}$ may contain any real values (not just 0s and 1s).
 
 
 
@@ -522,7 +275,7 @@ Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forec
 \end{textblock}}
 \only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
 \begin{alertblock}{Reconciled forecasts}
-Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
+Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
 \end{alertblock}
 \end{textblock}}
 
@@ -534,74 +287,29 @@ Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde
 \end{textblock}
 
 ## Linear projection reconciliation
-
-\only<1>{\placefig{9.5}{1.5}{width=6.2cm}{InsampDir_2_George}}
-\only<2>{\placefig{9.5}{1.5}{width=6.2cm}{OrthProj_George}}
-\only<3->{\placefig{9.5}{1.5}{width=6.2cm}{ObliqProj_George}}
-
-\begin{textblock}{9}(.5,1.5)
-  \begin{itemize}\tightlist
-  \item $R$ is the most likely direction of deviations from $\mathfrak{s}$.
-  \only<1->{\item Grey: potential base forecasts}
-  \only<2->{\item Red: reconciled forecasts}
-  \only<2->{\item Orthogonal projections (i.e., OLS) lead to smallest possible adjustments of base forecasts.}
-  \only<3->{\item Oblique projections (i.e., MinT) give reconciled forecasts with smallest variance.}
-  \end{itemize}
-\end{textblock}
-
-\only<2->{
-  \begin{textblock}{4.6}(11.2,7.6)\fontsize{13}{14}\sf
-  \begin{block}{}
-  \only<2>{Orthogonal \rlap{projection}}
-  \only<3>{Oblique projection}
-  \end{block}
-  \end{textblock}
-}
-
-## Linear projection reconciliation
 \fontsize{14}{16}\sf
 \vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t}$}
-\end{alertblock}\vspace*{-0.5cm}
+\centerline{$\tilde{\bm{y}}_{t+h|t}= \bm{M}\hat{\bm{y}}_{t+h|t}$}
+\end{alertblock}\vspace*{-0.2cm}
 
-* $\bm{M}$ is a projection onto $\mathfrak{s}$ if and only if $\bm{M}\bm{y}=\bm{y}$ for all $\bm{y}\in\mathfrak{s}$.
-* Coherent base forecasts are unchanged since $\bm{M}\hat{\bm{y}}=\hat{\bm{y}}$
-* If $\hat{\bm{y}}$ is unbiased, then $\tilde{\bm{y}}$ is also unbiased since
-$$
-  \E(\tilde{\bm{y}}_{t+h|t}) = \E(\bm{M}\hat{\bm{y}}_{t+h|t}) = \bm{M} \E(\hat{\bm{y}}_{t+h|t}) = \E(\hat{\bm{y}}_{t+h|t}),
-$$
-and unbiased estimates must lie on $\mathfrak{s}$.
 * If $\bm{S}$ forms a basis set for $\mathfrak{s}$, then projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
-* The projection is orthogonal if and only if $\bm{M}'=\bm{M}$. Equivalently, $\bm{\Psi}=\bm{I}$.
-
-\vspace*{10cm}
-
-## Linear projection reconciliation
-
-\vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t}$}\vspace{0.1cm}
-
-\centerline{where\quad $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi} = \bm{I} - \bm{\Psi}\bm{C}'(\bm{C}\bm{\Psi}\bm{C}')^{-1}\bm{C}
-$}
-\end{alertblock}\vspace*{.01cm}
-\begin{block}{}\vspace*{-0.6cm}
-\begin{align*}
-&\text{OLS:}  && \bm{\Psi}=\bm{I} \\
-&\text{WLS:}  && \bm{\Psi}=\text{diagonal} \\
-&\text{MinT:} && \bm{\Psi}=\bm{W}_h
-\end{align*}
-\end{block}\vspace*{-0.3cm}
-
+* Coherent base forecasts are unchanged since $\bm{M}\hat{\bm{y}}=\hat{\bm{y}}$
+* If $\hat{\bm{y}}$ is unbiased, then $\tilde{\bm{y}}$ is also unbiased.
 * $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$ is the covariance matrix of the base forecast errors.
 * $\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'$ is the covariance matrix of the reconciled forecast errors.
+* How to choose the best $\bm{\Psi}$?
 
 \vspace*{10cm}
 
 ## Minimum trace reconciliation
 
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+Wickramasuriya et al (2019)
+\end{block}\end{textblock}
+
 \vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
 If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$, so that
-\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1} =\bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
+\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
 \end{alertblock}
 \begin{block}{}
 \centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
@@ -617,17 +325,17 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 
 \begin{textblock}{5}(7,-0.2)
 \begin{block}{}
-\centerline{$\tilde{\by}_{T+h|T}=\bS\bG\hat{\by}_{T+h|T}$}
+\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
 \end{block}
 \end{textblock}
 
 \begin{textblock}{9.4}(.5,1.2)
-\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bG$}
-\begin{tabular}{ll}
-  OLS             & $(\bS'\bS)^{-1}\bS'$ \\
-  WLS(var)        & $(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
-  WLS(struct)     & $(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
-  MinT(sample)    & $(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
+\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{M}$}
+\begin{tabular}{l@{\hspace*{-0.5cm}}l}
+  OLS             & $\bS(\bS'\bS)^{-1}\bS'$ \\
+  WLS(var)        & $\bS(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
+  WLS(struct)     & $\bS(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
+  MinT(sample)    & $\bS(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
   MinT(shrink)\hspace*{2cm}    & $(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
 \end{tabular}
 \end{alertblock}
@@ -635,14 +343,9 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 \begin{textblock}{15}(.2,5.7)\fontsize{13}{15}\sf
 \begin{itemize}\parskip=0cm
 \item $\bm{\Lambda}_v = \text{diag}(\bm{W}_1)^{-1}$
+\item $\bm{\Lambda}_s = \text{diag}(\bS\bm{1})^{-1}$
 \item $\hat{\bm{W}}_{\text{sam}}$ is sample estimate of the residual covariance matrix
 \item $\hat{\bm{W}}_{\text{shr}}$ is shrinkage estimator $\tau \text{diag}(\hat{\bm{W}}_{\text{sam}})+(1-\tau)\hat{\bm{W}}_{\text{sam}}$\\ where $\tau$ selected optimally.
-\item Still need a good estimate of $\bm{W}_h$ for forecast variance.
-\end{itemize}
-\end{textblock}
-\begin{textblock}{14}(4.5,5.7)\fontsize{13}{15}\sf
-\begin{itemize}\tightlist
-\item $\bm{\Lambda}_s = \text{diag}(\bS\bm{1})^{-1}$
 \end{itemize}
 \end{textblock}
 \begin{textblock}{5}(10.3,3.35)
@@ -650,6 +353,7 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{block}
 \end{textblock}
+
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
@@ -887,53 +591,9 @@ Using sums of variances:
 * MinT reconciliation is better than OLS reconciliation
 * OLS reconciliation is better than base forecasts
 
-## Non-negative forecasts
-\fontsize{14}{15}\sf
-\vspace*{0.1cm}\begin{alertblock}{}
-\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
-\centerline{such that $\bm{b}_{t+h|t} = \bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
-\end{alertblock}\pause\vspace*{-0.2cm}
-
-\begin{block}{Solve via quadratic programming:}
-$$
-  \text{min}_{\bm{b}} \big[\bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - 2 \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T}\big] \quad \text{s.t.~~} \bm{b} \ge 0
-$$
-\rightline{\citep{nonnegmint}}
-\end{block}\pause\vspace*{-0.1cm}
-
-### Set-negative-to-zero heuristic solution
-  * Negative reconciled forecasts at bottom level set to zero
-  * Remaining forecasts computed via aggregation
-
-\rightline{\citep{di2023spatio}}
-
-
-## Reconciliation and regularization
-
-@Mishchenko2019:\newline Optimize all forecasts with an incoherence penalty
-$$
-\text{min}_{\hat{\bm{y}}_{t}} \sum_{t=1}^T \|\bm{y}_t - \hat{\bm{y}}_t\|_2 + \lambda \sum_{t=1}^T \|\hat{\bm{y}}_t - \bm{S}_t \hat{\bm{b}}_t\|_2
-$$
-\pause
-
-
-@Shiratori2020:\newline Optimize bottom level forecasts with an incoherence penalty
-$$
-\text{min}_{\hat{\bm{b}}_{t}} \sum_{t=1}^T \|\bm{b}_t - \hat{\bm{b}}_t\|_2 + \sum_{t=1}^T  \|\bm{\Lambda}(\bm{a}_t - \bm{A}_t \hat{\bm{b}}_t)\|_2
-$$
-
-
-\nocite{hierarchical,fasthts, mint, hfreview, htsgeometry, nonnegmint, Di_FonGir2022b, lhf}
-
-
-```{r}
-#| cache: false
-library(knitr)
-library(kableExtra)
-```
-
-
 # Improving univariate forecasts
+
+
 
 ## Temporal reconciliation: quarterly data
 
@@ -1202,275 +862,69 @@ $\tau$ is time index for most aggregated series,
 
 $k\in \mathcal{K} = \{k_1,\dots,k_p\}$,\quad $k_1=1$,\quad $k_p=m$,\quad $\tau=1,\dots,T/m$.
 
-
-## Cross-temporal forecast reconciliation
-
-\alert{Structural matrix approach}
-
-* $\bm{S}_{cs}=$ structural cross-sectional matrix
-* $\bm{S}_{te}=$ structural temporal matrix
-* $\bm{S}_{ct} = \bm{S}_{cs} \otimes \bm{S}_{te}$
-
-\vspace*{-0.6cm}
-
-$$\bm{x}_\tau = \bm{S}_{ct} \bm{b}_\tau,\qquad\text{where}\qquad
-\bm{b}_\tau = \begin{bmatrix}
-    {\bm{x}_{1,\tau}^{[1]}} \\
-    \vdots                  \\
-    {\bm{x}_{n,\tau}^{[1]}}
-  \end{bmatrix}.
-$$
-
-## Cross-temporal forecast reconciliation
-
-\full{Smatrix}
-
-\begin{textblock}{5}(0.5,1.5)
-\begin{block}{}
-\centerline{$\bm{S}_{cs} \otimes \bm{S}_{te} = \bm{S}_{ct}$}
-\end{block}
-\end{textblock}
-
-## Cross-temporal forecast reconciliation
-
-\alert{Constraint matrix approach}
-
-* $\bm{C}_{cs}=$ cross-sectional constraint matrix
-* $\bm{C}_{te}=$ temporal constraint matrix
-
-\vspace*{-0.6cm}
-
-$$\bm{C}_{ct}\bm{x}_\tau = \bm{0}\qquad\text{where}\qquad
-\bm{C}_{ct} = \begin{bmatrix}
-    (\bm{0}_{(n_a m\times nk^\ast)} ~~ \bm{I}_m \otimes \bm{C}_{cs})\bm{P}' \\
-    \bm{I}_n \otimes \bm{C}_{te}
-  \end{bmatrix}
-$$
-
-* $k^\ast = \displaystyle\sum_{k \in \mathcal{K}\setminus\{k_1\}} \frac{m}{k}$
-* $\bm{P}=$ the permutation matrix such that $\bm{P} \text{vec}(\bm{Y}_{\tau}) = \text{vec}(\bm{Y}_{\tau}')$.
-
-
-##  Cross-temporal probabilistic forecast reconciliation
-
-\alert{Nonparametric bootstrap}\fontsize{14}{16}\sf
-
-* Simulate future sample paths from all models using bootstrapped residuals, then reconcile them to obtain coherent sample paths.
-* Need to generate samples that preserve cross-temporal relationships.
-* Draw residual samples of all series at same time from most temporally aggregated level.
-* Residuals for other levels obtained using the corresponding time indices.
-
-
-##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.2cm}
+## Monthly Australian Tourism Demand
 
 ```{r}
-#| label: bootres
-#| output: asis
-boot_plot <- function(cols = c("green","blue","red","black")) {
-  cat("\\hspace*{-0.8cm}\\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]\n")
-  cat("\\matrix (e1) [matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[1]}$}}]\n")
-  cat("{\n")
-  cat("$T$ \\& ")
-  for(j in cols) {
-    for(i in seq(4)) {
-      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  cat("$X$ \\& ")
-  for(j in cols) {
-    for(i in seq(4)) {
-      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  cat("$Y$ \\& ")
-  for(j in cols) {
-    for(i in seq(4)){
-      cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  for(i in seq(16)) {
-    cat(paste("\\& ",i))
-  }
-  cat("\\\\\n")
-  cat("};\n")
-  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (e1-4-2.south west) -- (e1-4-17.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Quarterly, $t = 1,\\dots,16$};\n")
-  cat("\\matrix (ek) [above= 10mm of e1.north east, anchor=south east, matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[2]}$}}]\n")
-  cat("{\n")
-  cat("$T$ \\& ")
-  for(j in cols) {
-    for(i in seq(2)){
-     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  cat("$X$ \\& ")
-  for(j in cols) {
-    for(i in seq(2)){
-     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  cat("$Y$ \\& ")
-  for(j in cols) {
-    for(i in seq(2)){
-     cat(paste0("\\pgfuseimage{n",j, "} \\& "))
-    }
-  }
-  cat("\\\\\n")
-  for(i in seq(8)) {
-    cat(paste("\\& ",i))
-  }
-  cat("\\\\\n")
-  cat("};\n")
-  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (ek-4-2.south west) -- (ek-4-9.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Semi-annual, $j = 1,\\dots,8$};\n")
-  cat("\\matrix (em) [above= 10mm of e1.north west, anchor=south west, matrix of nodes,ampersand replacement=\\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\\fontsize{7}{6}\\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\\footnotesize$\\widehat{\\textbf{E}}^{[4]}$}}]\n")
-  cat("{\n")
-  cat("$T$ \\& ")
-  for(j in cols) {
-    cat(paste0("\\pgfuseimage{n",j, "}"))
-    if(j != cols[4]) cat("\\& ")
-  }
-  cat("\\\\\n")
-  cat("$X$ \\& ")
-  for(j in cols) {
-    cat(paste0("\\pgfuseimage{n",j, "}"))
-    if(j != cols[4]) cat("\\& ")
-  }
-  cat("\\\\\n")
-  cat("$Y$ \\& ")
-  for(j in cols) {
-    cat(paste0("\\pgfuseimage{n",j, "}"))
-    if(j != cols[4]) cat("\\& ")
-  }
-  cat("\\\\\n")
-  for(i in seq(4)) {
-    cat(paste("\\& ",i))
-  }
-  cat("\\\\\n")
-  cat("};\n")
-  cat("\\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (em-4-2.south west) -- (em-4-5.south east) node[midway, font = {\\fontsize{7}{6}\\selectfont}, yshift = -1em]{Annual, $\\tau = 1,\\dots,4$};\n")
-  cat("\\end{tikzpicture}\n\n")
-}
-boot_plot()
+#| label: tempagg
+#| include: false
+p1_m <- tourism |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  autoplot(visitors) +
+  xlab("Month") + ylab("")
+p1_q <- tourism |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  mutate(Quarter = yearquarter(month)) |>
+  index_by(Quarter) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  ylab("Overnight trips (thousands)") + xlab("Quarter")
+p1_y <- tourism |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  mutate(Year = year(month)) |>
+  index_by(Year) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  xlab("Year") + ylab("") +
+  ggtitle("Total domestic travel: Australia") +
+  xlim(1998,2017.8)
+
+Cairo::CairoPDF(here::here("figs/tourism7.pdf"), width = 12 * .8, height = 6 * .8)
+print(p1_y / p1_q / p1_m)
+crop::dev.off.crop(here::here("figs/tourism7.pdf"))
+
+p1_m <- tourism |>
+  filter(zone == "South NSW") |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  autoplot(visitors) +
+  xlab("Month") + ylab("")
+p1_q <- tourism |>
+  filter(zone == "South NSW") |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  mutate(Quarter = yearquarter(month)) |>
+  index_by(Quarter) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  ylab("Overnight trips (thousands)") + xlab("Quarter")
+p1_y <- tourism |>
+  filter(zone == "South NSW") |>
+  summarise(visitors = sum(visitors)/1e3) |>
+  mutate(Year = year(month)) |>
+  index_by(Year) |>
+  summarise(visitors = sum(visitors)) |>
+  autoplot(visitors) +
+  xlab("Year") + ylab("") +
+  #scale_y_log10() +
+  ggtitle("Total domestic travel: South NSW") +
+  xlim(1998,2017.8)
+
+Cairo::CairoPDF(here::here("figs/tourism8.pdf"), width = 12 * .8, height = 6 * .8)
+print(p1_y / p1_q / p1_m)
+crop::dev.off.crop(here::here("figs/tourism8.pdf"))
 ```
 
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
+\only<1>{\placefig{0.1}{1.3}{width=15.8cm}{tourism7}}
+\only<2>{\placefig{0.1}{1.3}{width=15.8cm}{tourism8}}
 
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Data}\end{textblock}
-
-
-##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.2cm}
-
-```{r}
-#| label: bootres1
-#| output: asis
-#| dependson: bootres
-boot_plot(c("red","black","green","blue"))
-```
-
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
-
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
-
-##  Cross-temporal probabilistic forecast reconciliation
-\vspace*{-0.2cm}
-
-```{r}
-#| label: bootres2
-#| output: asis
-#| dependson: bootres
-boot_plot(c("red","blue","green","blue"))
-```
-
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
-
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
-
-\only<2>{\begin{textblock}{8}(3.7,4)
-\begin{alertblock}{}
-The ``year'' can start in any quarter, giving overlapping blocks.
-\end{alertblock}
-\end{textblock}}
 
 ## Monthly Australian Tourism Demand
 
@@ -1527,52 +981,6 @@ The ``year'' can start in any quarter, giving overlapping blocks.
 * For each training set, compute temporally aggregated series for $k \in \{1,2,3,4,6,12\}$, and produce forecasts up to $h_2=6$, $h_3=4$, $h_4=3$, $h_6=2$ and $h_{12}=1$ steps ahead.
 
 * Automatic ETS forecasts on log-transformed data
-
-## Monthly Australian Tourism Demand
-
-\alert{Reconciliation approaches}\fontsize{13}{14}\sf
-
-* Cross-temporal \textbf{\color{newblue}{bottom-up}} and \textbf{\color{newblue}{partly bottom-up}}
-
-  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-  ct$(bu)$ & ct$(shr_{cs}, bu_{te})$ & ct$(wlsv_{te}, bu_{cs})$
-  \end{tabular}
-
-* Optimal forecast reconciliation with \textbf{\color{newblue}{one-step residuals}}
-
-    \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-    oct$(ols)$ & oct$(struc)$ & oct$(wlsv)$ & oct$(bdshr)$
-    \end{tabular}
-
-* Optimal forecast reconciliation with \textbf{\color{newblue}{multi-step residuals}}
-
-    \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-    oct$_h(hbshr)$ & oct$_h(bshr)$ & oct$_h(hshr)$ & oct$_h(shr)$
-    \end{tabular}
-
-## Monthly Australian tourism data -- CRPS skill scores
-\fontsize{12}{13}\sf\vspace*{0.2cm}
-
-\centerline{\textcolor{red}{Worse than benchmark}\qquad \textbf{Best}}
-
-\centering
-\footnotesize
-\begin{tabular}[t]{lrr}
-& \textbf{$\forall k \in \{12,6,4,3,2,1\}$} & \textbf{$k = 1$}\\
-\midrule
-base                      & \cellcolor{LightOrange!30} {1.000}  & \cellcolor{LightOrange!30} {1.000} \\
-ct$(bu)$                  & \textcolor{red}{1.321}              & \textcolor{red}{1.077} \\
-ct$(shr_{cs}, bu_{te})$   & \textcolor{red}{1.057}              & {0.976} \\
-ct$(wlsv_{te}, bu_{cs})$  & \textcolor{red}{1.062}              & {0.976}\\
-oct$(ols)$                & {0.989}                             & {0.982}\\
-oct$(struc)$              & {0.982}                             & {0.970}\\
-oct$(wlsv)$               & {0.987}                             & {0.952} \\
-oct$(bdshr)$              & {0.975}                             & {\textbf{0.949}} \\
-oct$_h(hbshr)$            & {0.989}                             & {0.982} \\
-oct$_h(bshr)$             & {0.994}                             & {0.988}\\
-oct$_h(hshr)$             & {\textbf{0.969}}                    & {0.953}\\
-oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red}{1.000}
-\end{tabular}
 
 # Improving multivariate forecasts
 

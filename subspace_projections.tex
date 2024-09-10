@@ -28,7 +28,6 @@
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\usetheme[]{monash}
 \ifPDFTeX\else  
     % xetex/luatex font selection
 \fi
@@ -116,56 +115,6 @@
 \def\fps@figure{htbp}
 \makeatother
 
-% Packages
-\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
-%\usepackage{enumitem,calc}
-\usepackage[bb=boondox]{mathalfa}
-\usepackage{url}
-\usepackage{multirow, booktabs, float, textcmds, siunitx}
-\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
-\usepackage{array,ifthen,colortbl,adjustbox}
-
-% Colors
-\definecolor{shadecolor}{RGB}{225,225,225}
-\definecolor{DarkBlue}{HTML}{2E4476}
-\definecolor{newred}{rgb}{0.8,0,0}
-\definecolor{avocado}{HTML}{2B7A0B}
-\definecolor{newblue}{HTML}{0270c0}
-\definecolor{LightOrange}{RGB}{255, 193, 7}
-\setbeamercolor{description item}{fg=Orange}
-\setbeamercolor{block title alerted}{fg=white,bg=DarkBlue}
-\setbeamercolor{block title}{fg=white,bg=DarkBlue}
-\setbeamercolor{frametitle}{bg=DarkBlue,fg=white}
-
-\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
-\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
-\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
-\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
-\renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
-\renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
-
-% Figures
-\graphicspath{{figs/}}
-
-% Fonts
-\usepackage{fontawesome}
-
-% Monash title page
-\setbeamertemplate{title page}
-{\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/operahouse_small.jpg}
-\begin{textblock}{15.5}(.5,0.3)
-\fontsize{20}{20}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\inserttitle}
-\end{textblock}
-\begin{textblock}{7.5}(.5,1.4)
-\fontsize{14}{14}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\insertauthor}
-\end{textblock}
-\placefig{.5}{8.4}{height=0.4cm, width=20cm}{monash_white}
-\placefig{4.5}{8.25}{height=0.6cm, width=20cm}{optima}
-\begin{textblock}{6.2}(13.4,8.75)
-\fontsize{4}{4}\sf\textcolor[HTML]{A0792E}{Photo by \href{https://unsplash.com/@stanleyc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash}{Stanley Cheung} on \href{"https://unsplash.com/photos/people-standing-on-stadium-during-night-time-sJ064KhsMok?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"}{Unsplash}}
-\end{textblock}}
-
-%\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
 
 % Tikz plots
 
@@ -236,23 +185,6 @@
 \newcommand{\btwocol}{\begin{multicols}{2}}
 \newcommand{\etwocol}{\end{multicols}}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
-
-% Biblatex
-\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,dashed=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -298,7 +230,7 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\usepackage[]{biblatex}
+\usepackage[natbib,style=authoryear]{biblatex}
 \addbibresource{hts.bib}
 \usepackage{bookmark}
 
@@ -310,10 +242,72 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
+\usetheme{Monash}
 
+% Outline at start of each section
+\AtBeginSection[]{
+   \begin{frame}{Outline}\vspace*{0.7cm}
+   \tableofcontents[currentsection,hideallsubsections]
+   \end{frame}
+  }
+
+% Packages
+\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
+%\usepackage{enumitem,calc}
+\usepackage[bb=boondox]{mathalfa}
+\usepackage{url}
+\usepackage{multirow, booktabs, float, textcmds, siunitx}
+\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
+\usepackage{array,ifthen,colortbl,adjustbox}
+
+% Colors
+\definecolor{shadecolor}{RGB}{225,225,225}
+\definecolor{DarkBlue}{HTML}{2E4476}
+\definecolor{newred}{rgb}{0.8,0,0}
+\definecolor{avocado}{HTML}{2B7A0B}
+\definecolor{newblue}{HTML}{0270c0}
+\definecolor{LightOrange}{RGB}{255, 193, 7}
+\setbeamercolor{description item}{fg=Orange}
+\setbeamercolor{block title alerted}{fg=white,bg=DarkBlue}
+\setbeamercolor{block title}{fg=white,bg=DarkBlue}
+\setbeamercolor{frametitle}{bg=DarkBlue,fg=white}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
+\renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
+
+% Figures
+\graphicspath{{figs/}}
+
+% Fonts
+\usepackage{fontawesome}
+
+% Monash title page
+\setbeamertemplate{title page}
+{\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/operahouse_small.jpg}
+\begin{textblock}{15.5}(.5,0.3)
+\fontsize{20}{20}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\inserttitle}
+\end{textblock}
+\begin{textblock}{7.5}(.5,1.4)
+\fontsize{14}{14}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\insertauthor}
+\end{textblock}
+\placefig{.5}{8.4}{height=0.4cm, width=20cm}{monash_white}
+\placefig{4.5}{8.25}{height=0.6cm, width=20cm}{optima}
+\begin{textblock}{6.2}(13.4,8.75)
+\fontsize{4}{4}\sf\textcolor[HTML]{A0792E}{Photo by \href{https://unsplash.com/@stanleyc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash}{Stanley Cheung} on \href{"https://unsplash.com/photos/people-standing-on-stadium-during-night-time-sJ064KhsMok?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"}{Unsplash}}
+\end{textblock}}
+
+%\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
+
+% Biblatex
+\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true}
 \title{Improving forecasts via subspace projections}
 \author{Rob J Hyndman}
-\date{}
+\date{19 September 2024}
+\titlegraphic{\includegraphics{bg-02.png}}
 
 \begin{document}
 \frame{\titlepage}
@@ -326,10 +320,10 @@ projections can lead to (sometimes dramatic) improvements in forecast
 accuracy.
 \end{abstract}
 
-
+\renewcommand*\contentsname{Outline}
 \begin{frame}{Outline}
-\phantomsection\label{outline}
-\vspace*{0.7cm}\tableofcontents
+  \vspace*{0.7cm}
+  \tableofcontents[hideallsubsections]
 \end{frame}
 
 \section{Improving hierarchical
@@ -337,7 +331,7 @@ forecasts}\label{improving-hierarchical-forecasts}
 
 \begin{frame}{Australian tourism regions}
 \phantomsection\label{australian-tourism-regions}
-\includegraphics{subspace_projections_files/figure-beamer/ausmap-1.pdf}
+\centerline{\includegraphics[width=14cm,height=8cm]{figs/aus_map.png}}
 
 \only<2>{\begin{textblock}{6.5}(9.2,1.4)
 \begin{block}{}%\fontsize{12}{13}\sf
@@ -357,123 +351,54 @@ forecasts}\label{improving-hierarchical-forecasts}
 
 \begin{frame}{Australian tourism data}
 \phantomsection\label{australian-tourism-data}
-\only<1>{\placefig{0.1}{1.4}{width=15.8cm}{tourism1}}
-\only<2>{\placefig{0.1}{1.4}{width=15.8cm}{tourism2}}
-\only<3>{\placefig{0.1}{1.4}{width=15.8cm}{tourism3}}
-\only<4>{\placefig{0.1}{1.4}{width=15.8cm}{tourism4}}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism4}}
+\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism5}}
+\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism6}}
 \end{frame}
 
-\begin{frame}{Spectacle sales}
-\phantomsection\label{spectacle-sales}
-\placefig{7}{4.9}{width=8.7cm}{spectacles}
-\begin{textblock}{12}(0.3,1.2)
-\begin{itemize}\tightlist
-    \item Monthly UK sales data from 2000 -- 2014
-    \item Provided by a large spectacle \rlap{manufacturer}
-    \item Split by brand (26), gender (3), price range (6), materials (4), and stores (600)
-    \item About 1 million bottom-level series
+\begin{frame}{Australian tourism data}
+\phantomsection\label{australian-tourism-data-1}
+\begin{textblock}{6}(0.2,1.2)
+\centering\fontsize{12}{13}\sf
+\textbf{Geographical division}\\
+\includegraphics[width = 5.5cm, trim= 0 0 180 0, clip=true]{aus_map}\\[-0.4cm]
+\faTimes\\
+\textbf{Purpose of travel}\\
+{\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
+\end{textblock}
+
+\begin{textblock}{10}(6.1,1)
+\fontsize{11}{14}\sf\tabcolsep=0.12cm
+\begin{itemize}
+\item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
+
+\begin{tabular}{lccccc}
+\toprule
+  & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
+  \midrule
+  \textbf{geographical} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
+  \textbf{purpose} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
+  \midrule
+  \textbf{total} & 5 & 35 & 105 & 380 & \textbf{525}\\
+  \bottomrule
+\end{tabular}
+\centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
+
 \end{itemize}
 \end{textblock}
-\end{frame}
 
-\begin{frame}{Hierarchical time series}
-\phantomsection\label{hierarchical-time-series}
-\vspace*{-0.2cm}
-
-A \alert{\textbf{hierarchical time series}} is a collection of several
-time series that are linked together in a hierarchical structure.
-
-\vspace*{-0.5cm}
-\begin{center}
-\begin{minipage}{9.6cm}
-\begin{block}{}
-\begin{tikzpicture}
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15]
-\tikzstyle[level distance=.1cm]
-\tikzstyle[sibling distance=7cm]
-\tikzstyle{level 1}=[sibling distance=33mm,set style={{every node}+=[fill=blue!15]}]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AA}}
-   child {node {AB}}
-   child {node {AC}}
- }
- child {node {B}
-   child {node {BA}}
-   child {node {BB}}
-   child {node {BC}}
- }
- child {node {C}
-   child {node {CA}}
-   child {node {CB}}
-   child {node {CC}}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{center}
-
-\pause\alert{Examples}\vspace*{-0.4cm}
-
+\begin{textblock}{9.4}(6.1,6)
+\begin{alertblock}{}\fontsize{12}{15}\sf
 \begin{itemize}
-\tightlist
-\item
-  Tourism by state and region
-\item
-  Retail sales by product groups, sub groups, and SKUs
+\item Need forecasts at all levels of aggregation.
+\item Independent forecasts will not add up.
+\item Impose constraints on the forecasts to ensure they are "coherent".
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Grouped time series}
-\phantomsection\label{grouped-time-series}
-A \alert{\textbf{grouped time series}} is a collection of time series
-that can be grouped together in a number of non-hierarchical ways.
-
-\vspace*{-0.2cm}\begin{center}
-\begin{minipage}{9.2cm}
-\begin{block}{}
-\begin{tikzpicture}[level distance=1.5cm]
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
-\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AX}}
-   child {node {AY}}
- }
- child {node {B}
-   child {node {BX}}
-   child {node {BY}}
- };
-\end{tikzpicture}\hspace*{1cm}
-\begin{tikzpicture}[level distance=1.5cm]
-\tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,outer sep=0pt, fill=red!15]
-\tikzstyle{level 1}=[sibling distance=23mm,set style={{every node}+=[fill=blue!15]},level distance=1cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=yellow]}, level distance=0.9cm]
-\node{Total}[edge from parent fork down]
- child {node {X}
-   child {node {AX}}
-   child {node {BX}}
- }
- child {node {Y}
-   child {node {AY}}
-   child {node {BY}}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{center}
-
-\pause\alert{Examples}\vspace*{-0.4cm}
-
-\begin{itemize}
-\tightlist
-\item
-  Tourism by state and purpose of travel
-\item
-  Retail sales by product groups/sub groups, and by countries/regions
-\end{itemize}
+\end{alertblock}
+\end{textblock}
 \end{frame}
 
 \begin{frame}{Hierarchical and grouped time series}
@@ -483,9 +408,8 @@ Almost all collections of time series with linear constraints can be written \rl
 \centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
 \vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
 \item $\by_t=$ vector of all series at time $t$
-\item $ y_{\text{Total},t}= $ aggregate of all series at time
-$t$.
-\item $ y_{X,t}= $ value of series $X$ at time $t$.
+\item $y_{\text{Total},t}=$ aggregate of all series at time $t$.
+\item $y_{X,t}=$ value of series $X$ at time $t$.
 \item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
 \item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
 \end{itemize}
@@ -519,246 +443,17 @@ $t$.
   y_{B,t}\\
   y_{C,t}
   \end{pmatrix}  \\
-  &= {\color{blue}\underbrace{\begin{pmatrix}
-                1 & 1 & 1 \\
-                1 & 0 & 0 \\
-                0 & 1 & 0\\
-                0 & 0 & 1
-                \end{pmatrix}}_{\bS}}
-     {\color{red}\underbrace{\begin{pmatrix}
-       y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}}_{\bm{b}_{t}}}
-\end{align*}
-\end{textblock}
-\end{frame}
-
-\begin{frame}{Hierarchical time series}
-\phantomsection\label{hierarchical-time-series-1}
-\begin{block}{}\hspace*{.6cm}{\centering\small
-\begin{tikzpicture}[level distance=1cm]
-\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-\tikzstyle[level distance=.01cm]
-\tikzstyle[sibling distance=12cm]
-\tikzstyle{level 2}=[sibling distance=10mm,font=\scriptsize,set style={{every node}+=[fill=yellow]}]
-\tikzstyle{level 1}=[sibling distance=40mm,font=\footnotesize,set style={{every node}+=[fill=blue!15]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
-   child {node {AX}}
-   child {node {AY}}
-   child {node {AZ}}
- }
- child {node {B}
-   child {node {BX}}
-   child {node {BY}}
-   child {node {BZ}}
- }
- child {node {C}
-   child {node {CX}}
-   child {node {CY}}
-   child {node {CZ}}
- };
-\end{tikzpicture}}
-\end{block}\vspace*{0.1cm}\pause\fontsize{8}{8}\sf
-
-\hbox{$\by_{t}= \begin{pmatrix}
-    y_{\text{Total},t}\\
-    y_{A,t}\\
-    y_{B,t}\\
-    y_{C,t}\\
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{AZ,t}\\
-    y_{BX,t}\\
-    y_{BY,t}\\
-    y_{BZ,t}\\
-    y_{CX,t}\\
-    y_{CY,t}\\
-    y_{CZ,t}\end{pmatrix}=
-    {\color{red}{\begin{pmatrix}
-                1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1\\
-                1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1\\
-                1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
-                0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\
-             \end{pmatrix}}}{\color{blue}{\begin{pmatrix}
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{AZ,t}\\
-    y_{BX,t}\\
-    y_{BY,t}\\
-    y_{BZ,t}\\
-    y_{CX,t}\\
-    y_{CY,t}\\
-    y_{CZ,t}\end{pmatrix}}}$}
-
-\only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
-\end{frame}
-
-\begin{frame}{Grouped data}
-\phantomsection\label{grouped-data}
-\begin{block}{}
-\begin{center}\small
-\tikzstyle{every node}=[inner sep=2pt]
-\begin{tikzpicture}
-    \matrix[ampersand replacement=\&,column sep=0.3cm] {
-        \node[ellipse,draw,fill=yellow,font=\scriptsize,distance=1cm] {AX};~ \&
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {AY};~ \&
-        \node[ellipse,draw,fill=blue!15] {A}; \\[0.3cm]
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BX};~ \&
-        \node[ellipse,draw,fill=yellow,font=\scriptsize] {BY};~ \&
-        \node[ellipse,draw,fill=blue!15] {B}; \\[0.3cm]
-        \node[ellipse,draw,fill=blue!15] {X};~ \&
-        \node[ellipse,draw,fill=blue!15] {Y};~ \&
-        \node[ellipse,draw,fill=red!15] {Total}; \\
-};
-\end{tikzpicture}
-\end{center}
-\end{block}\pause\fontsize{10}{11}\sf
-
-\hbox{$\by_{t}= \begin{pmatrix}
-    y_{\text{Total},t}\\
-    y_{A,t}\\
-    y_{B,t}\\
-    y_{X,t}\\
-    y_{Y,t}\\
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{BX,t}\\
-    y_{BY,t}
-    \end{pmatrix}=
-    \color{red}\begin{pmatrix}
-                1 & 1 & 1 & 1 \\
-                1 & 1 & 0 & 0 \\
-                0 & 0 & 1 & 1 \\
-                1 & 0 & 1 & 0 \\
-                0 & 1 & 0 & 1 \\
-                1 & 0 & 0 & 0 \\
-                0 & 1 & 0 & 0 \\
-                0 & 0 & 1 & 0 \\
-                0 & 0 & 0 & 1
-             \end{pmatrix}
-    \color{blue}\begin{pmatrix}
-    y_{AX,t}\\
-    y_{AY,t}\\
-    y_{BX,t}\\
-    y_{BY,t}
-    \end{pmatrix}$}
-
-\vspace*{-1cm}
-
-\only<3>{\begin{textblock}{3}(10.5,8)\fontsize{14}{15}\sf\colorbox[gray]{.8}{$\by_{t}=\color{red}\bS\color{blue}\bm{b}_{t}$}\end{textblock}}
-\end{frame}
-
-\begin{frame}{The hierarchical forecasting problem}
-\phantomsection\label{the-hierarchical-forecasting-problem}
-\begin{itemize}
-\tightlist
-\item
-  We want forecasts at all levels of aggregation.
-\item
-  If we model and forecast each series independently, the forecasts will
-  almost certainly not add up.
-\item
-  We need to impose constraints on the forecasts to ensure they are
-  ``coherent''.
-\item
-  We need to do this in a way that is computationally efficient.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Constraint notation}
-\phantomsection\label{constraint-notation}
-\begin{textblock}{5.7}(11.4,0.1)
-\begin{minipage}{4cm}
-\begin{block}{}\centering
-\begin{tikzpicture}
-\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-\tikzstyle[level distance=.3cm]
-\tikzstyle[sibling distance=12cm]
-\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-\node{Total}[edge from parent fork down]
- child {node {A}
- }
- child {node {B}
- }
- child {node {C}
- };
-\end{tikzpicture}
-\end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{6}(0.5,1.5)
-\begin{block}{Aggregation matrix}\vspace*{-0.6cm}
-\begin{align*}
-\bY_{t} & =\color{blue}\bS\color{red}\bm{b}_{t} \\[0.3cm]
-\begin{pmatrix}
-   \textcolor{DarkYellow}{y_{\text{Total},t}}\\
-   \textcolor{red}{y_{A,t}}\\
-   \textcolor{red}{y_{B,t}}\\
-   \textcolor{red}{y_{C,t}}
-  \end{pmatrix}
   &= {\color{blue}\begin{pmatrix}
-                \textcolor{DarkYellow}1 & \textcolor{DarkYellow}1 & \textcolor{DarkYellow}1 \\
+                1 & 1 & 1 \\
                 1 & 0 & 0 \\
                 0 & 1 & 0\\
                 0 & 0 & 1
                 \end{pmatrix}}
      {\color{red}\begin{pmatrix}
        y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}} \\[0.2cm]
-  \begin{pmatrix}\textcolor{DarkYellow}{\bm{a}_t}\\\textcolor{red}{\bm{b}_t}\end{pmatrix}
-   & = \begin{pmatrix}\textcolor{DarkYellow}{\bm{A}}\\\bm{I}_{n_b}\end{pmatrix}\textcolor{red}{\bm{b}_t}
+       \end{pmatrix}}
 \end{align*}
-\end{block}
 \end{textblock}
-
-\begin{textblock}{7}(8.1,3.5)
-\begin{block}{Constraint matrix}\vspace*{-0.6cm}
-\begin{align*}
-\bm{C} \bY_t & = \bm{0} \\
-\text{where}\qquad
-\bm{C} & =  \begin{bmatrix} 1 & -1 & -1 & -1 \end{bmatrix} \\
-  & = \begin{bmatrix} \bm{I}_{n_a} & -\textcolor{DarkYellow}{\bm{A}} \end{bmatrix}
-\end{align*}
-\end{block}
-\end{textblock}
-\end{frame}
-
-\begin{frame}{Constraint notation}
-\phantomsection\label{constraint-notation-1}
-\vspace*{0.2cm}
-
-\begin{block}{Aggregation matrix $\bm{A}$}
-$$\bm{y}_t
-    = \begin{bmatrix}\bm{a}_t\\\bm{b}_t\end{bmatrix}
-    = \begin{bmatrix}\bm{A}\\\bm{I}_{n_b}\end{bmatrix}\bm{b}_t
-    = \bm{S}\bm{b}_t
-$$
-\end{block}\pause
-
-\begin{block}{Constraint matrix $\bm{C}$}
-\centerline{$\bm{C}\bm{y}_t = \bm{0}$}
-\end{block}\vspace*{-0.3cm}
-
-\begin{itemize}
-\tightlist
-\item
-  Constraint matrix approach more general \& more parsimonious.
-\item
-  \(\bm{C} = [\bm{I}_{n_a} ~~~ {-\bm{A}}]\).
-\item
-  \(\bm{S}\), \(\bm{A}\) and \(\bm{C}\) may contain any real values (not
-  just 0s and 1s).
-\end{itemize}
 \end{frame}
 
 \begin{frame}{The coherent subspace}
@@ -781,7 +476,7 @@ Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forec
 \end{textblock}}
 \only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
 \begin{alertblock}{Reconciled forecasts}
-Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde{\bm{y}}_{t+h|t}=\psi(\hat{\bm{y}}_{t+h|t})$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
+Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
 \end{alertblock}
 \end{textblock}}
 
@@ -795,86 +490,31 @@ Let $\psi$ be a mapping, $\psi:\mathbb{\chi}^n\rightarrow\mathfrak{s}$.  $\tilde
 
 \begin{frame}{Linear projection reconciliation}
 \phantomsection\label{linear-projection-reconciliation}
-\only<1>{\placefig{9.5}{1.5}{width=6.2cm}{InsampDir_2_George}}
-\only<2>{\placefig{9.5}{1.5}{width=6.2cm}{OrthProj_George}}
-\only<3->{\placefig{9.5}{1.5}{width=6.2cm}{ObliqProj_George}}
-
-\begin{textblock}{9}(.5,1.5)
-  \begin{itemize}\tightlist
-  \item $R$ is the most likely direction of deviations from $\mathfrak{s}$.
-  \only<1->{\item Grey: potential base forecasts}
-  \only<2->{\item Red: reconciled forecasts}
-  \only<2->{\item Orthogonal projections (i.e., OLS) lead to smallest possible adjustments of base forecasts.}
-  \only<3->{\item Oblique projections (i.e., MinT) give reconciled forecasts with smallest variance.}
-  \end{itemize}
-\end{textblock}
-
-\only<2->{
-  \begin{textblock}{4.6}(11.2,7.6)\fontsize{13}{14}\sf
-  \begin{block}{}
-  \only<2>{Orthogonal \rlap{projection}}
-  \only<3>{Oblique projection}
-  \end{block}
-  \end{textblock}
-}
-\end{frame}
-
-\begin{frame}{Linear projection reconciliation}
-\phantomsection\label{linear-projection-reconciliation-1}
 \fontsize{14}{16}\sf
 \vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t}$}
-\end{alertblock}\vspace*{-0.5cm}
+\centerline{$\tilde{\bm{y}}_{t+h|t}= \bm{M}\hat{\bm{y}}_{t+h|t}$}
+\end{alertblock}\vspace*{-0.2cm}
 
 \begin{itemize}
 \tightlist
-\item
-  \(\bm{M}\) is a projection onto \(\mathfrak{s}\) if and only if
-  \(\bm{M}\bm{y}=\bm{y}\) for all \(\bm{y}\in\mathfrak{s}\).
-\item
-  Coherent base forecasts are unchanged since
-  \(\bm{M}\hat{\bm{y}}=\hat{\bm{y}}\)
-\item
-  If \(\hat{\bm{y}}\) is unbiased, then \(\tilde{\bm{y}}\) is also
-  unbiased since \[
-  \E(\tilde{\bm{y}}_{t+h|t}) = \E(\bm{M}\hat{\bm{y}}_{t+h|t}) = \bm{M} \E(\hat{\bm{y}}_{t+h|t}) = \E(\hat{\bm{y}}_{t+h|t}),
-  \] and unbiased estimates must lie on \(\mathfrak{s}\).
 \item
   If \(\bm{S}\) forms a basis set for \(\mathfrak{s}\), then projections
   are of the form \(\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}\)
   where \(\bm{\Psi}\) is a positive definite matrix.
 \item
-  The projection is orthogonal if and only if \(\bm{M}'=\bm{M}\).
-  Equivalently, \(\bm{\Psi}=\bm{I}\).
-\end{itemize}
-
-\vspace*{10cm}
-\end{frame}
-
-\begin{frame}{Linear projection reconciliation}
-\phantomsection\label{linear-projection-reconciliation-2}
-\vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \psi(\hat{\bm{y}}_{t+h|t}) = \bm{M}\hat{\bm{y}}_{t+h|t}$}\vspace{0.1cm}
-
-\centerline{where\quad $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi} = \bm{I} - \bm{\Psi}\bm{C}'(\bm{C}\bm{\Psi}\bm{C}')^{-1}\bm{C}
-$}
-\end{alertblock}\vspace*{.01cm}
-\begin{block}{}\vspace*{-0.6cm}
-\begin{align*}
-&\text{OLS:}  && \bm{\Psi}=\bm{I} \\
-&\text{WLS:}  && \bm{\Psi}=\text{diagonal} \\
-&\text{MinT:} && \bm{\Psi}=\bm{W}_h
-\end{align*}
-\end{block}\vspace*{-0.3cm}
-
-\begin{itemize}
-\tightlist
+  Coherent base forecasts are unchanged since
+  \(\bm{M}\hat{\bm{y}}=\hat{\bm{y}}\)
+\item
+  If \(\hat{\bm{y}}\) is unbiased, then \(\tilde{\bm{y}}\) is also
+  unbiased.
 \item
   \(\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]\)
   is the covariance matrix of the base forecast errors.
 \item
   \(\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'\)
   is the covariance matrix of the reconciled forecast errors.
+\item
+  How to choose the best \(\bm{\Psi}\)?
 \end{itemize}
 
 \vspace*{10cm}
@@ -882,9 +522,13 @@ $}
 
 \begin{frame}{Minimum trace reconciliation}
 \phantomsection\label{minimum-trace-reconciliation}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+Wickramasuriya et al (2019)
+\end{block}\end{textblock}
+
 \vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
 If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$, so that
-\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1} =\bm{I} - \bm{W}_h\bm{C}'(\bm{C}\bm{W}_h\bm{C}')^{-1}\bm{C}$}
+\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
 \end{alertblock}
 \begin{block}{}
 \centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
@@ -908,17 +552,17 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 \phantomsection\label{linear-projections}
 \begin{textblock}{5}(7,-0.2)
 \begin{block}{}
-\centerline{$\tilde{\by}_{T+h|T}=\bS\bG\hat{\by}_{T+h|T}$}
+\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
 \end{block}
 \end{textblock}
 
 \begin{textblock}{9.4}(.5,1.2)
-\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bG$}
-\begin{tabular}{ll}
-  OLS             & $(\bS'\bS)^{-1}\bS'$ \\
-  WLS(var)        & $(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
-  WLS(struct)     & $(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
-  MinT(sample)    & $(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
+\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{M}$}
+\begin{tabular}{l@{\hspace*{-0.5cm}}l}
+  OLS             & $\bS(\bS'\bS)^{-1}\bS'$ \\
+  WLS(var)        & $\bS(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
+  WLS(struct)     & $\bS(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
+  MinT(sample)    & $\bS(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
   MinT(shrink)\hspace*{2cm}    & $(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
 \end{tabular}
 \end{alertblock}
@@ -926,14 +570,9 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 \begin{textblock}{15}(.2,5.7)\fontsize{13}{15}\sf
 \begin{itemize}\parskip=0cm
 \item $\bm{\Lambda}_v = \text{diag}(\bm{W}_1)^{-1}$
+\item $\bm{\Lambda}_s = \text{diag}(\bS\bm{1})^{-1}$
 \item $\hat{\bm{W}}_{\text{sam}}$ is sample estimate of the residual covariance matrix
 \item $\hat{\bm{W}}_{\text{shr}}$ is shrinkage estimator $\tau \text{diag}(\hat{\bm{W}}_{\text{sam}})+(1-\tau)\hat{\bm{W}}_{\text{sam}}$\\ where $\tau$ selected optimally.
-\item Still need a good estimate of $\bm{W}_h$ for forecast variance.
-\end{itemize}
-\end{textblock}
-\begin{textblock}{14}(4.5,5.7)\fontsize{13}{15}\sf
-\begin{itemize}\tightlist
-\item $\bm{\Lambda}_s = \text{diag}(\bS\bm{1})^{-1}$
 \end{itemize}
 \end{textblock}
 \begin{textblock}{5}(10.3,3.35)
@@ -1369,50 +1008,6 @@ Using sums of variances:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Non-negative forecasts}
-\phantomsection\label{non-negative-forecasts}
-\fontsize{14}{15}\sf
-\vspace*{0.1cm}\begin{alertblock}{}
-\centerline{$\min_{\bm{G}_h}\text{tr}\Big(\E[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \bm{S}\bm{G}_h\hat{\bm{y}}_{t+h|t}]\Big)$}
-\centerline{such that $\bm{b}_{t+h|t} = \bm{G}_h\hat{\bm{y}}_{t+h|t} \ge 0$}
-\end{alertblock}\pause\vspace*{-0.2cm}
-
-\begin{block}{Solve via quadratic programming:}
-$$
-  \text{min}_{\bm{b}} \big[\bm{b}'\bS'\bm{W}_h^{-1}\bS\bm{b} - 2 \bm{b}'\bS'\bm{W}_h^{-1}\hat{\bm{y}}_{T+h|T}\big] \quad \text{s.t.~~} \bm{b} \ge 0
-$$
-\rightline{\citep{nonnegmint}}
-\end{block}\pause\vspace*{-0.1cm}
-
-\begin{block}{Set-negative-to-zero heuristic solution}
-\phantomsection\label{set-negative-to-zero-heuristic-solution}
-\begin{itemize}
-\tightlist
-\item
-  Negative reconciled forecasts at bottom level set to zero
-\item
-  Remaining forecasts computed via aggregation
-\end{itemize}
-
-\rightline{\citep{di2023spatio}}
-\end{block}
-\end{frame}
-
-\begin{frame}{Reconciliation and regularization}
-\phantomsection\label{reconciliation-and-regularization}
-\textcite{Mishchenko2019}:\newline Optimize all forecasts with an
-incoherence penalty \[
-\text{min}_{\hat{\bm{y}}_{t}} \sum_{t=1}^T \|\bm{y}_t - \hat{\bm{y}}_t\|_2 + \lambda \sum_{t=1}^T \|\hat{\bm{y}}_t - \bm{S}_t \hat{\bm{b}}_t\|_2
-\] \pause
-
-\textcite{Shiratori2020}:\newline Optimize bottom level forecasts with
-an incoherence penalty \[
-\text{min}_{\hat{\bm{b}}_{t}} \sum_{t=1}^T \|\bm{b}_t - \hat{\bm{b}}_t\|_2 + \sum_{t=1}^T  \|\bm{\Lambda}(\bm{a}_t - \bm{A}_t \hat{\bm{b}}_t)\|_2
-\]
-
-\nocite{hierarchical,fasthts, mint, hfreview, htsgeometry, nonnegmint, Di_FonGir2022b, lhf}
-\end{frame}
-
 \section{Improving univariate
 forecasts}\label{improving-univariate-forecasts}
 
@@ -1701,284 +1296,14 @@ where \[
 \(k\in \mathcal{K} = \{k_1,\dots,k_p\}\),\quad \(k_1=1\),\quad \(k_p=m\),\quad \(\tau=1,\dots,T/m\).
 \end{frame}
 
-\begin{frame}{Cross-temporal forecast reconciliation}
-\phantomsection\label{cross-temporal-forecast-reconciliation}
-\alert{Structural matrix approach}
-
-\begin{itemize}
-\tightlist
-\item
-  \(\bm{S}_{cs}=\) structural cross-sectional matrix
-\item
-  \(\bm{S}_{te}=\) structural temporal matrix
-\item
-  \(\bm{S}_{ct} = \bm{S}_{cs} \otimes \bm{S}_{te}\)
-\end{itemize}
-
-\vspace*{-0.6cm}
-
-\[\bm{x}_\tau = \bm{S}_{ct} \bm{b}_\tau,\qquad\text{where}\qquad
-\bm{b}_\tau = \begin{bmatrix}
-    {\bm{x}_{1,\tau}^{[1]}} \\
-    \vdots                  \\
-    {\bm{x}_{n,\tau}^{[1]}}
-  \end{bmatrix}.
-\]
-\end{frame}
-
-\begin{frame}{Cross-temporal forecast reconciliation}
-\phantomsection\label{cross-temporal-forecast-reconciliation-1}
-\full{Smatrix}
-
-\begin{textblock}{5}(0.5,1.5)
-\begin{block}{}
-\centerline{$\bm{S}_{cs} \otimes \bm{S}_{te} = \bm{S}_{ct}$}
-\end{block}
-\end{textblock}
-\end{frame}
-
-\begin{frame}{Cross-temporal forecast reconciliation}
-\phantomsection\label{cross-temporal-forecast-reconciliation-2}
-\alert{Constraint matrix approach}
-
-\begin{itemize}
-\tightlist
-\item
-  \(\bm{C}_{cs}=\) cross-sectional constraint matrix
-\item
-  \(\bm{C}_{te}=\) temporal constraint matrix
-\end{itemize}
-
-\vspace*{-0.6cm}
-
-\[\bm{C}_{ct}\bm{x}_\tau = \bm{0}\qquad\text{where}\qquad
-\bm{C}_{ct} = \begin{bmatrix}
-    (\bm{0}_{(n_a m\times nk^\ast)} ~~ \bm{I}_m \otimes \bm{C}_{cs})\bm{P}' \\
-    \bm{I}_n \otimes \bm{C}_{te}
-  \end{bmatrix}
-\]
-
-\begin{itemize}
-\tightlist
-\item
-  \(k^\ast = \displaystyle\sum_{k \in \mathcal{K}\setminus\{k_1\}} \frac{m}{k}\)
-\item
-  \(\bm{P}=\) the permutation matrix such that
-  \(\bm{P} \text{vec}(\bm{Y}_{\tau}) = \text{vec}(\bm{Y}_{\tau}')\).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Cross-temporal probabilistic forecast reconciliation}
-\phantomsection\label{cross-temporal-probabilistic-forecast-reconciliation}
-\alert{Nonparametric bootstrap}\fontsize{14}{16}\sf
-
-\begin{itemize}
-\tightlist
-\item
-  Simulate future sample paths from all models using bootstrapped
-  residuals, then reconcile them to obtain coherent sample paths.
-\item
-  Need to generate samples that preserve cross-temporal relationships.
-\item
-  Draw residual samples of all series at same time from most temporally
-  aggregated level.
-\item
-  Residuals for other levels obtained using the corresponding time
-  indices.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Cross-temporal probabilistic forecast reconciliation}
-\phantomsection\label{cross-temporal-probabilistic-forecast-reconciliation-1}
-\vspace*{-0.2cm}
-
-\hspace*{-0.8cm}\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]
-\matrix (e1) [matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[1]}$}}]
-{
-$T$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-$X$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-$Y$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\&  9\&  10\&  11\&  12\&  13\&  14\&  15\&  16\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (e1-4-2.south west) -- (e1-4-17.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Quarterly, $t = 1,\dots,16$};
-\matrix (ek) [above= 10mm of e1.north east, anchor=south east, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[2]}$}}]
-{
-$T$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-$X$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-$Y$ \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (ek-4-2.south west) -- (ek-4-9.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Semi-annual, $j = 1,\dots,8$};
-\matrix (em) [above= 10mm of e1.north west, anchor=south west, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[4]}$}}]
-{
-$T$ \& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\& \pgfuseimage{nred}\& \pgfuseimage{nblack}\\
-$X$ \& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\& \pgfuseimage{nred}\& \pgfuseimage{nblack}\\
-$Y$ \& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\& \pgfuseimage{nred}\& \pgfuseimage{nblack}\\
-\&  1\&  2\&  3\&  4\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (em-4-2.south west) -- (em-4-5.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Annual, $\tau = 1,\dots,4$};
-\end{tikzpicture}
-
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
-
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Data}\end{textblock}
-\end{frame}
-
-\begin{frame}{Cross-temporal probabilistic forecast reconciliation}
-\phantomsection\label{cross-temporal-probabilistic-forecast-reconciliation-2}
-\vspace*{-0.2cm}
-
-\hspace*{-0.8cm}\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]
-\matrix (e1) [matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[1]}$}}]
-{
-$T$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$X$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$Y$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\&  9\&  10\&  11\&  12\&  13\&  14\&  15\&  16\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (e1-4-2.south west) -- (e1-4-17.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Quarterly, $t = 1,\dots,16$};
-\matrix (ek) [above= 10mm of e1.north east, anchor=south east, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[2]}$}}]
-{
-$T$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$X$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$Y$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblack} \& \pgfuseimage{nblack} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (ek-4-2.south west) -- (ek-4-9.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Semi-annual, $j = 1,\dots,8$};
-\matrix (em) [above= 10mm of e1.north west, anchor=south west, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[4]}$}}]
-{
-$T$ \& \pgfuseimage{nred}\& \pgfuseimage{nblack}\& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-$X$ \& \pgfuseimage{nred}\& \pgfuseimage{nblack}\& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-$Y$ \& \pgfuseimage{nred}\& \pgfuseimage{nblack}\& \pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-\&  1\&  2\&  3\&  4\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (em-4-2.south west) -- (em-4-5.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Annual, $\tau = 1,\dots,4$};
-\end{tikzpicture}
-
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
-
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
-\end{frame}
-
-\begin{frame}{Cross-temporal probabilistic forecast reconciliation}
-\phantomsection\label{cross-temporal-probabilistic-forecast-reconciliation-3}
-\vspace*{-0.2cm}
-
-\hspace*{-0.8cm}\begin{tikzpicture}[scale = 0.9, every node/.style={scale=0.9}]
-\matrix (e1) [matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[1]}$}}]
-{
-$T$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$X$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$Y$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\&  9\&  10\&  11\&  12\&  13\&  14\&  15\&  16\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (e1-4-2.south west) -- (e1-4-17.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Quarterly, $t = 1,\dots,16$};
-\matrix (ek) [above= 10mm of e1.north east, anchor=south east, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[2]}$}}]
-{
-$T$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$X$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-$Y$ \& \pgfuseimage{nred} \& \pgfuseimage{nred} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \pgfuseimage{ngreen} \& \pgfuseimage{ngreen} \& \pgfuseimage{nblue} \& \pgfuseimage{nblue} \& \\
-\&  1\&  2\&  3\&  4\&  5\&  6\&  7\&  8\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (ek-4-2.south west) -- (ek-4-9.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Semi-annual, $j = 1,\dots,8$};
-\matrix (em) [above= 10mm of e1.north west, anchor=south west, matrix of nodes,ampersand replacement=\&,row sep=0cm,column sep=0cm, nodes= {rectangle, fill=white, inner sep = 1pt, font = {\fontsize{7}{6}\selectfont}, minimum width=1em, minimum height=1em,anchor=center}, label={[xshift = 0.5em]above:{\footnotesize$\widehat{\textbf{E}}^{[4]}$}}]
-{
-$T$ \& \pgfuseimage{nred}\& \pgfuseimage{nblue}\pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-$X$ \& \pgfuseimage{nred}\& \pgfuseimage{nblue}\pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-$Y$ \& \pgfuseimage{nred}\& \pgfuseimage{nblue}\pgfuseimage{ngreen}\& \pgfuseimage{nblue}\\
-\&  1\&  2\&  3\&  4\\
-};
-\draw[decorate,thick, decoration={brace, mirror, amplitude=5pt,raise=-1pt}] (em-4-2.south west) -- (em-4-5.south east) node[midway, font = {\fontsize{7}{6}\selectfont}, yshift = -1em]{Annual, $\tau = 1,\dots,4$};
-\end{tikzpicture}
-
-\begin{textblock}{1.9}(12.9,5.3)
-\begin{block}{}\centering
-\textcolor[HTML]{7fb97f}{Year 1}\\
-\textcolor[HTML]{7fbcff}{Year 2}\\
-\textcolor[HTML]{e87f7f}{Year 3}\\
-\textcolor[HTML]{7f7f7f}{Year 4}
-\end{block}
-\end{textblock}
-
-\begin{textblock}{1.9}(12.9,1.6)
-\begin{minipage}{1.9cm}
-  \begin{block}{}\centering
-    \begin{tikzpicture}
-      \tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
-      \tikzstyle[level distance=.3cm]
-      \tikzstyle[sibling distance=12cm]
-      \tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
-      \node{Total}[edge from parent fork down]
-      child {node {X}
-        }
-      child {node {Y}
-        };
-    \end{tikzpicture}
-  \end{block}
-\end{minipage}
-\end{textblock}
-
-\begin{textblock}{3}(3.5,1.2)\alert{Bootstrap}\end{textblock}
-
-\only<2>{\begin{textblock}{8}(3.7,4)
-\begin{alertblock}{}
-The ``year'' can start in any quarter, giving overlapping blocks.
-\end{alertblock}
-\end{textblock}}
+\begin{frame}{Monthly Australian Tourism Demand}
+\phantomsection\label{monthly-australian-tourism-demand}
+\only<1>{\placefig{0.1}{1.3}{width=15.8cm}{tourism7}}
+\only<2>{\placefig{0.1}{1.3}{width=15.8cm}{tourism8}}
 \end{frame}
 
 \begin{frame}{Monthly Australian Tourism Demand}
-\phantomsection\label{monthly-australian-tourism-demand}
+\phantomsection\label{monthly-australian-tourism-demand-1}
 \begin{textblock}{6}(0.2,1.2)
 \centering\fontsize{12}{13}\sf
 \textbf{Geographical division}\\
@@ -2023,7 +1348,7 @@ The ``year'' can start in any quarter, giving overlapping blocks.
 \end{frame}
 
 \begin{frame}{Monthly Australian Tourism Demand}
-\phantomsection\label{monthly-australian-tourism-demand-1}
+\phantomsection\label{monthly-australian-tourism-demand-2}
 \begin{itemize}
 \item
   Monthly data: January 1998 to December 2016
@@ -2038,61 +1363,6 @@ The ``year'' can start in any quarter, giving overlapping blocks.
 \item
   Automatic ETS forecasts on log-transformed data
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Monthly Australian Tourism Demand}
-\phantomsection\label{monthly-australian-tourism-demand-2}
-\alert{Reconciliation approaches}\fontsize{13}{14}\sf
-
-\begin{itemize}
-\item
-  Cross-temporal \textbf{\color{newblue}{bottom-up}} and
-  \textbf{\color{newblue}{partly bottom-up}}
-
-  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-  ct$(bu)$ & ct$(shr_{cs}, bu_{te})$ & ct$(wlsv_{te}, bu_{cs})$
-  \end{tabular}
-\item
-  Optimal forecast reconciliation with
-  \textbf{\color{newblue}{one-step residuals}}
-
-  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-    oct$(ols)$ & oct$(struc)$ & oct$(wlsv)$ & oct$(bdshr)$
-    \end{tabular}
-\item
-  Optimal forecast reconciliation with
-  \textbf{\color{newblue}{multi-step residuals}}
-
-  \begin{tabular}{M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}|M{0.24\linewidth}}
-    oct$_h(hbshr)$ & oct$_h(bshr)$ & oct$_h(hshr)$ & oct$_h(shr)$
-    \end{tabular}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Monthly Australian tourism data -- CRPS skill scores}
-\phantomsection\label{monthly-australian-tourism-data-crps-skill-scores}
-\fontsize{12}{13}\sf\vspace*{0.2cm}
-
-\centerline{\textcolor{red}{Worse than benchmark}\qquad \textbf{Best}}
-
-\centering
-\footnotesize
-\begin{tabular}[t]{lrr}
-& \textbf{$\forall k \in \{12,6,4,3,2,1\}$} & \textbf{$k = 1$}\\
-\midrule
-base                      & \cellcolor{LightOrange!30} {1.000}  & \cellcolor{LightOrange!30} {1.000} \\
-ct$(bu)$                  & \textcolor{red}{1.321}              & \textcolor{red}{1.077} \\
-ct$(shr_{cs}, bu_{te})$   & \textcolor{red}{1.057}              & {0.976} \\
-ct$(wlsv_{te}, bu_{cs})$  & \textcolor{red}{1.062}              & {0.976}\\
-oct$(ols)$                & {0.989}                             & {0.982}\\
-oct$(struc)$              & {0.982}                             & {0.970}\\
-oct$(wlsv)$               & {0.987}                             & {0.952} \\
-oct$(bdshr)$              & {0.975}                             & {\textbf{0.949}} \\
-oct$_h(hbshr)$            & {0.989}                             & {0.982} \\
-oct$_h(bshr)$             & {0.994}                             & {0.988}\\
-oct$_h(hshr)$             & {\textbf{0.969}}                    & {0.953}\\
-oct$_h(shr)$              & \textcolor{red}{1.007}              & \textcolor{red}{1.000}
-\end{tabular}
 \end{frame}
 
 \section{Improving multivariate
@@ -2182,7 +1452,7 @@ Package                                                                      & L
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]{References}
+\begin{frame}[allowframebreaks]{}
   \bibliographytrue
   \printbibliography[heading=none]
 \end{frame}
