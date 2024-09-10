@@ -1,24 +1,18 @@
 ---
 title: Improving forecasts via subspace projections
 author: Rob J Hyndman
-pdf-engine: pdflatex
-fig-width: 9
-fig-height: 4.5
+date: 19 September 2024
+toc: true
 format:
-  beamer:
-    theme: monash
-    aspectratio: 169
-    fontsize: 14pt
-    section-titles: false
+  presentation-beamer: 
     knitr:
       opts_chunk:
         dev: "CairoPDF"
-include-in-header: header.tex
-cite-method: biblatex
+    include-in-header: header.tex
+    cite-method: biblatex
+    keep-tex: true
 bibliography: hts.bib
-biblio-title: References
 highlight-style: tango
-keep-tex: true
 execute:
   echo: false
   message: false
