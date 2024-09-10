@@ -1014,3 +1014,4 @@ Package                                                                      & L
 \href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
 
 \nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
+\nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint}
