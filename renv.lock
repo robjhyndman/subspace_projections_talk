@@ -146,6 +146,13 @@
       ],
       "Hash": "470851b6d5d0ac559e9d01bb352b4021"
     },
+    "RApiSerialize": {
+      "Package": "RApiSerialize",
+      "Version": "0.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "12cbd319d03b55edaa195695a155bb30"
+    },
     "RColorBrewer": {
       "Package": "RColorBrewer",
       "Version": "1.1-3",
@@ -193,6 +200,16 @@
         "utils"
       ],
       "Hash": "4ac8e423216b8b70cb9653d1b3f71eb9"
+    },
+    "RcppParallel": {
+      "Package": "RcppParallel",
+      "Version": "5.1.9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "f38a72a419b91faac0ce5d9eee04c120"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -1466,6 +1483,20 @@
       ],
       "Hash": "1cba04a4e9414bdefc9dcaa99649a8dc"
     },
+    "qs": {
+      "Package": "qs",
+      "Version": "0.26.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "BH",
+        "R",
+        "RApiSerialize",
+        "Rcpp",
+        "stringfish"
+      ],
+      "Hash": "e372cf3f70e3c7a768ec5ea14f0f3edd"
+    },
     "quadprog": {
       "Package": "quadprog",
       "Version": "1.5-8",
@@ -1729,6 +1760,18 @@
         "warp"
       ],
       "Hash": "a584625e2b9e4fad4be135c8ea5c99aa"
+    },
+    "stringfish": {
+      "Package": "stringfish",
+      "Version": "0.16.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp",
+        "RcppParallel"
+      ],
+      "Hash": "b7eb79470319ae71d4b5ed9cd7bf7294"
     },
     "stringi": {
       "Package": "stringi",

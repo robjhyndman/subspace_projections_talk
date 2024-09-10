@@ -27,6 +27,7 @@ abstract: Univariate, multivariate, and hierarchical forecasts can all be improv
 
 ```{r}
 #| label: load-packages
+#| cache: false
 source("setup.R")
 ```
 
@@ -593,8 +594,6 @@ Using sums of variances:
 
 # Improving univariate forecasts
 
-
-
 ## Temporal reconciliation: quarterly data
 
 \begin{textblock}{7}(1,1.9)
@@ -901,16 +900,21 @@ Test set: last 52 weeks
 
 \alert{MASE comparison} (ARIMA models)
 
-\begin{tabular}{llllr}
-  \toprule
-  Aggr. Level & $h$   & Base & Reconciled & Change  \\
-  \midrule
-  Annual & 1       & 3.4   & 1.9   & $-42.9\%$ \\
-  Weekly & 1--52   & 2.0   & 1.9   & $-5.0\%$ \\
-  Weekly & 13      & 2.3   & 1.9   & $-16.2\%$ \\
-  Weekly & 4       & 1.9   & 1.5   & $-18.6\%$ \\
-  Weekly & 1       & 1.6   & 1.3   & $-17.2\%$ \\
-\end{tabular}
+```{r}
+#| label: ae-table
+tibble::tribble(
+  ~`Aggregation Level`, ~h, ~Base, ~Reconciled, ~Change,
+  "Annual", "1"    , 3.4, 1.9, -42.9,
+  "Weekly", "1--52", 2.0, 1.9, -5.0,
+  "Weekly", "13"   , 2.3, 1.9, -16.2,
+  "Weekly", "4"    , 1.9, 1.5, -18.6,
+  "Weekly", "1"    , 1.6, 1.3, -17.2
+) |>
+  dplyr::mutate(Change = paste0(sprintf("%.1f", Change),"%")) |>
+  kable(booktabs = TRUE, align = "lrrrr") |>
+  column_spec(5, bold = TRUE)
+```
+
 
 ## Temporal reconciliation: M3 monthly series
 
@@ -925,25 +929,271 @@ Test set: last 52 weeks
 
 ## Temporal reconciliation: M3 monthly series
 
-\alert{Improvement in MASE}
+\alert{Improvement in MASE relative to base forecasts}
 
-\fontsize{9}{9}\sf
+\fontsize{11}{11}\sf
 \tabcolsep=0.15cm
 \centering
-\begin{tabular}{lr@{\hskip 0.2cm}rrrrrrrr@{\hskip 0.2cm}rrrrrr}
-Aggregation & & & \multicolumn{6}{c}{ETS} & & \multicolumn{5}{c}{ARIMA} \\
-\cmidrule{4-9}\cmidrule{11-16}
-level & $h$ & & Base & & BU & WLS$_H$ & WLS$_V$ & WLS$_S$ & & Base & & BU & WLS$_H$ & WLS$_V$ & WLS$_S$\\
-\midrule
-Annual           & 1  & &  1.1  & &     -12.1 &      -17.9 &   -17.8 &  {\bf -18.5}  & &       1.3 & &     -25.4 &      -29.9 &      -29.9 &  {\bf -30.2}\\
-Semi-annual      & 3  & &  1.0  & &       0.0 &       -6.3 &    -6.0 &  {\bf  -6.9}  & &       1.1 & &      -2.9 &       -8.1 &       -8.2 &  {\bf  -9.4}\\
-Four-monthly     & 4  & &  0.9  & &       3.1 &       -3.2 &    -3.0 &  {\bf  -3.4}  & &       0.9 & &      -1.8 &       -6.2 &       -6.5 &  {\bf  -7.1}\\
-Quarterly        & 6  & &  0.9  & &       3.2 &       -2.8 &    -2.7 &  {\bf  -3.4}  & &       1.0 & &      -2.6 &       -6.9 &       -7.4 &  {\bf  -8.1}\\
-Bi-monthly       & 9  & &  0.9  & &       2.7 &       -2.9 &    -3.0 &  {\bf  -3.7}  & &       0.9 & &      -1.3 &       -5.0 &       -5.5 &  {\bf  -6.3}\\
-Monthly          & 18 & &  0.9  & &       0.0 &       -3.7 &    -4.6 &  {\bf  -5.0}  & &       0.9 & &       0.0 &       -1.9 &       -3.2 &  {\bf  -3.7}\\ [0.01cm]
-\textit{Average} &    & &       & & \textit{-0.5} & \textit{-6.1} & \textit{-6.2} & {\bf\textit{-6.8}} & &      & & \textit{-5.7} & \textit{-9.7} & \textit{-10.1} & {\bf\textit{ -10.8}}
-\end{tabular}
+```{r}
+#| label: tab-m3
+options(knitr.kable.NA = '')
+tab <- tibble::tribble(
+  ~`Agg.level`   , ~h ,  ~BU1 , ~WLSH1, ~WLSV1, ~WLSS1, ~BU2,  ~WLSH2, ~WLSV2, ~WLSS2,
+  "Annual"       , 1  , -12.1 , -17.9,  -17.8 , -18.5 ,-25.4 ,  -29.9, -29.9 ,  -30.2,
+  "Semi-annual"  , 3  ,   0.0 , -6.3 ,   -6.0 ,  -6.9 , -2.9 ,   -8.1,  -8.2 ,   -9.4,
+  "Four-monthly" , 4  ,   3.1 , -3.2 ,   -3.0 ,  -3.4 , -1.8 ,   -6.2,  -6.5 ,   -7.1,
+  "Quarterly"    , 6  ,   3.2 , -2.8 ,   -2.7 ,  -3.4 , -2.6 ,   -6.9,  -7.4 ,   -8.1,
+  "Bi-monthly"   , 9  ,   2.7 , -2.9 ,   -3.0 ,  -3.7 , -1.3 ,   -5.0,  -5.5 ,   -6.3,
+  "Monthly"      , 18 ,   0.0 , -3.7 ,   -4.6 ,  -5.0 ,  0.0 ,   -1.9,  -3.2 ,   -3.7,
+  "Average"      , NA  ,  -0.5 , -6.1 ,   -6.2 ,  -6.8 , -5.7 ,   -9.7, -10.1 ,  -10.8
+)
+tab |>
+  kable(
+    booktabs = TRUE,
+    format = "latex",
+    escape = FALSE,
+    linesep = "",
+    col.names = c("Aggregation level", "$h$", "BU", "WLS$_H$", "WLS$_V$", "WLS$_S$", "BU", "WLS$_H$", "WLS$_V$", "WLS$_S$")
+  ) |>
+  add_header_above(c(" " = 2, "ETS" = 4, "ARIMA" = 4)) |>
+  column_spec(c(6,10), bold = TRUE) |>
+  row_spec(6, hline_after = TRUE)
+```
+
 # Improving multivariate forecasts
+
+## Forecast Linear Augmented Projection (FLAP)
+
+* We want to forecast a multivariate series $\bm{y}_t$.
+* Construct many linear combinations $\bm{c}_t = \bm{\Phi}\bm{y}_t$ of the multivariate series (e.g., principal components or random combinations)
+* Produce univariate forecasts of all series $\hat{\bm{y}}_t$ and all linear combinations $\hat{\bm{c}}_t$.
+* Reconcile forecasts so they are coherent ($\tilde{\bm{c}}_t = \bm{\Phi}\tilde{\bm{y}}_t$)
+
+\pause\vspace*{-0.4cm}
+
+$$
+\bm{z}_t = \begin{bmatrix} \bm{y}_t\\ \bm{c}_t \end{bmatrix}
+\qquad \tilde{\bm{z}}_{t+h} = \bm{M} \hat{\bm{z}}_{t+h}
+$$
+where $\bm{M}$ is a projection matrix onto the coherent subspace.
+
+## Forecast error variance reduction
+
+* Under unbiasedness, the variance reduction $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$
+is __positive semi-definite__.
+
+* The diagonal elements of $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$ are non-decreasing as the number of components increases.
+
+## Minimum variance of individual series
+
+The projection is equivalent to the mapping
+$$
+\tilde{\bm{y}}_{t+h} = \bm{G}\hat{\bm{z}}_{t+h},
+$$
+where $\bm{G} = \big[\bm{g}_1 ~~ \bm{g}_2 ~~ \dots ~~ \bm{g}_m\big]' \in \mathbb{R}^{m\times (m+p)}$ is the solution to
+$$
+\underset{\bm{G}}{\arg\min}\ \bm{G}\bm{W}_h\bm{G}'
+\qquad \text{s.t. } \bm{G}\bm{S} = \bm{I}
+$$
+or
+$$
+\underset{\bm{g}_i}{\arg\min}\ \bm{g}_i'\bm{W}_h\bm{g}_i
+\qquad \text{s.t. } \bm{g}_i'\bm{s}_{j} = \bm{1}(i=j),
+$$
+where $\bm{S} = \begin{bmatrix}\bm{I}_m \\\bm{\Phi}\end{bmatrix} = \big[\bm{s}_1\cdots \bm{s}_m\big]$.
+
+## Key results
+
+1. The forecast error variance is __reduced__ with FLAP
+1. The forecast error variance __monotonically__ decreases with increasing number of components
+1. The forecast projection is __optimal__ to achieve minimum forecast error variance of each series
+
+\pause
+
+In practice, we need to:
+
+* Estimate $\bm{W}_h = \Var(\bm{z}_{t+h} - \hat{\bm{z}}_{t+h})$. (We can use the MinT shrinkage estimator.)
+* Construct the components, $\bm{\Phi}$.
+
+## Construction of $\bm{\Phi}$
+
+### Principal component analysis (PCA)
+
+Finding the weights matrix $\bm{\Phi}$ so that the resulting components \alert{\textbf{maximise variance}}
+
+### Simulation
+
+Generating values of $\bm{\Phi}$ from a random distribution and normalising them to unit vectors
+
+* Normal distribution
+* Uniform distribution
+* Orthonormal matrix
+
+## Monthly Australian regional tourism
+
+* Monthly Australian tourism data set aggregated by region giving 77 series, from Jan 1998 to Dec 2019
+* Use expanding window time series cross-validation with $T=84$ observations in first training set, and forecast horizons $h=1,2,\dots,12$.
+
+## Monthly Australian regional tourism
+
+```{r}
+#| label: aus-visnights
+visnights <- readr::read_csv(here::here("data/visnights_monthly.csv")) |>
+  mutate(Month = yearmonth(Month)) |>
+  group_by(Month, Region) |>
+  summarise(Nights = sum(Nights), .groups = "drop")
+```
+
+```{r}
+#| label: series
+#| fig-height: 5
+regions <- c("Melbourne", "Canberra", "Fraser Coast", "Central Highlands")
+
+visnights |>
+  filter(Region %in% regions) |>
+  ggplot() +
+  geom_line(aes(x = Month, y = Nights)) +
+  facet_grid("Region", scales = "free")
+```
+
+## Monthly Australian regional tourism
+
+```{r}
+#| label: components
+source(here::here("component.R"))
+visnights_wide <- visnights |>
+  pivot_wider(names_from = Region, values_from = Nights)
+col_month <- select(visnights_wide, Month)
+visnights_wide |>
+  select(-Month) |>
+  as.matrix() |>
+  component() |>
+  getElement("x") %>%
+  bind_cols(col_month, .) |>
+  pivot_longer(-Month,
+               names_to = "Component",
+               values_to = "Value") |>
+  filter(Component %in% unique(Component)[seq_len(4)]) |>
+  ggplot() +
+  geom_line(aes(x = Month, y = Value)) +
+  facet_grid("Component", scales = "free")
+```
+
+## Monthly Australian regional tourism
+
+```{r visnights}
+m <- 77
+qs::qread(here::here("output/tourism_mse.qs")) |>
+  filter(h %in% c(1, 6, 12)) |>
+  mutate(
+    Component = case_match(paste(proj, Phi, sep = "."),
+      "TRUE.PCA_normal" ~ "PCA+Norm.",
+      "FALSE.NA" ~ "No Proj.",
+      "TRUE.normal" ~ "Norm."
+    )
+  ) |>
+  filter(!is.na(Component)) |>
+  ggplot(aes(x = p, y = value, color = Component)) +
+  geom_vline(xintercept = m) +
+  geom_line() +
+  geom_hline(data = \(df) filter(df, !proj), aes(yintercept = value, color = Component)) +
+  facet_grid(rows = "h", scales = "free", labeller = label_both) +
+  ylab("MSE")
+```
+
+
+## FRED-MD (DFM)
+
+```{r fred-md}
+m <- 122
+qs::qread(here::here("output/fred_mse.qs")) %>%
+  filter(
+    !model %in% c("ets","arima"),
+    !grepl("ets", Phi),
+    h %in% c(1, 6, 12)) %>%
+  ggplot(aes(x = p, y = value,
+             linetype = paste(proj, Phi, sep = "."))) +
+  geom_vline(xintercept = m) +
+  geom_line() +
+  geom_hline(data = \(df) filter(df, !proj),
+             aes(yintercept = value,
+                 linetype = paste(proj, Phi, sep = "."))) +
+  # facet_wrap("h", scales = "free", labeller = label_both) +
+  facet_grid(rows = "h", scales = "free", labeller = label_both) +
+  ylab("MSE") +
+  scale_linetype_manual(
+    name = "Component",
+    values = c(
+      "TRUE.PCA_normal" = "solid",
+      "FALSE.NA" = "dashed",
+      "TRUE.normal" = "longdash"
+    ),
+    labels = c(
+      "TRUE.PCA_normal" = "PCA+Norm.",
+      "FALSE.NA" = "No Proj.",
+      "TRUE.normal" = "Norm."
+    ))
+```
+
+## Simulation
+
+* Data generating process (DGP): VAR($3$) with $m=70$ variables
+* Sample size: $T=400$
+* Number of repeated samples: $220$
+* Base model: ARIMA and DFM
+
+## Simulation
+
+```{r simulation}
+m <- 70
+mse <- qs::qread(here::here("output/simulation_mse.qs"))
+
+mse %>%
+  filter(model %in% c("arima", "dfm", "var", "true"),
+         Phi %in% c("PCA_normal") | is.na(Phi),
+         h %in% c(1, 6)) %>%
+  # {print(distinct(., model, Phi))}
+  ggplot(aes(x = p, y = value,
+             colour = model,
+             linetype = paste(proj, Phi, sep = ".")))+
+  geom_vline(xintercept = m) +
+  geom_line() +
+  geom_hline(data = \(df) filter(df, !proj),
+             aes(yintercept = value,
+                 colour = model,
+                 linetype = paste(proj, Phi, sep = "."))) +
+  # facet_wrap("h", scales = "free", labeller = label_both) +
+  facet_grid(rows = "h", scales = "free", labeller = label_both) +
+  ylab("MSE") +
+  scale_linetype_manual(
+    name = "Component",
+    values = c(
+      "TRUE.PCA_normal" = "solid",
+      "FALSE.NA" = "dashed",
+      "TRUE.normal" = "longdash"
+    ),
+    labels = c(
+      "TRUE.PCA_normal" = "PCA+Norm.",
+      "FALSE.NA" = "No Proj.",
+      "TRUE.normal" = "Norm."
+    )) +
+  scale_color_manual(
+    name = "Model",
+    values = cb_palette_grey[c(7, 6, 4, 2)],
+    labels = c(
+      "arima" = "ARIMA",
+      "dfm" = "DFM",
+      "true" = "VAR - DGP",
+      "var" = "VAR - Est."))
+```
+
+## Future research directions
+
+* Investigate why PCA performs better than random weights
+* Find other components that are better than PCA
+* Find optimal components by minimising forecast error variance with respect to $\bm{\Phi}$
+* Use forecast projection and forecast reconciliation together
+
 
 # Final comments
 
@@ -1014,4 +1264,4 @@ Package                                                                      & L
 \href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
 
 \nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
-\nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint}
+\nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint,flap}

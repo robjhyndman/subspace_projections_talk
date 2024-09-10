@@ -5,6 +5,7 @@ library(patchwork)
 
 # Set some defaults
 options(digits = 3, width = 88)
+options(knitr.kable.NA = '')
 
 # Colours to be viridis for continuous scales and Okabe for discrete scales
 options(
@@ -16,6 +17,7 @@ options(
 knitr::opts_chunk$set(
   dev.args = list(bg = grey(0.9), pointsize = 11)
 )
+cb_palette_grey <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 # Font for graphics to be Fira Sans
 ggplot2::theme_set(
