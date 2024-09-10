@@ -4,13 +4,17 @@ author: Rob J Hyndman
 date: 19 September 2024
 toc: true
 format:
-  presentation-beamer: 
+  presentation-beamer:
+    pdf-engine: pdflatex
     knitr:
       opts_chunk:
         dev: "CairoPDF"
+    template-partials:
+      - before-title.tex
     include-in-header: header.tex
-    cite-method: biblatex
     keep-tex: true
+cite-method: biblatex
+biblatexoptions: natbib,style=authoryear
 bibliography: hts.bib
 highlight-style: tango
 execute:
