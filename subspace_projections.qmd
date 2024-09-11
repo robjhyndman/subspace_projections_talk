@@ -109,15 +109,16 @@ p2 <- tourism |>
         TAS = "#cc79a7",
         ACT = "#cccccc"
       )
-  )
+  ) +
+  guides(color = guide_legend(title="State"))
 p3 <- tourism |>
   filter(state == "NSW") |>
   group_by(zone) |>
   summarise(visitors = sum(visitors)) |>
   autoplot(visitors) +
   ylab("Visitor nights") + xlab("Month") +
-  #scale_y_log10() +
-  ggtitle("Total domestic travel: NSW by zone")
+  ggtitle("Total domestic travel: NSW by zone") +
+  guides(color = guide_legend(title="Zone"))
 p4 <- tourism |>
   filter(zone == "South NSW") |>
   group_by(region) |>
@@ -125,14 +126,16 @@ p4 <- tourism |>
   autoplot(visitors) +
   ylab("Visitor nights") + xlab("Month") +
   #scale_y_log10() +
-  ggtitle("Total domestic travel: South NSW by region")
+  ggtitle("Total domestic travel: South NSW by region") +
+  guides(color = guide_legend(title="Region"))
 p5 <- tourism |>
   group_by(purpose) |>
   summarise(visitors = sum(visitors)) |>
   autoplot(visitors) +
   ylab("Visitor nights") + xlab("Month") +
   #scale_y_log10() +
-  ggtitle("Total domestic travel: by purpose of travel")
+  ggtitle("Total domestic travel: by purpose of travel") +
+  guides(color = guide_legend(title="Purpose"))
 p6 <- tourism |>
   filter(region == "Snowy Mountains") |>
   group_by(purpose) |>
@@ -140,7 +143,8 @@ p6 <- tourism |>
   autoplot(visitors) +
   ylab("Visitor nights") + xlab("Month") +
   #scale_y_log10() +
-  ggtitle("Total domestic travel: Snowy Mountains by purpose of travel")
+  ggtitle("Total domestic travel: Snowy Mountains by purpose of travel") +
+  guides(color = guide_legend(title="Purpose"))
 
 aligned_plots <- align_patches(p1, p2, p3, p4, p5, p6)
 for (i in seq_along(aligned_plots)) {
@@ -1032,6 +1036,7 @@ Generating values of $\bm{\Phi}$ from a random distribution and normalising them
 ## Monthly Australian regional tourism
 
 * Monthly Australian tourism data set aggregated by region giving 77 series, from Jan 1998 to Dec 2019
+
 * Use expanding window time series cross-validation with $T=84$ observations in first training set, and forecast horizons $h=1,2,\dots,12$.
 
 ## Monthly Australian regional tourism
@@ -1101,82 +1106,107 @@ qs::qread(here::here("output/tourism_mse.qs")) |>
   ylab("MSE")
 ```
 
+## FRED-MD
+
+* Monthly data of macroeconomic variables (McCracken and Ng, 2016).
+
+* Data from Jan 1959 -- Sep 2023. 777 observations on 122 series.
+
+* Same cleaning process as per McCracken and Ng (2016).
+
+* All series scaled to have mean 0 and variance 1.
+
+* Expanding time series cross-validation with initial size of 25 years and forecast horizon 12 months.
+
+```{r}
+#| label: fred-md
+m <- 122
+mse <- qs::qread(here::here("output/fred_mse.qs")) |>
+  tibble::as_tibble() |>
+  filter(model %in% c("arima", "dfm"), h %in% c(1, 6, 12)) |>
+  filter(Phi %in% c("NA", "normal", "PCA_normal")) |>
+  mutate(
+    Component = case_when(
+      !proj ~ "No projection",
+      Phi == "normal" ~ "Normal",
+      Phi == "PCA_normal" ~ "PCA + Normal"
+    )
+  )
+```
+
+## FRED-MD (ARIMA)
+
+```{r}
+#| label: fred-md-arima
+mse |>
+  filter(model == "arima") |>
+  ggplot(aes(x = p, y = value, color = Component)) +
+  geom_vline(xintercept = m) +
+  geom_hline(data = filter(mse, !proj & model == "arima"),
+             aes(yintercept = value, color = Component)) +
+  geom_line() +
+  facet_grid(rows = "h", scales = "free", labeller = label_both) +
+  ylab("MSE") +
+  scale_x_continuous(expand = expansion(mult = 0)) +
+  scale_color_manual(values = c("#D55E00", "#0072B2","#009E73"),
+                    breaks = c("No projection", "Normal", "PCA + Normal"))
+```
 
 ## FRED-MD (DFM)
 
-```{r fred-md}
-m <- 122
-qs::qread(here::here("output/fred_mse.qs")) %>%
-  filter(
-    !model %in% c("ets","arima"),
-    !grepl("ets", Phi),
-    h %in% c(1, 6, 12)) %>%
-  ggplot(aes(x = p, y = value,
-             linetype = paste(proj, Phi, sep = "."))) +
+```{r}
+#| label: fred-md-dfm
+mse |>
+  filter(model == "dfm") |>
+  ggplot(aes(x = p, y = value, color = Component)) +
   geom_vline(xintercept = m) +
+  geom_hline(data = filter(mse, !proj & model == "dfm"),
+             aes(yintercept = value, color = Component)) +
   geom_line() +
-  geom_hline(data = \(df) filter(df, !proj),
-             aes(yintercept = value,
-                 linetype = paste(proj, Phi, sep = "."))) +
-  # facet_wrap("h", scales = "free", labeller = label_both) +
   facet_grid(rows = "h", scales = "free", labeller = label_both) +
   ylab("MSE") +
-  scale_linetype_manual(
-    name = "Component",
-    values = c(
-      "TRUE.PCA_normal" = "solid",
-      "FALSE.NA" = "dashed",
-      "TRUE.normal" = "longdash"
-    ),
-    labels = c(
-      "TRUE.PCA_normal" = "PCA+Norm.",
-      "FALSE.NA" = "No Proj.",
-      "TRUE.normal" = "Norm."
-    ))
+  scale_x_continuous(expand = expansion(mult = 0)) +
+  scale_color_manual(values = c("#D55E00", "#0072B2","#009E73"),
+                    breaks = c("No projection", "Normal", "PCA + Normal"))
 ```
 
 ## Simulation
 
-* Data generating process (DGP): VAR($3$) with $m=70$ variables
+* Data generating process: VAR($3$) with 70 variables
+
 * Sample size: $T=400$
+
 * Number of repeated samples: $220$
-* Base model: ARIMA and DFM
+
+* Base models:
+
+  * automatic ARIMA (based on AICc)
+  * DFM (structure chosen using BIC, different model for each horizon)
 
 ## Simulation
 
 ```{r simulation}
 m <- 70
-mse <- qs::qread(here::here("output/simulation_mse.qs"))
-
-mse %>%
+mse <- qs::qread(here::here("output/simulation_mse.qs")) |>
+  as_tibble() |>
   filter(model %in% c("arima", "dfm", "var", "true"),
          Phi %in% c("PCA_normal") | is.na(Phi),
-         h %in% c(1, 6)) %>%
-  # {print(distinct(., model, Phi))}
-  ggplot(aes(x = p, y = value,
-             colour = model,
-             linetype = paste(proj, Phi, sep = ".")))+
+         h %in% c(1, 6)) |>
+  mutate(
+    Component = case_when(
+      !proj ~ "No projection",
+      proj & Phi == "PCA_normal" ~ "PCA + Normal",
+      TRUE ~ "Other"
+    )
+  )
+mse |>
+  ggplot(aes(x = p, y = value, colour = model, linetype = Component)) +
   geom_vline(xintercept = m) +
   geom_line() +
-  geom_hline(data = \(df) filter(df, !proj),
-             aes(yintercept = value,
-                 colour = model,
-                 linetype = paste(proj, Phi, sep = "."))) +
-  # facet_wrap("h", scales = "free", labeller = label_both) +
+  geom_hline(data = filter(mse, !proj),
+             aes(yintercept = value, colour = model, linetype = Component)) +
   facet_grid(rows = "h", scales = "free", labeller = label_both) +
   ylab("MSE") +
-  scale_linetype_manual(
-    name = "Component",
-    values = c(
-      "TRUE.PCA_normal" = "solid",
-      "FALSE.NA" = "dashed",
-      "TRUE.normal" = "longdash"
-    ),
-    labels = c(
-      "TRUE.PCA_normal" = "PCA+Norm.",
-      "FALSE.NA" = "No Proj.",
-      "TRUE.normal" = "Norm."
-    )) +
   scale_color_manual(
     name = "Model",
     values = cb_palette_grey[c(7, 6, 4, 2)],
@@ -1184,25 +1214,33 @@ mse %>%
       "arima" = "ARIMA",
       "dfm" = "DFM",
       "true" = "VAR - DGP",
-      "var" = "VAR - Est."))
+      "var" = "VAR - Est.")) +
+  scale_linetype_manual(
+    name = "Component",
+    values = c("dashed", "solid"),
+    labels = c("No projection", "PCA + Normal")
+  )
 ```
 
 ## Future research directions
 
 * Investigate why PCA performs better than random weights
+
 * Find other components that are better than PCA
+
 * Find optimal components by minimising forecast error variance with respect to $\bm{\Phi}$
+
 * Use forecast projection and forecast reconciliation together
 
 
 # Final comments
 
 ## Software
-\fontsize{11}{12}\sf\vspace*{0.3cm}
+\fontsize{10}{12}\sf\vspace*{0.3cm}\tabcolsep=0.12cm
 
-\hspace*{-0.6cm}\begin{tabular}{llP{1.7cm}cP{1.7cm}c}
+\hspace*{-0.3cm}\begin{tabular}{@{}llP{1.4cm}cP{1.4cm}cc@{}}
 \toprule
-Package                                                                      & Language  & Cross-sectional  & Temporal    & Cross-temporal  & Probabilistic\\
+Package                                                                      & Language  & Cross-sectional  & Temporal    & Cross-temporal  & Probabilistic & Multivariate \\
 \midrule
 \texttt{\href{https://pkg.earo.me/hts/}{hts}}
     & R         & \checkmark       &             &                 & \\
@@ -1212,6 +1250,8 @@ Package                                                                      & L
     & R         & \checkmark       &             &                 & \checkmark\\
 \texttt{\href{https://danigiro.github.io/FoReco/}{FoReco}}
     & R         & \checkmark       & \checkmark  & \checkmark      & \checkmark\\
+\texttt{\href{https://cran.r-project.org/package=flap}{flap}}
+    & R & & & & & \checkmark \\
 \texttt{\href{https://angelpone.github.io/pyhts/}{pyhts}}
     & Python    & \checkmark       & \checkmark  &                 & \\
 \texttt{\href{https://nixtla.github.io/hierarchicalforecast/}{hierarchicalforecast}}
@@ -1221,6 +1261,7 @@ Package                                                                      & L
 
 * `hts`, `thief`, and `FoReco` use `ts` objects
 * `fable` uses `tsibble` objects
+* `flap` uses matrices of base forecasts
 * `fable` has plans to implement temporal and cross-temporal reconciliation
 
 ## Thanks!
@@ -1232,11 +1273,11 @@ Package                                                                      & L
 \placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
 \placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
 \placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
-\placefig{14}{1.2}{trim = 40 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
+\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
 
 \placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
 \placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
-\placefig{4}{3.8}{trim = 100 30 50 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
+\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
 \placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
 \placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
 \placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
