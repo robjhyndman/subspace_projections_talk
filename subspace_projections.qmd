@@ -1304,5 +1304,13 @@ Package                                                                      & L
 
 \href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
 
+\vspace*{1cm}
+
+\begin{block}{}
+\centerline{\href{https://robjhyndman.com/curtin2024}{robjhyndman.com/curtin2024}}
+\end{block}
+
+
+
 \nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
 \nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint,flap}
