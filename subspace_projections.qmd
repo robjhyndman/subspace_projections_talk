@@ -983,7 +983,7 @@ where $\bm{M}$ is a projection matrix onto the coherent subspace.
 
 ## Forecast error variance reduction
 
-* Under unbiasedness, the variance reduction $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$
+* The variance reduction $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$
 is __positive semi-definite__.
 
 * The diagonal elements of $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$ are non-decreasing as the number of components increases.
