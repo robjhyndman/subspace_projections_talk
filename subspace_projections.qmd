@@ -13,7 +13,9 @@ format:
       - before-title.tex
     include-in-header: header.tex
     keep-tex: true
-cite-method: biblatex
+    cite-method: biblatex
+    fig-width: 9
+    fig-height: 4
 biblatexoptions: natbib,style=authoryear
 bibliography: hts.bib
 highlight-style: tango
@@ -21,146 +23,43 @@ execute:
   echo: false
   message: false
   warning: false
-  cache: true
+  cache: false
 abstract: Univariate, multivariate, and hierarchical forecasts can all be improved using projections onto linear subspaces, regardless of what forecasting method is used. I will show some theoretical guarantees of this statement, and demonstrate using empirical applications how linear projections can lead to (sometimes dramatic) improvements in forecast accuracy.
 ---
 
 ```{r}
 #| label: load-packages
-#| cache: false
 source("setup.R")
+library(fpp3)
+library(targets)
+tar_load(c(tourism,tourism_agg,fit,fc))
 ```
 
 # Improving hierarchical forecasts
 
 ## Australian tourism regions
 
-```{r}
-#| label: ausmap
-#| eval: false
-library(sf)
-# Use Okabe-Ito color-blind friendly color palette
-state_colors <- c(
-  `New South Wales` = "#56b4e9",
-  `Victoria` = "#0072b2",
-  `Queensland` = "#009e73",
-  `South Australia` = "#f0e442",
-  `Northern Territory` = "#d55e00",
-  `Western Australia` = "#e69f00",
-  `Tasmania` = "#cc79a7",
-  `Australian Capital Territory` = "#cccccc"
-)
-Cairo::CairoPDF(here::here("figs/ausmap.pdf"), width = 15/1.5, height = 7/1.5)
-read_sf("tourism/Tourism_Regions_2020.shp") |>
-  rename(State = "STE_NAME16") |>
-  ggplot() +
-  geom_sf(aes(fill = State), alpha = 0.8) +
-  theme_void() +
-  theme(text = ggplot2::element_text(family = 'Fira Sans')) +
-  scale_fill_manual(values = state_colors)
-crop::dev.off.crop(here::here("figs/aus_map.pdf"))
-```
+\centerline{\includegraphics[width=14cm,height=7.7cm]{figs/aus_map.png}}
 
-\centerline{\includegraphics[width=14cm,height=8cm]{figs/aus_map.png}}
-
-\only<2>{\begin{textblock}{6.5}(9.2,1.4)
+\only<2>{\begin{textblock}{6.5}(9.2,0)
 \begin{block}{}%\fontsize{12}{13}\sf
   \begin{itemize}\itemsep=0cm\parskip=0cm
-    \item Monthly data on visitor night from 1998 -- 2017
-    \item From \textit{National Visitor Survey}, annual interviews of 120,000 Australians aged 15+.
-    \item Geographical hierarchy split by
-    \begin{itemize}
+    \item Monthly data on visitor nights: 1998 -- 2016
     \item 7 states
     \item 27 zones
-    \item 75 regions
-    \end{itemize}
+    \item 76 regions
   \end{itemize}
 \end{block}
 \end{textblock}}
 
-
 ## Australian tourism data
 
-```{r}
-#| label: tourism_plots
-#| eval: false
-p1 <- tourism |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  #scale_y_log10() +
-  ggtitle("Total domestic travel: Australia")
-p2 <- tourism |>
-  group_by(state) |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  scale_y_log10() +
-  ggtitle("Total domestic travel: by state") +
-  scale_color_manual(
-    values =
-      c(
-        NSW = "#56b4e9",
-        VIC = "#0072b2",
-        QLD = "#009e73",
-        SA = "#f0e442",
-        NT = "#d55e00",
-        WA = "#e69f00",
-        TAS = "#cc79a7",
-        ACT = "#cccccc"
-      )
-  ) +
-  guides(color = guide_legend(title="State"))
-p3 <- tourism |>
-  filter(state == "NSW") |>
-  group_by(zone) |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  ggtitle("Total domestic travel: NSW by zone") +
-  guides(color = guide_legend(title="Zone"))
-p4 <- tourism |>
-  filter(zone == "South NSW") |>
-  group_by(region) |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  #scale_y_log10() +
-  ggtitle("Total domestic travel: South NSW by region") +
-  guides(color = guide_legend(title="Region"))
-p5 <- tourism |>
-  group_by(purpose) |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  #scale_y_log10() +
-  ggtitle("Total domestic travel: by purpose of travel") +
-  guides(color = guide_legend(title="Purpose"))
-p6 <- tourism |>
-  filter(region == "Snowy Mountains") |>
-  group_by(purpose) |>
-  summarise(visitors = sum(visitors)) |>
-  autoplot(visitors) +
-  ylab("Visitor nights") + xlab("Month") +
-  #scale_y_log10() +
-  ggtitle("Total domestic travel: Snowy Mountains by purpose of travel") +
-  guides(color = guide_legend(title="Purpose"))
-
-aligned_plots <- align_patches(p1, p2, p3, p4, p5, p6)
-for (i in seq_along(aligned_plots)) {
-  fname <- paste0("./figs/tourism", i, ".pdf")
-  Cairo::CairoPDF(fname, width = 15/1.5, height = 7/1.5)
-  print(aligned_plots[[i]])
-  crop::dev.off.crop(fname)
-}
-```
-
-\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism1}}
-\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism2}}
-\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism3}}
-\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism4}}
-\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism5}}
-\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism6}}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism4}}
+\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism5}}
+\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism6}}
 
 ## Australian tourism data
 
@@ -257,8 +156,6 @@ Almost all collections of time series with linear constraints can be written \rl
        \end{pmatrix}}
 \end{align*}
 \end{textblock}
-
-
 
 ## The coherent subspace
 
@@ -370,32 +267,34 @@ tourism
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r tourismagg, echo=TRUE}
+```r
 tourism_agg <- tourism |>
   aggregate_key(state / zone / region, visitors = sum(visitors))
 ```
 
 ```{r tourismagg2, echo=FALSE}
+#| label: tourismagg
 tourism_agg
 ```
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r tourismmodels, echo=TRUE}
+```r
 fit <- tourism_agg |>
   filter(year(month) <= 2015) |>
   model(ets = ETS(visitors))
 ```
 
 ```{r tourismmodels1, echo=FALSE}
+#| label: tourismmodels
 fit
 ```
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism, echo=TRUE}
+```r
 fc <- fit |>
   reconcile(
     ols = min_trace(ets, method = "ols"),
@@ -408,53 +307,92 @@ fc <- fit |>
 ```
 
 ```{r fctourism1, echo=FALSE}
+#| label: fctourism
 fc
 ```
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism2, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+```r
 fc |>
   filter(is_aggregated(state)) |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
 
+```{r}
+#| label: fctourism2
+#| fig-width: 12
+#| fig-height: 4.5
+tar_read(fctourism2)
+```
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism3, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+```r
 fc |>
   filter(state == "NSW" & is_aggregated(zone)) |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
 
+```{r}
+#| label: fctourism3
+#| fig-width: 12
+#| fig-height: 4.5
+tar_read(fctourism3)
+```
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism4, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+```r
 fc |>
   filter(region == "Melbourne") |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
 
+```{r}
+#| label: fctourism4
+#| fig-width: 12
+#| fig-height: 4.5
+tar_read(fctourism4)
+```
+
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism5, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+```r
 fc |>
   filter(region == "Snowy Mountains") |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
 
+```{r}
+#| label: fctourism5
+#| fig-width: 12
+#| fig-height: 4.5
+tar_read(fctourism5)
+```
+
+
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fctourism6, dependson='fctourism', echo=TRUE, fig.width=12, fig.height=4.5}
+```r
 fc |>
   filter(region == "Barossa") |>
   autoplot(filter(tourism_agg, year(month) > 2012), level = NULL)
 ```
+
+```{r}
+#| label: fctourism6
+#| fig-width: 12
+#| fig-height: 4.5
+tar_read(fctourism6)
+```
+
 
 ## Performance evaluation
 
@@ -489,20 +427,30 @@ $$
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fcaccuracy, dependson='fctourismcomb', echo=TRUE}
+```r
 fc |>
   accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE))
+```
+
+```{r}
+#| label: fcaccuracy
+tar_read(fcaccuracy)
 ```
 
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r fcaccuracy2, dependson='fctourismcomb', echo=TRUE}
+```r
 fc |>
   accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE)) |>
   group_by(.model) |>
   summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
   arrange(rmsse)
+```
+
+```{r}
+#| label: fcaccuracy2
+tar_read(fcaccuracy2)
 ```
 
 \only<2>{\begin{textblock}{7}(7,5)
@@ -516,23 +464,8 @@ fc |>
 ## Example: Australian tourism
 \fontsize{8}{7}\sf
 
-```{r fcaccuracy3, dependson='fctourismcomb', echo=FALSE}
-fc |>
-  accuracy(tourism_agg,
-    measures = list(mase = MASE, rmsse = RMSSE)
-  ) |>
-  mutate(
-    level = case_when(
-      is_aggregated(state) ~ "National",
-      is_aggregated(zone) ~ "State",
-      is_aggregated(region) ~ "Zone",
-      TRUE ~ "Region"
-    ),
-    level = factor(level, levels = c("National", "State", "Zone", "Region"))
-  ) |>
-  group_by(.model, level) |>
-  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
-  arrange(level, rmsse)
+```{r fcaccuracy3, echo=FALSE}
+tar_read(fcaccuracy3)
 ```
 
 \only<2>{\begin{textblock}{7}(7,5)
@@ -905,20 +838,8 @@ Test set: last 52 weeks
 \alert{MASE comparison} (ARIMA models)
 
 ```{r}
-#| label: ae-table
-tibble::tribble(
-  ~`Aggregation Level`, ~h, ~Base, ~Reconciled, ~Change,
-  "Annual", "1"    , 3.4, 1.9, -42.9,
-  "Weekly", "1--52", 2.0, 1.9, -5.0,
-  "Weekly", "13"   , 2.3, 1.9, -16.2,
-  "Weekly", "4"    , 1.9, 1.5, -18.6,
-  "Weekly", "1"    , 1.6, 1.3, -17.2
-) |>
-  dplyr::mutate(Change = paste0(sprintf("%.1f", Change),"%")) |>
-  kable(booktabs = TRUE, align = "lrrrr") |>
-  column_spec(5, bold = TRUE)
+tar_read(aetable)
 ```
-
 
 ## Temporal reconciliation: M3 monthly series
 
@@ -939,29 +860,8 @@ tibble::tribble(
 \tabcolsep=0.15cm
 \centering
 ```{r}
-#| label: tab-m3
-options(knitr.kable.NA = '')
-tab <- tibble::tribble(
-  ~`Agg.level`   , ~h ,  ~BU1 , ~WLSH1, ~WLSV1, ~WLSS1, ~BU2,  ~WLSH2, ~WLSV2, ~WLSS2,
-  "Annual"       , 1  , -12.1 , -17.9,  -17.8 , -18.5 ,-25.4 ,  -29.9, -29.9 ,  -30.2,
-  "Semi-annual"  , 3  ,   0.0 , -6.3 ,   -6.0 ,  -6.9 , -2.9 ,   -8.1,  -8.2 ,   -9.4,
-  "Four-monthly" , 4  ,   3.1 , -3.2 ,   -3.0 ,  -3.4 , -1.8 ,   -6.2,  -6.5 ,   -7.1,
-  "Quarterly"    , 6  ,   3.2 , -2.8 ,   -2.7 ,  -3.4 , -2.6 ,   -6.9,  -7.4 ,   -8.1,
-  "Bi-monthly"   , 9  ,   2.7 , -2.9 ,   -3.0 ,  -3.7 , -1.3 ,   -5.0,  -5.5 ,   -6.3,
-  "Monthly"      , 18 ,   0.0 , -3.7 ,   -4.6 ,  -5.0 ,  0.0 ,   -1.9,  -3.2 ,   -3.7,
-  "Average"      , NA  ,  -0.5 , -6.1 ,   -6.2 ,  -6.8 , -5.7 ,   -9.7, -10.1 ,  -10.8
-)
-tab |>
-  kable(
-    booktabs = TRUE,
-    format = "latex",
-    escape = FALSE,
-    linesep = "",
-    col.names = c("Aggregation level", "$h$", "BU", "WLS$_H$", "WLS$_V$", "WLS$_S$", "BU", "WLS$_H$", "WLS$_V$", "WLS$_S$")
-  ) |>
-  add_header_above(c(" " = 2, "ETS" = 4, "ARIMA" = 4)) |>
-  column_spec(c(6,10), bold = TRUE) |>
-  row_spec(6, hline_after = TRUE)
+options(knitr.kable.NA = "")
+tar_read(tabm3)
 ```
 
 # Improving multivariate forecasts
@@ -1042,68 +942,22 @@ Generating values of $\bm{\Phi}$ from a random distribution and normalising them
 ## Monthly Australian regional tourism
 
 ```{r}
-#| label: aus-visnights
-visnights <- readr::read_csv(here::here("data/visnights_monthly.csv")) |>
-  mutate(Month = yearmonth(Month)) |>
-  group_by(Month, Region) |>
-  summarise(Nights = sum(Nights), .groups = "drop")
-```
-
-```{r}
 #| label: series
 #| fig-height: 5
-regions <- c("Melbourne", "Canberra", "Fraser Coast", "Central Highlands")
-
-visnights |>
-  filter(Region %in% regions) |>
-  ggplot() +
-  geom_line(aes(x = Month, y = Nights)) +
-  facet_grid("Region", scales = "free")
+tar_read(series)
 ```
 
 ## Monthly Australian regional tourism
 
 ```{r}
 #| label: components
-source(here::here("component.R"))
-visnights_wide <- visnights |>
-  pivot_wider(names_from = Region, values_from = Nights)
-col_month <- select(visnights_wide, Month)
-visnights_wide |>
-  select(-Month) |>
-  as.matrix() |>
-  component() |>
-  getElement("x") %>%
-  bind_cols(col_month, .) |>
-  pivot_longer(-Month,
-               names_to = "Component",
-               values_to = "Value") |>
-  filter(Component %in% unique(Component)[seq_len(4)]) |>
-  ggplot() +
-  geom_line(aes(x = Month, y = Value)) +
-  facet_grid("Component", scales = "free")
+tar_read(components_plot)
 ```
 
 ## Monthly Australian regional tourism
 
 ```{r visnights}
-m <- 77
-qs::qread(here::here("output/tourism_mse.qs")) |>
-  filter(h %in% c(1, 6, 12)) |>
-  mutate(
-    Component = case_match(paste(proj, Phi, sep = "."),
-      "TRUE.PCA_normal" ~ "PCA+Norm.",
-      "FALSE.NA" ~ "No Proj.",
-      "TRUE.normal" ~ "Norm."
-    )
-  ) |>
-  filter(!is.na(Component)) |>
-  ggplot(aes(x = p, y = value, color = Component)) +
-  geom_vline(xintercept = m) +
-  geom_line() +
-  geom_hline(data = \(df) filter(df, !proj), aes(yintercept = value, color = Component)) +
-  facet_grid(rows = "h", scales = "free", labeller = label_both) +
-  ylab("MSE")
+tar_read(visnights_mse)
 ```
 
 ## FRED-MD
@@ -1118,56 +972,18 @@ qs::qread(here::here("output/tourism_mse.qs")) |>
 
 * Expanding time series cross-validation with initial size of 25 years and forecast horizon 12 months.
 
-```{r}
-#| label: fred-md
-m <- 122
-mse <- qs::qread(here::here("output/fred_mse.qs")) |>
-  tibble::as_tibble() |>
-  filter(model %in% c("arima", "dfm"), h %in% c(1, 6, 12)) |>
-  filter(Phi %in% c("NA", "normal", "PCA_normal")) |>
-  mutate(
-    Component = case_when(
-      !proj ~ "No projection",
-      Phi == "normal" ~ "Normal",
-      Phi == "PCA_normal" ~ "PCA + Normal"
-    )
-  )
-```
-
 ## FRED-MD (ARIMA)
 
 ```{r}
 #| label: fred-md-arima
-mse |>
-  filter(model == "arima") |>
-  ggplot(aes(x = p, y = value, color = Component)) +
-  geom_vline(xintercept = m) +
-  geom_hline(data = filter(mse, !proj & model == "arima"),
-             aes(yintercept = value, color = Component)) +
-  geom_line() +
-  facet_grid(rows = "h", scales = "free", labeller = label_both) +
-  ylab("MSE") +
-  scale_x_continuous(expand = expansion(mult = 0)) +
-  scale_color_manual(values = c("#D55E00", "#0072B2","#009E73"),
-                    breaks = c("No projection", "Normal", "PCA + Normal"))
+tar_read(plot_fred_mse_arima)
 ```
 
 ## FRED-MD (DFM)
 
 ```{r}
 #| label: fred-md-dfm
-mse |>
-  filter(model == "dfm") |>
-  ggplot(aes(x = p, y = value, color = Component)) +
-  geom_vline(xintercept = m) +
-  geom_hline(data = filter(mse, !proj & model == "dfm"),
-             aes(yintercept = value, color = Component)) +
-  geom_line() +
-  facet_grid(rows = "h", scales = "free", labeller = label_both) +
-  ylab("MSE") +
-  scale_x_continuous(expand = expansion(mult = 0)) +
-  scale_color_manual(values = c("#D55E00", "#0072B2","#009E73"),
-                    breaks = c("No projection", "Normal", "PCA + Normal"))
+tar_read(plot_fred_mse_dfm)
 ```
 
 ## Simulation
@@ -1186,40 +1002,7 @@ mse |>
 ## Simulation
 
 ```{r simulation}
-m <- 70
-mse <- qs::qread(here::here("output/simulation_mse.qs")) |>
-  as_tibble() |>
-  filter(model %in% c("arima", "dfm", "var", "true"),
-         Phi %in% c("PCA_normal") | is.na(Phi),
-         h %in% c(1, 6)) |>
-  mutate(
-    Component = case_when(
-      !proj ~ "No projection",
-      proj & Phi == "PCA_normal" ~ "PCA + Normal",
-      TRUE ~ "Other"
-    )
-  )
-mse |>
-  ggplot(aes(x = p, y = value, colour = model, linetype = Component)) +
-  geom_vline(xintercept = m) +
-  geom_line() +
-  geom_hline(data = filter(mse, !proj),
-             aes(yintercept = value, colour = model, linetype = Component)) +
-  facet_grid(rows = "h", scales = "free", labeller = label_both) +
-  ylab("MSE") +
-  scale_color_manual(
-    name = "Model",
-    values = cb_palette_grey[c(7, 6, 4, 2)],
-    labels = c(
-      "arima" = "ARIMA",
-      "dfm" = "DFM",
-      "true" = "VAR - DGP",
-      "var" = "VAR - Est.")) +
-  scale_linetype_manual(
-    name = "Component",
-    values = c("dashed", "solid"),
-    labels = c("No projection", "PCA + Normal")
-  )
+tar_read(plot_sim_mse)
 ```
 
 ## Future research directions
@@ -1266,32 +1049,32 @@ Package                                                                      & L
 
 ## Thanks!
 
-\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
-\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{george}
-\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
-\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
-\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
-\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
-\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
-\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
+\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{roman}
+\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{george}
+\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{hanlin}
+\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{earowang}
+\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{alanlee}
+\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mitch}
+\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{shanika}
+\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tas}
 
-\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
-\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
-\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
-\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
-\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
-\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
-\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm}{christoph}
-\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm}{fin}
+\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{puwasala}
+\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fotios}
+\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{nikos}
+\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{souhaib}
+\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{james}
+\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahdi}
+\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{christoph}
+\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fin}
 
-\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{berwin}
-\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm}{galit}
-\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahsa}
-\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
-\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm}{bahman}
-\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
-\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{danielegiro}
-\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm}{tommy}
+\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{berwin}
+\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{galit}
+\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahsa}
+\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{evan}
+\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{bahman}
+\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{pablo}
+\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{danielegiro}
+\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tommy}
 
 ## More information
 \fontsize{18}{20}\sf
