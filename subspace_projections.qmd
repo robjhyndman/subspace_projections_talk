@@ -41,7 +41,7 @@ tar_load(c(tourism,tourism_agg,fit,fc))
 
 \centerline{\includegraphics[width=14cm,height=7.7cm]{figs/aus_map.png}}
 
-\only<2>{\begin{textblock}{6.5}(9.2,0)
+\only<2>{\begin{textblock}{6.5}(9.2,-0.15)
 \begin{block}{}%\fontsize{12}{13}\sf
   \begin{itemize}\itemsep=0cm\parskip=0cm
     \item Monthly data on visitor nights: 1998 -- 2016

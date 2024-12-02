@@ -17,7 +17,8 @@ make_ausmap <- function(tourism_regions) {
     geom_sf(aes(fill = State), alpha = 0.8) +
     theme_void() +
     theme(text = ggplot2::element_text(family = "Fira Sans")) +
-    scale_fill_manual(values = state_colors)
+    scale_fill_manual(values = state_colors) +
+    theme(rect = element_rect(fill = "transparent"))
   Cairo::CairoPDF(here::here("figs/ausmap.pdf"), width = 15 / 1.5, height = 7 / 1.5)
   print(p)
   crop::dev.off.crop(here::here("figs/aus_map.pdf"))

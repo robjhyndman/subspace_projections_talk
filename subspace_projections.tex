@@ -103,15 +103,17 @@
 \makeatother
 \usepackage{graphicx}
 \makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
 % Set default figure placement to htbp
-\makeatletter
 \def\fps@figure{htbp}
 \makeatother
 
@@ -186,20 +188,6 @@
 \newcommand{\btwocol}{\begin{multicols}{2}}
 \newcommand{\etwocol}{\end{multicols}}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -242,9 +230,6 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
 \usepackage[natbib,style=authoryear]{biblatex}
 \addbibresource{hts.bib}
 \usepackage{bookmark}
@@ -309,8 +294,8 @@
 \begin{textblock}{7.5}(.5,1.4)
 \fontsize{14}{14}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\insertauthor}
 \end{textblock}
-\placefig{.5}{8.4}{height=0.4cm, width=20cm}{monash_white}
-\placefig{4.5}{8.25}{height=0.6cm, width=20cm}{optima}
+\placefig{.5}{8.4}{height=0.4cm, width=20cm, keepaspectratio}{monash_white}
+\placefig{4.5}{8.25}{height=0.6cm, width=20cm, keepaspectratio}{optima}
 \begin{textblock}{6.2}(13.4,8.75)
 \fontsize{4}{4}\sf\textcolor[HTML]{A0792E}{Photo by \href{https://unsplash.com/@stanleyc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash}{Stanley Cheung} on \href{"https://unsplash.com/photos/people-standing-on-stadium-during-night-time-sJ064KhsMok?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"}{Unsplash}}
 \end{textblock}}
@@ -324,7 +309,6 @@
 \author{Rob J Hyndman}
 \date{19 September 2024}
 \titlegraphic{\includegraphics{bg-02.png}}
-
 \begin{document}
 \frame{\titlepage}
 \begin{abstract}
@@ -347,19 +331,15 @@ forecasts}\label{improving-hierarchical-forecasts}
 
 \begin{frame}{Australian tourism regions}
 \phantomsection\label{australian-tourism-regions}
-\centerline{\includegraphics[width=14cm,height=8cm]{figs/aus_map.png}}
+\centerline{\includegraphics[width=14cm,height=7.7cm]{figs/aus_map.png}}
 
-\only<2>{\begin{textblock}{6.5}(9.2,1.4)
+\only<2>{\begin{textblock}{6.5}(9.2,-0.15)
 \begin{block}{}%\fontsize{12}{13}\sf
   \begin{itemize}\itemsep=0cm\parskip=0cm
-    \item Monthly data on visitor night from 1998 -- 2017
-    \item From \textit{National Visitor Survey}, annual interviews of 120,000 Australians aged 15+.
-    \item Geographical hierarchy split by
-    \begin{itemize}
+    \item Monthly data on visitor nights: 1998 -- 2016
     \item 7 states
     \item 27 zones
-    \item 75 regions
-    \end{itemize}
+    \item 76 regions
   \end{itemize}
 \end{block}
 \end{textblock}}
@@ -367,12 +347,12 @@ forecasts}\label{improving-hierarchical-forecasts}
 
 \begin{frame}{Australian tourism data}
 \phantomsection\label{australian-tourism-data}
-\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism1}}
-\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism2}}
-\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism3}}
-\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism4}}
-\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism5}}
-\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=8cm}{tourism6}}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism4}}
+\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism5}}
+\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism6}}
 \end{frame}
 
 \begin{frame}{Australian tourism data}
@@ -709,19 +689,20 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \begin{verbatim}
 # A fable: 13,320 x 7 [1M]
 # Key:     state, zone, region, .model [555]
-   state  zone   region   .model    month      visitors .mean
-   <chr*> <chr*> <chr*>   <chr>     <mth>        <dist> <dbl>
- 1 NSW    ACT    Canberra ets    2016 Jan N(593, 21917)  593.
- 2 NSW    ACT    Canberra ets    2016 Feb  N(367, 8384)  367.
- 3 NSW    ACT    Canberra ets    2016 Mar N(461, 13247)  461.
- 4 NSW    ACT    Canberra ets    2016 Apr N(506, 15968)  506.
- 5 NSW    ACT    Canberra ets    2016 May N(430, 11509)  430.
- 6 NSW    ACT    Canberra ets    2016 Jun  N(398, 9861)  398.
- 7 NSW    ACT    Canberra ets    2016 Jul N(523, 17068)  523.
- 8 NSW    ACT    Canberra ets    2016 Aug  N(392, 9564)  392.
- 9 NSW    ACT    Canberra ets    2016 Sep N(442, 12153)  442.
-10 NSW    ACT    Canberra ets    2016 Oct N(572, 20376)  572.
+   state  zone   region   .model    month
+   <chr*> <chr*> <chr*>   <chr>     <mth>
+ 1 NSW    ACT    Canberra ets    2016 Jan
+ 2 NSW    ACT    Canberra ets    2016 Feb
+ 3 NSW    ACT    Canberra ets    2016 Mar
+ 4 NSW    ACT    Canberra ets    2016 Apr
+ 5 NSW    ACT    Canberra ets    2016 May
+ 6 NSW    ACT    Canberra ets    2016 Jun
+ 7 NSW    ACT    Canberra ets    2016 Jul
+ 8 NSW    ACT    Canberra ets    2016 Aug
+ 9 NSW    ACT    Canberra ets    2016 Sep
+10 NSW    ACT    Canberra ets    2016 Oct
 # i 13,310 more rows
+# i 2 more variables: visitors <dist>, .mean <dbl>
 \end{verbatim}
 \end{frame}
 
@@ -737,7 +718,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{subspace_projections_files/figure-beamer/fctourism2-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fctourism2-1.pdf}}
 \end{frame}
 
 \begin{frame}[fragile]{Example: Australian tourism}
@@ -752,7 +733,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{subspace_projections_files/figure-beamer/fctourism3-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fctourism3-1.pdf}}
 \end{frame}
 
 \begin{frame}[fragile]{Example: Australian tourism}
@@ -767,7 +748,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{subspace_projections_files/figure-beamer/fctourism4-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fctourism4-1.pdf}}
 \end{frame}
 
 \begin{frame}[fragile]{Example: Australian tourism}
@@ -782,7 +763,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{subspace_projections_files/figure-beamer/fctourism5-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fctourism5-1.pdf}}
 \end{frame}
 
 \begin{frame}[fragile]{Example: Australian tourism}
@@ -797,7 +778,7 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{subspace_projections_files/figure-beamer/fctourism6-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fctourism6-1.pdf}}
 \end{frame}
 
 \begin{frame}{Performance evaluation}
@@ -858,19 +839,19 @@ $$
 \end{Shaded}
 
 \begin{verbatim}
-# A tibble: 555 x 7
-   .model state  zone            region          .type  mase rmsse
-   <chr>  <chr*> <chr*>          <chr*>          <chr> <dbl> <dbl>
- 1 ets    NSW    ACT             Canberra        Test  0.546 0.513
- 2 ets    NSW    ACT             <aggregated>    Test  0.546 0.513
- 3 ets    NSW    Metro NSW       Central Coast   Test  0.909 0.829
- 4 ets    NSW    Metro NSW       Sydney          Test  0.891 0.764
- 5 ets    NSW    Metro NSW       <aggregated>    Test  0.848 0.715
- 6 ets    NSW    North Coast NSW Hunter          Test  0.804 0.696
- 7 ets    NSW    North Coast NSW North Coast NSW Test  1.21  1.17 
- 8 ets    NSW    North Coast NSW <aggregated>    Test  1.10  0.986
- 9 ets    NSW    North NSW       Blue Mountains  Test  0.932 1.13 
-10 ets    NSW    North NSW       Central NSW     Test  1.02  0.805
+# A tibble: 555 x 8
+   .model state  zone            region          .type  mase rmsse level 
+   <chr>  <chr*> <chr*>          <chr*>          <chr> <dbl> <dbl> <fct> 
+ 1 ets    NSW    ACT             Canberra        Test  0.546 0.513 Region
+ 2 ets    NSW    ACT             <aggregated>    Test  0.546 0.513 Zone  
+ 3 ets    NSW    Metro NSW       Central Coast   Test  0.909 0.829 Region
+ 4 ets    NSW    Metro NSW       Sydney          Test  0.891 0.764 Region
+ 5 ets    NSW    Metro NSW       <aggregated>    Test  0.848 0.715 Zone  
+ 6 ets    NSW    North Coast NSW Hunter          Test  0.804 0.696 Region
+ 7 ets    NSW    North Coast NSW North Coast NSW Test  1.21  1.17  Region
+ 8 ets    NSW    North Coast NSW <aggregated>    Test  1.10  0.986 Zone  
+ 9 ets    NSW    North NSW       Blue Mountains  Test  0.932 1.13  Region
+10 ets    NSW    North NSW       Central NSW     Test  1.02  0.805 Region
 # i 545 more rows
 \end{verbatim}
 \end{frame}
@@ -1352,17 +1333,18 @@ Test set: last 52 weeks
 
 \alert{MASE comparison} (ARIMA models)
 
-\begin{longtable*}[t]{lrrr>{}r}
-\toprule
-Aggregation Level & h & Base & Reconciled & Change\\
-\midrule
-Annual & 1 & 3.4 & 1.9 & \textbf{-42.9\%}\\
-Weekly & 1--52 & 2.0 & 1.9 & \textbf{-5.0\%}\\
-Weekly & 13 & 2.3 & 1.9 & \textbf{-16.2\%}\\
-Weekly & 4 & 1.9 & 1.5 & \textbf{-18.6\%}\\
-Weekly & 1 & 1.6 & 1.3 & \textbf{-17.2\%}\\
-\bottomrule
-\end{longtable*}
+\begin{longtable}[]{@{}lrrrr@{}}
+\toprule\noalign{}
+Aggregation Level & h & Base & Reconciled & Change \\
+\midrule\noalign{}
+\endhead
+Annual & 1 & 3.4 & 1.9 & -42.9\% \\
+Weekly & 1-\/-52 & 2.0 & 1.9 & -5.0\% \\
+Weekly & 13 & 2.3 & 1.9 & -16.2\% \\
+Weekly & 4 & 1.9 & 1.5 & -18.6\% \\
+Weekly & 1 & 1.6 & 1.3 & -17.2\% \\
+\bottomrule\noalign{}
+\end{longtable}
 \end{frame}
 
 \begin{frame}{Temporal reconciliation: M3 monthly series}
@@ -1414,7 +1396,7 @@ Quarterly & 6 & 3.2 & -2.8 & -2.7 & \textbf{-3.4} & -2.6 & -6.9 & -7.4 & \textbf
 Bi-monthly & 9 & 2.7 & -2.9 & -3.0 & \textbf{-3.7} & -1.3 & -5.0 & -5.5 & \textbf{-6.3}\\
 Monthly & 18 & 0.0 & -3.7 & -4.6 & \textbf{-5.0} & 0.0 & -1.9 & -3.2 & \textbf{-3.7}\\
 \midrule
-Average &  & -0.5 & -6.1 & -6.2 & \textbf{-6.8} & -5.7 & -9.7 & -10.1 & \textbf{-10.8}\\
+Average & NA & -0.5 & -6.1 & -6.2 & \textbf{-6.8} & -5.7 & -9.7 & -10.1 & \textbf{-10.8}\\
 \bottomrule
 \end{tabular}
 \end{frame}
@@ -1546,17 +1528,17 @@ normalising them to unit vectors
 
 \begin{frame}{Monthly Australian regional tourism}
 \phantomsection\label{monthly-australian-regional-tourism-1}
-\includegraphics{subspace_projections_files/figure-beamer/series-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/series-1.pdf}}
 \end{frame}
 
 \begin{frame}{Monthly Australian regional tourism}
 \phantomsection\label{monthly-australian-regional-tourism-2}
-\includegraphics{subspace_projections_files/figure-beamer/components-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/components-1.pdf}}
 \end{frame}
 
 \begin{frame}{Monthly Australian regional tourism}
 \phantomsection\label{monthly-australian-regional-tourism-3}
-\includegraphics{subspace_projections_files/figure-beamer/visnights-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/visnights-1.pdf}}
 \end{frame}
 
 \begin{frame}{FRED-MD}
@@ -1578,12 +1560,12 @@ normalising them to unit vectors
 
 \begin{frame}{FRED-MD (ARIMA)}
 \phantomsection\label{fred-md-arima}
-\includegraphics{subspace_projections_files/figure-beamer/fred-md-arima-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fred-md-arima-1.pdf}}
 \end{frame}
 
 \begin{frame}{FRED-MD (DFM)}
 \phantomsection\label{fred-md-dfm}
-\includegraphics{subspace_projections_files/figure-beamer/fred-md-dfm-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fred-md-dfm-1.pdf}}
 \end{frame}
 
 \begin{frame}{Simulation}
@@ -1610,7 +1592,7 @@ normalising them to unit vectors
 
 \begin{frame}{Simulation}
 \phantomsection\label{simulation-2}
-\includegraphics{subspace_projections_files/figure-beamer/simulation-1.pdf}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/simulation-1.pdf}}
 \end{frame}
 
 \begin{frame}{Future research directions}
@@ -1672,32 +1654,32 @@ Package                                                                      & L
 
 \begin{frame}{Thanks!}
 \phantomsection\label{thanks}
-\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm}{roman}
-\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{george}
-\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{hanlin}
-\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{earowang}
-\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm}{alanlee}
-\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mitch}
-\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{shanika}
-\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{tas}
+\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{roman}
+\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{george}
+\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{hanlin}
+\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{earowang}
+\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{alanlee}
+\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mitch}
+\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{shanika}
+\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tas}
 
-\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm}{puwasala}
-\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm}{fotios}
-\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm}{nikos}
-\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm}{souhaib}
-\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm}{james}
-\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahdi}
-\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm}{christoph}
-\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm}{fin}
+\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{puwasala}
+\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fotios}
+\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{nikos}
+\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{souhaib}
+\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{james}
+\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahdi}
+\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{christoph}
+\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fin}
 
-\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{berwin}
-\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm}{galit}
-\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{mahsa}
-\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm}{evan}
-\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm}{bahman}
-\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{pablo}
-\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm}{danielegiro}
-\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm}{tommy}
+\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{berwin}
+\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{galit}
+\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahsa}
+\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{evan}
+\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{bahman}
+\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{pablo}
+\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{danielegiro}
+\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tommy}
 \end{frame}
 
 \begin{frame}{More information}
