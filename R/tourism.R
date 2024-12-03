@@ -28,3 +28,4 @@ tourism_accuracy <- function(fc, data) {
       level = factor(level, levels = c("National", "State", "Zone", "Region"))
     )
 }
+

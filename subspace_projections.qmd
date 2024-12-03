@@ -59,38 +59,25 @@ tar_load(c(tourism,tourism_agg,fit,fc))
 \only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism2}}
 \only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism3}}
 \only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism4}}
-\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism5}}
-\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism6}}
 
 ## Australian tourism data
 
-\begin{textblock}{6}(0.2,1.2)
-\centering\fontsize{12}{13}\sf
-\textbf{Geographical division}\\
-\includegraphics[width = 5.5cm]{ausmap.png}\\[-0.4cm]
-\faTimes\\
-\textbf{Purpose of travel}\\
-{\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
-\end{textblock}
+\placefig{0.2}{1.3}{width = 6.5cm, trim = 0 0 700 0, clip = true}{ausmap.png}
 
-\begin{textblock}{10}(6.1,1)
-\fontsize{11}{14}\sf\tabcolsep=0.12cm
-\begin{itemize}
-\item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
-
-\begin{tabular}{lccccc}
+\begin{textblock}{10}(8.1,1.4)
+\fontsize{11}{12}\sf
+\begin{tabular}{lr}
 \toprule
-  & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
-  \midrule
-  \textbf{geographical} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
-  \textbf{purpose} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
-  \midrule
-  \textbf{total} & 5 & 35 & 105 & 380 & \textbf{525}\\
-  \bottomrule
+\bf Aggregation level & \bf \# series \\
+\midrule
+National & 1 \\
+State & 7 \\
+Zone & 27 \\
+Region & 76 \\
+\midrule
+\bf Total & \bf 111 \\
+\bottomrule
 \end{tabular}
-\centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
-
-\end{itemize}
 \end{textblock}
 
 \begin{textblock}{9.4}(6.1,6)

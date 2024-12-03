@@ -44,25 +44,25 @@ make_tourism_plots <- function(tourism) {
     # scale_y_log10() +
     ggtitle("Total domestic travel: South NSW by region") +
     guides(color = guide_legend(title = "Region"))
-  p5 <- tourism |>
-    group_by(purpose) |>
-    summarise(visitors = sum(visitors)) |>
-    autoplot(visitors) +
-    ylab("Visitor nights") + xlab("Month") +
-    # scale_y_log10() +
-    ggtitle("Total domestic travel: by purpose of travel") +
-    guides(color = guide_legend(title = "Purpose"))
-  p6 <- tourism |>
-    filter(region == "Snowy Mountains") |>
-    group_by(purpose) |>
-    summarise(visitors = sum(visitors)) |>
-    autoplot(visitors) +
-    ylab("Visitor nights") + xlab("Month") +
-    # scale_y_log10() +
-    ggtitle("Total domestic travel: Snowy Mountains by purpose of travel") +
-    guides(color = guide_legend(title = "Purpose"))
+  # p5 <- tourism |>
+  #   group_by(purpose) |>
+  #   summarise(visitors = sum(visitors)) |>
+  #   autoplot(visitors) +
+  #   ylab("Visitor nights") + xlab("Month") +
+  #   # scale_y_log10() +
+  #   ggtitle("Total domestic travel: by purpose of travel") +
+  #   guides(color = guide_legend(title = "Purpose"))
+  # p6 <- tourism |>
+  #   filter(region == "Snowy Mountains") |>
+  #   group_by(purpose) |>
+  #   summarise(visitors = sum(visitors)) |>
+  #   autoplot(visitors) +
+  #   ylab("Visitor nights") + xlab("Month") +
+  #   # scale_y_log10() +
+  #   ggtitle("Total domestic travel: Snowy Mountains by purpose of travel") +
+  #   guides(color = guide_legend(title = "Purpose"))
 
-  aligned_plots <- align_patches(p1, p2, p3, p4, p5, p6)
+  aligned_plots <- align_patches(p1, p2, p3, p4)
   for (i in seq_along(aligned_plots)) {
     fname <- paste0("./figs/tourism", i, ".pdf")
     Cairo::CairoPDF(fname, width = 15 / 1.5, height = 7 / 1.5)

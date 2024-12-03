@@ -138,5 +138,7 @@ make_tourism <- function(vndata) {
       )
     ) |>
     as_tsibble(index = month, key = c(state, zone, region, purpose)) |>
-    select(month, state:purpose, visitors)
+    select(month, state:purpose, visitors) |>
+    group_by(state, zone, region) |>
+    summarise(visitors = sum(visitors), .groups = "drop")
 }
