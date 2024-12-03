@@ -1,5 +1,5 @@
 make_tourism_plots <- function(tourism) {
-  #| label: tourism_plots
+  source(here::here("setup.R"))
   p1 <- tourism |>
     summarise(visitors = sum(visitors)) |>
     autoplot(visitors) +
@@ -67,7 +67,7 @@ make_tourism_plots <- function(tourism) {
     fname <- paste0("./figs/tourism", i, ".pdf")
     Cairo::CairoPDF(fname, width = 15 / 1.5, height = 7 / 1.5)
     print(aligned_plots[[i]])
-    crop::dev.off.crop(fname)
+    dev.off(fname)
   }
   return(aligned_plots)
 }
