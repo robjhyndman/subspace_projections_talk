@@ -94,13 +94,13 @@ Region & 76 \\
 
 \begin{textblock}{8.8}(0.2,1.5)
 Almost all collections of time series with linear constraints can be written \rlap{as}
-\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
+\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{summing}\bS\color{bottom}\bm{b}_{t}$}}
 \vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
 \item $\by_t=$ vector of all series at time $t$
 \item $y_{\text{Total},t}=$ aggregate of all series at time $t$.
 \item $y_{X,t}=$ value of series $X$ at time $t$.
-\item $\color{red}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
-\item $\color{blue}{\bS}=$ ``summing matrix'' containing the linear constraints.
+\item $\color{bottom}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
+\item $\color{summing}{\bS}=$ ``summing matrix'' containing the linear constraints.
 \end{itemize}
 \end{textblock}
 
@@ -129,12 +129,12 @@ Almost all collections of time series with linear constraints can be written \rl
   y_{A,t}\\
   y_{B,t}
   \end{pmatrix}  \\
-  &= {\color{blue}\underbrace{\begin{pmatrix}
+  &= {\color{summing}\underbrace{\begin{pmatrix}
                 1 & 1  \\
                 1 & 0  \\
-                0 & 1 
+                0 & 1
                 \end{pmatrix}}_{\bm{S}}}
-     {\color{red}\underbrace{\begin{pmatrix}
+     {\color{bottom}\underbrace{\begin{pmatrix}
        y_{A,t}\\y_{B,t}
        \end{pmatrix}}_{\bm{b}_t}}
 \end{align*}
@@ -179,11 +179,11 @@ Wickramasuriya et al (2019)
 \begin{block}{}
 \centerline{$\displaystyle\reconciled = \bm{M}\base$}
 \end{block}
-\centerline{\hspace*{1.4cm}\textcolor[HTML]{00aa00}{Reconciled forecasts}\hfill\textcolor[HTML]{aa00aa}{Base forecasts}\hspace*{2.6cm}}
+\centerline{\hspace*{1.4cm}\textcolor{reconciled}{Reconciled forecasts}\hfill\textcolor{base}{Base forecasts}\hspace*{2.6cm}}
 \pause
 
-* Base forecast covariance:\newline $\bm{W}_h = \var[\by_{T+h} - \base \mid \by_1,\dots,\by_T]$ 
-* Reconciled forecast covariance:\newline $\bm{V}_h = \var[\by_{T+h} - \reconciled \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'$ 
+* Base forecast covariance:\newline $\bm{W}_h = \var[\by_{T+h} - \base \mid \by_1,\dots,\by_T]$
+* Reconciled forecast covariance:\newline $\bm{V}_h = \var[\by_{T+h} - \reconciled \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'$
 
 \pause
 \begin{alertblock}{Minimum trace (MinT) reconciliation}
@@ -193,35 +193,29 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 
 ## Linear projections
 
-\begin{textblock}{5}(7,-0.2)
+\begin{textblock}{7}(7,-0.2)
 \begin{block}{}
-\centerline{$\reconciled =\bm{M}\base$}
+\centerline{$\reconciled = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\base$}
 \end{block}
 \end{textblock}
 
-\begin{textblock}{9.4}(.5,1.2)
-\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{M}$}
+\begin{textblock}{9.4}(1,1.15)
+\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{W}_h$}
 \begin{tabular}{ll}
-  OLS             & $\bS(\bS'\bS)^{-1}\bS'$ \\
-  WLS(var)        & $\bS(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
-  WLS(struct)     & $\bS(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
-  MinT(sample)    & $\bS(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
-  MinT(shrink)\hspace*{1.7cm}    & $\bS(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
+  OLS             & $\bm{I}$ \\
+  WLS(var)        & $\text{diag}(\bm{W}_1)$ \\
+  WLS(struct)     & $\text{diag}(\bS\bm{1})$ \\
+  MinT(sample)    & $\hat{\bm{W}}_{\text{sam}}$  \\
+  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$  
 \end{tabular}
 \end{alertblock}
 \end{textblock}
-\begin{textblock}{15}(.2,5.7)\fontsize{13}{15}\sf
+\begin{textblock}{15}(.8,5.8)\fontsize{14}{16}\sf
 \begin{itemize}\parskip=0cm
-\item $\bm{\Lambda}_v = \text{diag}(\bm{W}_1)^{-1}$
-\item $\bm{\Lambda}_s = \text{diag}(\bS\bm{1})^{-1}$
+\item All approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \item $\hat{\bm{W}}_{\text{sam}}$ is sample estimate of the residual covariance matrix
 \item $\hat{\bm{W}}_{\text{shr}}$ is shrinkage estimator $\tau \text{diag}(\hat{\bm{W}}_{\text{sam}})+(1-\tau)\hat{\bm{W}}_{\text{sam}}$\\ where $\tau$ selected optimally.
 \end{itemize}
-\end{textblock}
-\begin{textblock}{5}(10.3,3.35)
-\begin{block}{}
-These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
-\end{block}
 \end{textblock}
 
 
@@ -266,9 +260,6 @@ fit
 fc <- fit |>
   reconcile(
     ols = min_trace(ets, method = "ols"),
-    wlsv = min_trace(ets, method = "wls_var"),
-    wlss = min_trace(ets, method = "wls_struct"),
-    # mint_c = min_trace(ets, method="mint_cov"),
     mint_s = min_trace(ets, method = "mint_shrink"),
   ) |>
   forecast(h = "2 years")
@@ -361,22 +352,6 @@ fc |>
 tar_read(fctourism6)
 ```
 
-
-## Performance evaluation
-
-\vspace*{0.2cm}\begin{block}{}
-\centerline{$\text{MASE} = \text{mean}(|q_{j}|)$}
-$$
-  q_{j} = \frac{e_{j}\phantom{^2}}
- {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T |y_{t}-y_{t-m}|}
-$$
-\end{block}
-
-* $y_t=$ observation for period $t$
-* $e_{j}=$ forecast error for forecast horizon $j$
-* $T=$ size of training set
-* $m = 12$
-
 ## Performance evaluation
 
 \vspace*{0.2cm}\begin{block}{}
@@ -396,8 +371,7 @@ $$
 \fontsize{10}{11}\sf
 
 ```r
-fc |>
-  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE))
+accuracy(fc, tourism_agg, measures = list(rmsse = RMSSE))
 ```
 
 ```{r}
@@ -409,11 +383,8 @@ tar_read(fcaccuracy)
 \fontsize{10}{11}\sf
 
 ```r
-fc |>
-  accuracy(tourism_agg, measures = list(mase = MASE, rmsse = RMSSE)) |>
-  group_by(.model) |>
-  summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
-  arrange(rmsse)
+accuracy(fc, tourism_agg, measures = list(rmsse = RMSSE)) |>
+  summarise(rmsse = sqrt(mean(rmsse^2)), .by = .model)
 ```
 
 ```{r}
@@ -421,10 +392,10 @@ fc |>
 tar_read(fcaccuracy2)
 ```
 
-\only<2>{\begin{textblock}{7}(7,5)
+\only<2>{\begin{textblock}{7}(7,3)
 \begin{block}{}\fontsize{13}{14}\sf
 \begin{itemize}\tightlist
-\item Overall, every reconciliation method is better than the base ETS forecasts.
+\item Overall, both reconciliation methods are more accurate than the base ETS forecasts.
 \end{itemize}
 \end{block}
 \end{textblock}}
@@ -432,14 +403,20 @@ tar_read(fcaccuracy2)
 ## Example: Australian tourism
 \fontsize{8}{7}\sf
 
+
+```r
+accuracy(fc, tourism_agg, measures = list(rmsse = RMSSE)) |>
+  summarise(rmsse = sqrt(mean(rmsse^2)), .by = c(.model, level)) |>
+```
+
 ```{r fcaccuracy3, echo=FALSE}
 tar_read(fcaccuracy3)
 ```
 
-\only<2>{\begin{textblock}{7}(7,5)
+\only<2>{\begin{textblock}{7}(7,3)
 \begin{block}{}\fontsize{13}{14}\sf
 \begin{itemize}\tightlist
-\item OLS is best for all levels except national.
+\item Reconciliation is best for all levels except national.
 \item Improvements due to reconciliation are greater at lower levels.
 \end{itemize}
 \end{block}
@@ -453,7 +430,7 @@ tar_read(fcaccuracy3)
 
 \vspace*{0.2cm}\begin{alertblock}{Distance reducing property}
 Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
-  \centerline{$\|\bm{y}_{t+h}-\tilde{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}\le\|\bm{y}_{t+h}-\hat{\bm{y}}_{t+h|t}\|_{\bm{\Psi}}$}
+  \centerline{$\|\bm{y}_{t+h}-\reconciled\|_{\bm{\Psi}}\le\|\bm{y}_{t+h}-\base\|_{\bm{\Psi}}$}
 \end{alertblock}
 
  * $\bm{\Psi}$-projection is guaranteed to improve forecast accuracy over base forecasts *using this distance measure*.
@@ -468,10 +445,10 @@ Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
 
 \begin{block}{}\vspace*{-0.6cm}
 \begin{align*}
-\|\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h}\|_2^2
- &= \|\bm{M}(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h})\|_2^2 \\
- &\le \|\bm{M}\|_2^2 \|\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}\|_2^2 \\
- & = \sigma_{\text{max}}^2\|\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}\|_2^2
+\|\bm{y}_{t+h} - \reconciled\|_2^2
+ &= \|\bm{M}(\bm{y}_{t+h} - \base)\|_2^2 \\
+ &\le \|\bm{M}\|_2^2 \|\bm{y}_{t+h} - \base\|_2^2 \\
+ & = \sigma_{\text{max}}^2\|\bm{y}_{t+h} - \base\|_2^2
 \end{align*}
 \end{block}
 
@@ -486,9 +463,9 @@ Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
 \end{block}\end{textblock}
 \vspace*{0.2cm}\begin{block}{}\vspace*{-0.6cm}
 \begin{align*}
-    & \text{tr}\Big(\E[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{MinT}}_{t+h|t}]'[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{MinT}}_{t+h|t}]\Big) \\
-\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{OLS}}_{t+h|t}]'[\bm{y}_{t+h} - \tilde{\bm{y}}^{\text{OLS}}_{t+h|t}]\Big) \\
-\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \hat{\bm{y}}_{t+h|t}]'[\bm{y}_{t+h} - \hat{\bm{y}}_{t+h|t}]\Big)
+    & \text{tr}\Big(\E[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{MinT}}]'[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{MinT}}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{OLS}}]'[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{OLS}}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \base]'[\bm{y}_{t+h} - \base]\Big)
 \end{align*}
 \end{block}
 

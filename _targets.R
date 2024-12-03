@@ -57,15 +57,13 @@ list(
   tar_target(
     fcaccuracy2,
     fcaccuracy |>
-      group_by(.model) |>
-      summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
+      summarise(rmsse = sqrt(mean(rmsse^2)), .by = .model) |>
       arrange(rmsse)
   ),
   tar_target(
     fcaccuracy3,
     fcaccuracy |>
-      group_by(.model, level) |>
-      summarise(mase = mean(mase), rmsse = sqrt(mean(rmsse^2))) |>
+      summarise(rmsse = sqrt(mean(rmsse^2)), .by = c(.model, level)) |>
       arrange(level, rmsse)
   ),
 

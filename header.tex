@@ -70,5 +70,11 @@
 \newcommand{\etwocol}{\end{multicols}}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
 
-\def\base{\textcolor[HTML]{aa00aa}{\hat{\bm{y}}_{t+h|t}}}
-\def\reconciled{\textcolor[HTML]{00aa00}{\tilde{\bm{y}}_{t+h|t}}}
+\definecolor{bottom}{HTML}{6600aa}
+\definecolor{summing}{HTML}{008800}
+\definecolor{base}{HTML}{0000bb}
+\definecolor{reconciled}{HTML}{bb0000}
+
+\def\base{\textcolor{base}{\hat{\bm{y}}_{t+h|t}}}
+\def\basez{\textcolor{base}{\hat{\bm{z}}_{t+h|t}}}
+\def\reconciled{\textcolor{reconciled}{\tilde{\bm{y}}_{t+h|t}}}
