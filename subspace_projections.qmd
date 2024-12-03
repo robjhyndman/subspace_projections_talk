@@ -813,55 +813,35 @@ tar_read(tabm3)
 
 ## Forecast Linear Augmented Projection (FLAP)
 
-* We want to forecast a multivariate series $\bm{y}_t$.
-* Construct many linear combinations $\bm{c}_t = \bm{\Phi}\bm{y}_t$ of the multivariate series (e.g., principal components or random combinations)
-* Produce univariate forecasts of all series $\hat{\bm{y}}_t$ and all linear combinations $\hat{\bm{c}}_t$.
-* Reconcile forecasts so they are coherent ($\tilde{\bm{c}}_t = \bm{\Phi}\tilde{\bm{y}}_t$)
+* We want to forecast multivariate series $\bm{y}_t$.
+* Linear combinations of $\bm{y}_t$ may have better signal-noise ratio
+* Construct many linear combinations $\bm{c}_{t} = \bm{\Phi}\bm{y}_t$ (e.g., principal components or random combinations)
+* Produce univariate forecasts of all series $\base$ and all linear combinations $\textcolor{base}{\hat{\bm{c}}_{t+h|t}}$.
+* Reconcile forecasts so they are coherent ($\textcolor{reconciled}{\tilde{\bm{c}}_{t+h|t}} = \bm{\Phi}\reconciled$)
 
 \pause\vspace*{-0.4cm}
 
 $$
 \bm{z}_t = \begin{bmatrix} \bm{y}_t\\ \bm{c}_t \end{bmatrix}
-\qquad \tilde{\bm{z}}_{t+h} = \bm{M} \hat{\bm{z}}_{t+h}
+\qquad \textcolor{reconciled}{\tilde{\bm{z}}_{t+h}} = \bm{M} \basez
 $$
 where $\bm{M}$ is a projection matrix onto the coherent subspace.
 
 ## Forecast error variance reduction
 
-* The variance reduction $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$
-is __positive semi-definite__.
+If we know the covariance matrix $\bm{W}_h = \Var(\bm{z}_{t+h} - \basez)$, then 
 
-* The diagonal elements of $\Var(\bm{y}_{t+h} - \hat{\bm{y}}_{t+h}) -\Var(\bm{y}_{t+h} - \tilde{\bm{y}}_{t+h})$ are non-decreasing as the number of components increases.
+1. The forecast error variance is reduced:
 
-## Minimum variance of individual series
-
-The projection is equivalent to the mapping
-$$
-\tilde{\bm{y}}_{t+h} = \bm{G}\hat{\bm{z}}_{t+h},
-$$
-where $\bm{G} = \big[\bm{g}_1 ~~ \bm{g}_2 ~~ \dots ~~ \bm{g}_m\big]' \in \mathbb{R}^{m\times (m+p)}$ is the solution to
-$$
-\underset{\bm{G}}{\arg\min}\ \bm{G}\bm{W}_h\bm{G}'
-\qquad \text{s.t. } \bm{G}\bm{S} = \bm{I}
-$$
-or
-$$
-\underset{\bm{g}_i}{\arg\min}\ \bm{g}_i'\bm{W}_h\bm{g}_i
-\qquad \text{s.t. } \bm{g}_i'\bm{s}_{j} = \bm{1}(i=j),
-$$
-where $\bm{S} = \begin{bmatrix}\bm{I}_m \\\bm{\Phi}\end{bmatrix} = \big[\bm{s}_1\cdots \bm{s}_m\big]$.
-
-## Key results
-
-1. The forecast error variance is __reduced__ with FLAP
-1. The forecast error variance __monotonically__ decreases with increasing number of components
-1. The forecast projection is __optimal__ to achieve minimum forecast error variance of each series
+   * $\Var(\bm{y}_{t+h} - \base) -\Var(\bm{y}_{t+h} - \reconciled)$ is positive semi-definite.
+  
+2. The forecast error variance of each series monotonically decreases with increasing number of components.
 
 \pause
 
 In practice, we need to:
 
-* Estimate $\bm{W}_h = \Var(\bm{z}_{t+h} - \hat{\bm{z}}_{t+h})$. (We can use the MinT shrinkage estimator.)
+* Estimate $\bm{W}_h$ (use the MinT shrinkage estimator).
 * Construct the components, $\bm{\Phi}$.
 
 ## Construction of $\bm{\Phi}$
@@ -880,15 +860,17 @@ Generating values of $\bm{\Phi}$ from a random distribution and normalising them
 
 ## Monthly Australian regional tourism
 
-* Monthly Australian tourism data set aggregated by region giving 77 series, from Jan 1998 to Dec 2019
+* Monthly Australian tourism data set aggregated by region giving 77 series, from Jan 1998 to Dec 2019.
 
 * Use expanding window time series cross-validation with $T=84$ observations in first training set, and forecast horizons $h=1,2,\dots,12$.
+
+* Fit univariate ETS models to each series.
 
 ## Monthly Australian regional tourism
 
 ```{r}
 #| label: series
-#| fig-height: 5
+#| fig-height: 4.8
 tar_read(series)
 ```
 
@@ -896,6 +878,7 @@ tar_read(series)
 
 ```{r}
 #| label: components
+#| fig-height: 4.8
 tar_read(components_plot)
 ```
 
