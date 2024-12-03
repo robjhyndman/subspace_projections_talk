@@ -62,7 +62,7 @@ tar_load(c(tourism,tourism_agg,fit,fc))
 
 ## Australian tourism data
 
-\placefig{0.2}{1.3}{width = 6.5cm, trim = 0 0 700 0, clip = true}{ausmap.png}
+\placefig{0.2}{1.3}{width = 6.8cm, trim = 0 0 700 0, clip = true}{ausmap.png}
 
 \begin{textblock}{10}(8.1,1.4)
 \fontsize{11}{12}\sf
@@ -80,18 +80,17 @@ Region & 76 \\
 \end{tabular}
 \end{textblock}
 
-\begin{textblock}{9.4}(6.1,6)
+\begin{textblock}{9.2}(6.5,5.5)
 \begin{alertblock}{}\fontsize{12}{15}\sf
 \begin{itemize}
 \item Need forecasts at all levels of aggregation.
-\item Independent forecasts will not add up.
-\item Impose constraints on the forecasts to ensure they are "coherent".
+\item Compute \textbf{base forecasts} using univariate models. These will not add up.
+\item Adjust base forecasts to ensure they are ``coherent'' giving \textbf{reconciled forecasts}.
 \end{itemize}
 \end{alertblock}
 \end{textblock}
 
-
-## Hierarchical and grouped time series
+## Notation
 
 \begin{textblock}{8.8}(0.2,1.5)
 Almost all collections of time series with linear constraints can be written \rlap{as}
@@ -117,79 +116,59 @@ Almost all collections of time series with linear constraints can be written \rl
  child {node {A}
  }
  child {node {B}
- }
- child {node {C}
  };
 \end{tikzpicture}
 \end{block}
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
+\begin{textblock}{5.7}(9.4,2.8)\fontsize{15}{17}\sf
 \begin{align*}
 \bY_{t}&= \begin{pmatrix}
   y_{\text{Total},t}\\
   y_{A,t}\\
-  y_{B,t}\\
-  y_{C,t}
+  y_{B,t}
   \end{pmatrix}  \\
-  &= {\color{blue}\begin{pmatrix}
-                1 & 1 & 1 \\
-                1 & 0 & 0 \\
-                0 & 1 & 0\\
-                0 & 0 & 1
-                \end{pmatrix}}
-     {\color{red}\begin{pmatrix}
-       y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}}
+  &= {\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1  \\
+                1 & 0  \\
+                0 & 1 
+                \end{pmatrix}}_{\bm{S}}}
+     {\color{red}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}
+       \end{pmatrix}}_{\bm{b}_t}}
 \end{align*}
 \end{textblock}
 
-## The coherent subspace
+## Projections onto the coherent subspace
 
-\begin{textblock}{9}(.2,1)\fontsize{13}{13}\sf
-\begin{block}{Coherent subspace}
-$n_b$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{\chi}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Hierarchical time series}
-An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Coherent point forecasts}
-$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-\end{block}\vspace*{-0.2cm}
-\end{textblock}
-\only<2-3>{\begin{textblock}{7.5}(.2,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Base forecasts}
-Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
-\end{alertblock}
-\end{textblock}}
-\only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Reconciled forecasts}
-Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
-\end{alertblock}
-\end{textblock}}
+\placefig{0}{1.2}{width=7.4cm}{3D_hierarchy}
 
-\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
-\begin{textblock}{3}(11.4,5.6)\fontsize{13}{13}\sf
+\begin{textblock}{3}(2,7.5)\fontsize{13}{13}\sf
 \begin{block}{}
-\centerline{$y_{Tot} = y_A + y_B$}
+\centerline{$y_{\text{Total}} = y_A + y_B$}
 \end{block}
 \end{textblock}
 
-## Linear projection reconciliation
-\fontsize{14}{16}\sf
-\vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \bm{M}\hat{\bm{y}}_{t+h|t}$}
-\end{alertblock}\vspace*{-0.2cm}
+\only<2->{\begin{textblock}{7.5}(8.3,1)\fontsize{13}{13}\sf
+\begin{alertblock}{Base forecasts}
+Let $\base$ be vector of \emph{incoherent} initial $h$-step forecasts.
+\end{alertblock}
+\end{textblock}}
 
-* If $\bm{S}$ forms a basis set for $\mathfrak{s}$, then projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
-* Coherent base forecasts are unchanged since $\bm{M}\hat{\bm{y}}=\hat{\bm{y}}$
-* If $\hat{\bm{y}}$ is unbiased, then $\tilde{\bm{y}}$ is also unbiased.
-* $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$ is the covariance matrix of the base forecast errors.
-* $\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'$ is the covariance matrix of the reconciled forecast errors.
-* How to choose the best $\bm{\Psi}$?
+\only<3->{\begin{textblock}{7.5}(8.3,3.1)\fontsize{13}{13}\sf
+\begin{alertblock}{Reconciled forecasts}
+Let $\bm{M}$ be a projection matrix. $\reconciled = \bm{M} \base$ ``reconciles'' $\base$.
+\end{alertblock}
+\end{textblock}}
 
-\vspace*{10cm}
+\only<4>{\begin{textblock}{7.8}(8,5.4)\fontsize{13}{15}\sf
+\begin{itemize}\tightlist
+\item $\bm{S}$ forms a basis set for $\mathfrak{s}$
+\item All projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
+\item How to choose the best $\bm{\Psi}$?
+\end{itemize}
+\end{textblock}}
 
 ## Minimum trace reconciliation
 
@@ -197,36 +176,37 @@ Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_
 Wickramasuriya et al (2019)
 \end{block}\end{textblock}
 
-\vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
-If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$, so that
+\begin{block}{}
+\centerline{$\displaystyle\reconciled = \bm{M}\base$}
+\end{block}
+\centerline{\hspace*{1.4cm}\textcolor[HTML]{00aa00}{Reconciled forecasts}\hfill\textcolor[HTML]{aa00aa}{Base forecasts}\hspace*{2.6cm}}
+\pause
+
+* Base forecast covariance:\newline $\bm{W}_h = \var[\by_{T+h} - \base \mid \by_1,\dots,\by_T]$ 
+* Reconciled forecast covariance:\newline $\bm{V}_h = \var[\by_{T+h} - \reconciled \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'$ 
+
+\pause
+\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$
 \centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
 \end{alertblock}
-\begin{block}{}
-\centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
-= \bm{M} ~ \textcolor{blue}{\hat{\by}_{T+h|T}}$}
-\end{block}\vspace*{-0.2cm}
-\centerline{\hspace*{1.4cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2.9cm}}\vspace*{-0.2cm}
-
-* Trace of $\bm{V}_h$ is sum of forecast variances.
-* MinT is $L_2$ optimal amongst linear unbiased forecasts.
-* How to estimate $\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]$?
 
 ## Linear projections
 
 \begin{textblock}{5}(7,-0.2)
 \begin{block}{}
-\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
+\centerline{$\reconciled =\bm{M}\base$}
 \end{block}
 \end{textblock}
 
 \begin{textblock}{9.4}(.5,1.2)
 \begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{M}$}
-\begin{tabular}{l@{\hspace*{-0.5cm}}l}
+\begin{tabular}{ll}
   OLS             & $\bS(\bS'\bS)^{-1}\bS'$ \\
   WLS(var)        & $\bS(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
   WLS(struct)     & $\bS(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
   MinT(sample)    & $\bS(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
-  MinT(shrink)\hspace*{2cm}    & $(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
+  MinT(shrink)\hspace*{1.7cm}    & $\bS(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
 \end{tabular}
 \end{alertblock}
 \end{textblock}

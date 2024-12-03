@@ -188,6 +188,9 @@
 \newcommand{\btwocol}{\begin{multicols}{2}}
 \newcommand{\etwocol}{\end{multicols}}
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+\def\base{\textcolor[HTML]{aa00aa}{\hat{\bm{y}}_{t+h|t}}}
+\def\reconciled{\textcolor[HTML]{00aa00}{\tilde{\bm{y}}_{t+h|t}}}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -351,54 +354,41 @@ forecasts}\label{improving-hierarchical-forecasts}
 \only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism2}}
 \only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism3}}
 \only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism4}}
-\only<5>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism5}}
-\only<6>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism6}}
 \end{frame}
 
 \begin{frame}{Australian tourism data}
 \phantomsection\label{australian-tourism-data-1}
-\begin{textblock}{6}(0.2,1.2)
-\centering\fontsize{12}{13}\sf
-\textbf{Geographical division}\\
-\includegraphics[width = 5.5cm]{ausmap.png}\\[-0.4cm]
-\faTimes\\
-\textbf{Purpose of travel}\\
-{\fontsize{11}{12}\sf Holiday, Visiting friends \& relatives, Business, Other}
-\end{textblock}
+\placefig{0.2}{1.3}{width = 6.8cm, trim = 0 0 700 0, clip = true}{ausmap.png}
 
-\begin{textblock}{10}(6.1,1)
-\fontsize{11}{14}\sf\tabcolsep=0.12cm
-\begin{itemize}
-\item \textbf{Grouped ts}\newline (geographical divisions $\times$ purpose of travel)
-
-\begin{tabular}{lccccc}
+\begin{textblock}{10}(8.1,1.4)
+\fontsize{11}{12}\sf
+\begin{tabular}{lr}
 \toprule
-  & \textbf{AUS} & \textbf{States} & \textbf{Zones$^\ast$} & \textbf{Regions} & \textbf{Tot}\\
-  \midrule
-  \textbf{geographical} & {\color{newblue}1} & {\color{newblue}7} & {\color{newblue}21} & {\color{newblue}76} & 105 \\
-  \textbf{purpose} & {\color{newblue}4} & {\color{newblue}28} & {\color{newblue}84} & {\color{avocado}304} & 420\\
-  \midrule
-  \textbf{total} & 5 & 35 & 105 & 380 & \textbf{525}\\
-  \bottomrule
+\bf Aggregation level & \bf \# series \\
+\midrule
+National & 1 \\
+State & 7 \\
+Zone & 27 \\
+Region & 76 \\
+\midrule
+\bf Total & \bf 111 \\
+\bottomrule
 \end{tabular}
-\centerline{{\color{newblue}$n_a = 221$}, {\color{avocado}$n_b = 304$}, and $\textbf{n = 525}$}
-
-\end{itemize}
 \end{textblock}
 
-\begin{textblock}{9.4}(6.1,6)
+\begin{textblock}{9.2}(6.5,5.5)
 \begin{alertblock}{}\fontsize{12}{15}\sf
 \begin{itemize}
 \item Need forecasts at all levels of aggregation.
-\item Independent forecasts will not add up.
-\item Impose constraints on the forecasts to ensure they are "coherent".
+\item Compute \textbf{base forecasts} using univariate models. These will not add up.
+\item Adjust base forecasts to ensure they are ``coherent'' giving \textbf{reconciled forecasts}.
 \end{itemize}
 \end{alertblock}
 \end{textblock}
 \end{frame}
 
-\begin{frame}{Hierarchical and grouped time series}
-\phantomsection\label{hierarchical-and-grouped-time-series}
+\begin{frame}{Notation}
+\phantomsection\label{notation}
 \begin{textblock}{8.8}(0.2,1.5)
 Almost all collections of time series with linear constraints can be written \rlap{as}
 \centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{blue}\bS\color{red}\bm{b}_{t}$}}
@@ -423,97 +413,60 @@ Almost all collections of time series with linear constraints can be written \rl
  child {node {A}
  }
  child {node {B}
- }
- child {node {C}
  };
 \end{tikzpicture}
 \end{block}
 \end{minipage}
 \end{textblock}
 
-\begin{textblock}{5.7}(9.4,2.8)\fontsize{14}{15}\sf
+\begin{textblock}{5.7}(9.4,2.8)\fontsize{15}{17}\sf
 \begin{align*}
 \bY_{t}&= \begin{pmatrix}
   y_{\text{Total},t}\\
   y_{A,t}\\
-  y_{B,t}\\
-  y_{C,t}
+  y_{B,t}
   \end{pmatrix}  \\
-  &= {\color{blue}\begin{pmatrix}
-                1 & 1 & 1 \\
-                1 & 0 & 0 \\
-                0 & 1 & 0\\
-                0 & 0 & 1
-                \end{pmatrix}}
-     {\color{red}\begin{pmatrix}
-       y_{A,t}\\y_{B,t}\\y_{C,t}
-       \end{pmatrix}}
+  &= {\color{blue}\underbrace{\begin{pmatrix}
+                1 & 1  \\
+                1 & 0  \\
+                0 & 1 
+                \end{pmatrix}}_{\bm{S}}}
+     {\color{red}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}
+       \end{pmatrix}}_{\bm{b}_t}}
 \end{align*}
 \end{textblock}
 \end{frame}
 
-\begin{frame}{The coherent subspace}
-\phantomsection\label{the-coherent-subspace}
-\begin{textblock}{9}(.2,1)\fontsize{13}{13}\sf
-\begin{block}{Coherent subspace}
-$n_b$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{\chi}^n$ for which linear constraints hold for all $\bm{y}\in\mathfrak{s}$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Hierarchical time series}
-An $n$-dimensional multivariate time series such that $\bm{y}_t\in\mathfrak{s}\quad\forall t$.
-\end{block}\vspace*{-0.3cm}
-\begin{block}{Coherent point forecasts}
-$\tilde{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\tilde{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-\end{block}\vspace*{-0.2cm}
-\end{textblock}
-\only<2-3>{\begin{textblock}{7.5}(.2,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Base forecasts}
-Let $\hat{\bm{y}}_{t+h|t}$ be vector of \emph{incoherent} initial $h$-step forecasts.$\phantom{y_{t|h}}$
-\end{alertblock}
-\end{textblock}}
-\only<3>{\begin{textblock}{7.5}(8.3,6.75)\fontsize{13}{13}\sf
-\begin{alertblock}{Reconciled forecasts}
-Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_{t+h|t}$ ``reconciles'' $\hat{\bm{y}}_{t+h|t}$.
-\end{alertblock}
-\end{textblock}}
+\begin{frame}{Projections onto the coherent subspace}
+\phantomsection\label{projections-onto-the-coherent-subspace}
+\placefig{0}{1.2}{width=7.4cm}{3D_hierarchy}
 
-\placefig{9.4}{.0}{width=6.6cm}{3D_hierarchy}
-\begin{textblock}{3}(11.4,5.6)\fontsize{13}{13}\sf
+\begin{textblock}{3}(2,7.5)\fontsize{13}{13}\sf
 \begin{block}{}
-\centerline{$y_{Tot} = y_A + y_B$}
+\centerline{$y_{\text{Total}} = y_A + y_B$}
 \end{block}
 \end{textblock}
-\end{frame}
 
-\begin{frame}{Linear projection reconciliation}
-\phantomsection\label{linear-projection-reconciliation}
-\fontsize{14}{16}\sf
-\vspace*{0.2cm}\begin{alertblock}{}
-\centerline{$\tilde{\bm{y}}_{t+h|t}= \bm{M}\hat{\bm{y}}_{t+h|t}$}
-\end{alertblock}\vspace*{-0.2cm}
+\only<2->{\begin{textblock}{7.5}(8.3,1)\fontsize{13}{13}\sf
+\begin{alertblock}{Base forecasts}
+Let $\base$ be vector of \emph{incoherent} initial $h$-step forecasts.
+\end{alertblock}
+\end{textblock}}
 
-\begin{itemize}
-\tightlist
-\item
-  If \(\bm{S}\) forms a basis set for \(\mathfrak{s}\), then projections
-  are of the form \(\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}\)
-  where \(\bm{\Psi}\) is a positive definite matrix.
-\item
-  Coherent base forecasts are unchanged since
-  \(\bm{M}\hat{\bm{y}}=\hat{\bm{y}}\)
-\item
-  If \(\hat{\bm{y}}\) is unbiased, then \(\tilde{\bm{y}}\) is also
-  unbiased.
-\item
-  \(\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]\)
-  is the covariance matrix of the base forecast errors.
-\item
-  \(\bm{V}_h = \var[\by_{T+h} - \tilde{\by}_{T+h|T}  \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'\)
-  is the covariance matrix of the reconciled forecast errors.
-\item
-  How to choose the best \(\bm{\Psi}\)?
+\only<3->{\begin{textblock}{7.5}(8.3,3.1)\fontsize{13}{13}\sf
+\begin{alertblock}{Reconciled forecasts}
+Let $\bm{M}$ be a projection matrix. $\reconciled = \bm{M} \base$ ``reconciles'' $\base$.
+\end{alertblock}
+\end{textblock}}
+
+\only<4>{\begin{textblock}{7.8}(8,5.4)\fontsize{13}{15}\sf
+\begin{itemize}\tightlist
+\item $\bm{S}$ forms a basis set for $\mathfrak{s}$
+\item All projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
+\item How to choose the best $\bm{\Psi}$?
 \end{itemize}
-
-\vspace*{10cm}
+\end{textblock}}
 \end{frame}
 
 \begin{frame}{Minimum trace reconciliation}
@@ -522,44 +475,45 @@ Let $\bm{M}$ be a projection matrix. $\tilde{\bm{y}}_{t+h|t}=\bm{M}\hat{\bm{y}}_
 Wickramasuriya et al (2019)
 \end{block}\end{textblock}
 
-\vspace*{0.2cm}\begin{alertblock}{Minimum trace (MinT) reconciliation}
-If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$, so that
-\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
-\end{alertblock}
 \begin{block}{}
-\centerline{$\displaystyle\textcolor{red}{\tilde{\by}_{T+h|T}}
-= \bm{M} ~ \textcolor{blue}{\hat{\by}_{T+h|T}}$}
-\end{block}\vspace*{-0.2cm}
-\centerline{\hspace*{1.4cm}\textcolor{red}{Reconciled forecasts}\hfill\textcolor{blue}{Base forecasts}\hspace*{2.9cm}}\vspace*{-0.2cm}
+\centerline{$\displaystyle\reconciled = \bm{M}\base$}
+\end{block}
+\centerline{\hspace*{1.4cm}\textcolor[HTML]{00aa00}{Reconciled forecasts}\hfill\textcolor[HTML]{aa00aa}{Base forecasts}\hspace*{2.6cm}}
+\pause
 
 \begin{itemize}
 \tightlist
 \item
-  Trace of \(\bm{V}_h\) is sum of forecast variances.
+  Base forecast
+  covariance:\newline \(\bm{W}_h = \var[\by_{T+h} - \base \mid \by_1,\dots,\by_T]\)
 \item
-  MinT is \(L_2\) optimal amongst linear unbiased forecasts.
-\item
-  How to estimate
-  \(\bm{W}_h = \var[\by_{T+h} - \hat{\by}_{T+h|T} \mid \by_1,\dots,\by_T]\)?
+  Reconciled forecast
+  covariance:\newline \(\bm{V}_h = \var[\by_{T+h} - \reconciled \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'\)
 \end{itemize}
+
+\pause
+\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$
+\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
+\end{alertblock}
 \end{frame}
 
 \begin{frame}{Linear projections}
 \phantomsection\label{linear-projections}
 \begin{textblock}{5}(7,-0.2)
 \begin{block}{}
-\centerline{$\tilde{\by}_{T+h|T}=\bm{M}\hat{\by}_{T+h|T}$}
+\centerline{$\reconciled =\bm{M}\base$}
 \end{block}
 \end{textblock}
 
 \begin{textblock}{9.4}(.5,1.2)
 \begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{M}$}
-\begin{tabular}{l@{\hspace*{-0.5cm}}l}
+\begin{tabular}{ll}
   OLS             & $\bS(\bS'\bS)^{-1}\bS'$ \\
   WLS(var)        & $\bS(\bS'\bm{\Lambda}_v\bS)^{-1}\bS'\bm{\Lambda}_v$ \\
   WLS(struct)     & $\bS(\bS'\bm{\Lambda}_s\bS)^{-1}\bS'\bm{\Lambda}_s$ \\
   MinT(sample)    & $\bS(\bS'\hat{\bm{W}}_{\text{sam}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{sam}}^{-1}$  \\
-  MinT(shrink)\hspace*{2cm}    & $(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
+  MinT(shrink)\hspace*{1.7cm}    & $\bS(\bS'\hat{\bm{W}}_{\text{shr}}^{-1}\bS)^{-1}\bS' \hat{\bm{W}}_{\text{shr}}^{-1}$  \\
 \end{tabular}
 \end{alertblock}
 \end{textblock}
@@ -589,21 +543,21 @@ These approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
 \end{Shaded}
 
 \begin{verbatim}
-# A tsibble: 69,312 x 6 [1M]
-# Key:       state, zone, region, purpose [304]
-      month state zone  region   purpose  visitors
-      <mth> <chr> <chr> <chr>    <chr>       <dbl>
- 1 1998 Jan NSW   ACT   Canberra Business     25.0
- 2 1998 Feb NSW   ACT   Canberra Business    148. 
- 3 1998 Mar NSW   ACT   Canberra Business    111. 
- 4 1998 Apr NSW   ACT   Canberra Business     93.1
- 5 1998 May NSW   ACT   Canberra Business     78.1
- 6 1998 Jun NSW   ACT   Canberra Business     44.3
- 7 1998 Jul NSW   ACT   Canberra Business    129. 
- 8 1998 Aug NSW   ACT   Canberra Business     71.3
- 9 1998 Sep NSW   ACT   Canberra Business     77.7
-10 1998 Oct NSW   ACT   Canberra Business    145. 
-# i 69,302 more rows
+# A tsibble: 17,328 x 5 [1M]
+# Key:       state, zone, region [76]
+   state zone  region      month visitors
+   <chr> <chr> <chr>       <mth>    <dbl>
+ 1 NSW   ACT   Canberra 1998 Jan     612.
+ 2 NSW   ACT   Canberra 1998 Feb     471.
+ 3 NSW   ACT   Canberra 1998 Mar     430.
+ 4 NSW   ACT   Canberra 1998 Apr     499.
+ 5 NSW   ACT   Canberra 1998 May     338.
+ 6 NSW   ACT   Canberra 1998 Jun     236.
+ 7 NSW   ACT   Canberra 1998 Jul     371.
+ 8 NSW   ACT   Canberra 1998 Aug     375.
+ 9 NSW   ACT   Canberra 1998 Sep     449.
+10 NSW   ACT   Canberra 1998 Oct     517.
+# i 17,318 more rows
 \end{verbatim}
 \end{frame}
 
