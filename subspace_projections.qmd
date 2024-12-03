@@ -768,7 +768,7 @@ Weekly A\&E demand data: 7 November 2010 to 7 June 2015.\fontsize{11}{11.5}\sf
 
 ## Example: Accident & emergency services demand
 
-\placefig{2.2}{2.2}{height=6.5cm, width=14cm}{AEexample.pdf}
+\placefig{1}{2.2}{height=6.5cm, width=14cm}{AEexample.pdf}
 
 \begin{textblock}{10}(3,1)\fontsize{12}{12}\sf
   \begin{block}{}\centering
