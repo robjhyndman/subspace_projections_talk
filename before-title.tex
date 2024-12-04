@@ -59,5 +59,36 @@
 %\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
 
 % Biblatex
-\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true}
-\renewcommand*{\bibfont}{\normalfont\small}
+\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true,dashed=false}
+\renewcommand*{\bibfont}{\fontsize{11.5}{12.5}\sf}
+\setbeamercolor{biblography item}{fg=black}
+\setbeamerfont{bibliography item}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry author}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry title}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry location}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry note}{size=\fontsize{11.5}{12.5}\sf}
+
+\DeclareFieldFormat{url}{\texttt{\url{#1}}}
+\DeclareFieldFormat[article]{pages}{\color{black}#1}
+\DeclareFieldFormat[inproceedings]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[incollection]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[article]{journal}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{journaltitle}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{volume}{\color{black}\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\color{black}\mkbibparens{#1}}
+\DeclareFieldFormat[article]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[unpublished]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[article]{author}{\fontsize{11.5}{12.5}\sf{#1}}
+\DeclareFieldFormat[article]{url}{}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat{shorthandwidth}{#1}
+\usepackage{xpatch}
+\xpatchbibmacro{volume+number+eid}{\setunit*{\adddot}}{}{}{}
+% Remove In: for an article.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+\AtEveryBibitem{\clearfield{month}}
+\AtEveryCitekey{\clearfield{month}}
+\DeclareDelimFormat[cbx@textcite]{nameyeardelim}{\addspace}
+\renewcommand*{\finalnamedelim}{\addspace\&\space}

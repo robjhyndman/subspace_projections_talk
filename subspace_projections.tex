@@ -312,8 +312,39 @@
 %\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
 
 % Biblatex
-\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true}
-\renewcommand*{\bibfont}{\normalfont\small}
+\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true,dashed=false}
+\renewcommand*{\bibfont}{\fontsize{11.5}{12.5}\sf}
+\setbeamercolor{biblography item}{fg=black}
+\setbeamerfont{bibliography item}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry author}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry title}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry location}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry note}{size=\fontsize{11.5}{12.5}\sf}
+
+\DeclareFieldFormat{url}{\texttt{\url{#1}}}
+\DeclareFieldFormat[article]{pages}{\color{black}#1}
+\DeclareFieldFormat[inproceedings]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[incollection]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[article]{journal}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{journaltitle}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{volume}{\color{black}\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\color{black}\mkbibparens{#1}}
+\DeclareFieldFormat[article]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[unpublished]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[article]{author}{\fontsize{11.5}{12.5}\sf{#1}}
+\DeclareFieldFormat[article]{url}{}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat{shorthandwidth}{#1}
+\usepackage{xpatch}
+\xpatchbibmacro{volume+number+eid}{\setunit*{\adddot}}{}{}{}
+% Remove In: for an article.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+\AtEveryBibitem{\clearfield{month}}
+\AtEveryCitekey{\clearfield{month}}
+\DeclareDelimFormat[cbx@textcite]{nameyeardelim}{\addspace}
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
 \title{Improving forecasts via subspace projections}
 \author{Rob J Hyndman}
 \date{19 September 2024}
@@ -329,10 +360,24 @@ projections can lead to (sometimes dramatic) improvements in forecast
 accuracy.
 \end{abstract}
 
-\renewcommand*\contentsname{Outline}
+
+\begin{frame}{Sri Lankan PhD students and post-docs}
+\phantomsection\label{sri-lankan-phd-students-and-post-docs}
+\placefig{0}{1.2}{height = 3.2cm}{arivalzahan}
+\placefig{3.2}{1.2}{height = 3.2cm}{thilaksha}
+\placefig{6.4}{1.2}{height = 3.2cm}{shanika}
+\placefig{9.6}{1.2}{height = 3.2cm}{dilini}
+\placefig{12.8}{1.2}{height = 3.2cm}{thiyanga}
+\placefig{0}{4.5}{height = 3.2cm}{sevvandi}
+\placefig{3.2}{4.5}{height = 3.2cm}{puwasala}
+\placefig{6.4}{4.5}{height = 3.2cm}{nuwani}
+\placefig{9.6}{4.5}{height = 3.2cm}{lakshan}
+\end{frame}
+
 \begin{frame}{Outline}
-  \vspace*{0.7cm}
-  \tableofcontents[hideallsubsections]
+\phantomsection\label{outline}
+\vspace*{0.7cm}
+\tableofcontents[hideallsubsections]
 \end{frame}
 
 \section{Improving hierarchical
@@ -519,7 +564,7 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
   WLS(var)        & $\text{diag}(\bm{W}_1)$ \\
   WLS(struct)     & $\text{diag}(\bS\bm{1})$ \\
   MinT(sample)    & $\hat{\bm{W}}_{\text{sam}}$  \\
-  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$  
+  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$
 \end{tabular}
 \end{alertblock}
 \end{textblock}
@@ -640,19 +685,14 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 \begin{verbatim}
 # A fable: 7,992 x 7 [1M]
 # Key:     state, zone, region, .model [333]
-   state  zone   region   .model    month
-   <chr*> <chr*> <chr*>   <chr>     <mth>
- 1 NSW    ACT    Canberra ets    2016 Jan
- 2 NSW    ACT    Canberra ets    2016 Feb
- 3 NSW    ACT    Canberra ets    2016 Mar
- 4 NSW    ACT    Canberra ets    2016 Apr
- 5 NSW    ACT    Canberra ets    2016 May
- 6 NSW    ACT    Canberra ets    2016 Jun
- 7 NSW    ACT    Canberra ets    2016 Jul
- 8 NSW    ACT    Canberra ets    2016 Aug
- 9 NSW    ACT    Canberra ets    2016 Sep
-10 NSW    ACT    Canberra ets    2016 Oct
-# i 7,982 more rows
+  state  zone   region   .model    month
+  <chr*> <chr*> <chr*>   <chr>     <mth>
+1 NSW    ACT    Canberra ets    2016 Jan
+2 NSW    ACT    Canberra ets    2016 Feb
+3 NSW    ACT    Canberra ets    2016 Mar
+4 NSW    ACT    Canberra ets    2016 Apr
+5 NSW    ACT    Canberra ets    2016 May
+# i 7,987 more rows
 # i 2 more variables: visitors <dist>, .mean <dbl>
 \end{verbatim}
 \end{frame}
@@ -973,9 +1013,9 @@ $$
   \end{alertblock}
 \end{textblock}}
 
-\only<3->{\begin{textblock}{5}(10.3,7.9)
+\only<3->{\begin{textblock}{5}(10.3,8.3)
 \fontsize{11}{12}\sf
-$\tau=$ index of largest temporal aggregation level.
+$\tau=$ year
 \end{textblock}}
 \end{frame}
 
@@ -1259,7 +1299,7 @@ Aggregation Level & h & Base & Reconciled & Change \\
 \midrule\noalign{}
 \endhead
 Annual & 1 & 3.4 & 1.9 & -42.9\% \\
-Weekly & 1-\/-52 & 2.0 & 1.9 & -5.0\% \\
+Weekly & 1-52 & 2.0 & 1.9 & -5.0\% \\
 Weekly & 13 & 2.3 & 1.9 & -16.2\% \\
 Weekly & 4 & 1.9 & 1.5 & -18.6\% \\
 Weekly & 1 & 1.6 & 1.3 & -17.2\% \\
@@ -1419,6 +1459,8 @@ normalising them to unit vectors
   Use expanding window time series cross-validation with \(T=84\)
   observations in first training set, and forecast horizons
   \(h=1,2,\dots,12\).
+\item
+  Fit univariate ETS models to each series.
 \end{itemize}
 \end{frame}
 
@@ -1454,14 +1496,9 @@ normalising them to unit vectors
 \end{itemize}
 \end{frame}
 
-\begin{frame}{FRED-MD (ARIMA)}
-\phantomsection\label{fred-md-arima}
-\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fred-md-arima-1.pdf}}
-\end{frame}
-
-\begin{frame}{FRED-MD (DFM)}
-\phantomsection\label{fred-md-dfm}
-\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fred-md-dfm-1.pdf}}
+\begin{frame}{FRED-MD}
+\phantomsection\label{fred-md-1}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/fred-md-plot-1.pdf}}
 \end{frame}
 
 \begin{frame}{Simulation}
@@ -1488,22 +1525,7 @@ normalising them to unit vectors
 
 \begin{frame}{Simulation}
 \phantomsection\label{simulation-2}
-\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/simulation-1.pdf}}
-\end{frame}
-
-\begin{frame}{Future research directions}
-\phantomsection\label{future-research-directions}
-\begin{itemize}
-\item
-  Investigate why PCA performs better than random weights
-\item
-  Find other components that are better than PCA
-\item
-  Find optimal components by minimising forecast error variance with
-  respect to \(\bm{\Phi}\)
-\item
-  Use forecast projection and forecast reconciliation together
-\end{itemize}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_projections_files/figure-beamer/sim_mse-1.pdf}}
 \end{frame}
 
 \section{Final comments}\label{final-comments}
@@ -1582,19 +1604,11 @@ Package                                                                      & L
 \phantomsection\label{more-information}
 \fontsize{18}{20}\sf
 
-\href{https://robjhyndman.com}{\faicon{home} robjhyndman.com}
+\vspace*{3cm}
 
-\href{https://aus.social/@robjhyndman}{\includegraphics[width=0.5cm]{figs/mastodon}\, aus.social/@robjhyndman}
-
-\href{https://github.com/robjhyndman}{\faicon{github}  @robjhyndman}
-
-\href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
-
-\vspace*{1cm}
-
-\begin{block}{}
-\centerline{\href{https://robjhyndman.com/curtin2024}{robjhyndman.com/curtin2024}}
-\end{block}
+\begin{alertblock}{}
+\centerline{\href{https://robjhyndman.com/srilanka2024}{robjhyndman.com/srilanka2024}}
+\end{alertblock}
 
 \nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
 \nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint,flap}
