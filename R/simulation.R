@@ -28,7 +28,7 @@ sim_mse_plot <- function(mse, m) {
   )
   mse |>
     ggplot(aes(x = p, y = value, colour = model, linetype = Component)) +
-    #geom_vline(aes(xintercept = m)) +
+    # geom_vline(aes(xintercept = m)) +
     geom_line() +
     geom_hline(
       data = filter(mse, !proj),

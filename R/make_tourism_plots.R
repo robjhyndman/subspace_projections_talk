@@ -65,7 +65,10 @@ make_tourism_plots <- function(tourism) {
   aligned_plots <- align_patches(p1, p2, p3, p4)
   for (i in seq_along(aligned_plots)) {
     fname <- paste0("./figs/tourism", i, ".pdf")
-    Cairo::CairoPDF(fname, width = 15 / 1.5, height = 7 / 1.5)
+    Cairo::CairoPDF(
+      fname,
+      width = 15 / 1.5, height = 7 / 1.5, bg = "transparent"
+    )
     print(aligned_plots[[i]])
     dev.off(fname)
   }
