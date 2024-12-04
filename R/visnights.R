@@ -46,7 +46,8 @@ visnights_mse_plot <- function(visnights) {
       )
     ) |>
     filter(!is.na(Component)) |>
-    ggplot(aes(x = p, y = value, color = Component)) +
+    ggplot() +
+    aes(x = p, y = value, color = Component) +
     geom_vline(xintercept = m) +
     geom_line() +
     geom_hline(data = \(df) filter(df, !proj), aes(yintercept = value, color = Component)) +

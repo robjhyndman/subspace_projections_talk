@@ -9,7 +9,7 @@ options(
   ggplot2.discrete.fill = c("#D55E00", "#0072B2", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#F0E442")
 )
 knitr::opts_chunk$set(
-  dev.args = list(bg = grey(0.9), pointsize = 11)
+  dev.args = list(bg = "transparent", pointsize = 11)
 )
 
 # Font for graphics to be Fira Sans
@@ -17,7 +17,7 @@ ggplot2::theme_set(
   ggplot2::theme_get() +
     ggplot2::theme(
       text = ggplot2::element_text(family = "Fira Sans"),
-      plot.background = ggplot2::element_rect(fill = "#fafafa", color = "#fafafa")
+      plot.background = ggplot2::element_rect(fill = "transparent", colour = "transparent")
     )
 )
 # Also in base R plots

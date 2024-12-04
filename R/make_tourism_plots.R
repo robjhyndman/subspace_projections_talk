@@ -5,7 +5,11 @@ make_tourism_plots <- function(tourism) {
     autoplot(visitors) +
     ylab("Visitor nights") + xlab("Month") +
     # scale_y_log10() +
-    ggtitle("Total domestic travel: Australia")
+    ggtitle("Total domestic travel: Australia") +
+    theme(
+      text = ggplot2::element_text(family = "Fira Sans"),
+      rect = element_rect(fill = "transparent")
+    )
   p2 <- tourism |>
     group_by(state) |>
     summarise(visitors = sum(visitors)) |>
@@ -26,7 +30,11 @@ make_tourism_plots <- function(tourism) {
           ACT = "#cccccc"
         )
     ) +
-    guides(color = guide_legend(title = "State"))
+    guides(color = guide_legend(title = "State")) +
+    theme(
+      text = ggplot2::element_text(family = "Fira Sans"),
+      rect = element_rect(fill = "transparent", colour = "transparent")
+    )
   p3 <- tourism |>
     filter(state == "NSW") |>
     group_by(zone) |>
@@ -34,7 +42,11 @@ make_tourism_plots <- function(tourism) {
     autoplot(visitors) +
     ylab("Visitor nights") + xlab("Month") +
     ggtitle("Total domestic travel: NSW by zone") +
-    guides(color = guide_legend(title = "Zone"))
+    guides(color = guide_legend(title = "Zone")) +
+    theme(
+      text = ggplot2::element_text(family = "Fira Sans"),
+      rect = element_rect(fill = "transparent")
+    )
   p4 <- tourism |>
     filter(zone == "South NSW") |>
     group_by(region) |>
@@ -43,7 +55,12 @@ make_tourism_plots <- function(tourism) {
     ylab("Visitor nights") + xlab("Month") +
     # scale_y_log10() +
     ggtitle("Total domestic travel: South NSW by region") +
-    guides(color = guide_legend(title = "Region"))
+    guides(color = guide_legend(title = "Region")) +
+    theme(
+      text = ggplot2::element_text(family = "Fira Sans"),
+      rect = element_rect(fill = "transparent")
+    )
+
   # p5 <- tourism |>
   #   group_by(purpose) |>
   #   summarise(visitors = sum(visitors)) |>

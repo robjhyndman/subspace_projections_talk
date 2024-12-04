@@ -18,7 +18,8 @@ get_fred_mse <- function(qsfile) {
 fred_mse_plot <- function(mse, m) {
   mse |>
     filter(Component != "Normal") |>
-    ggplot(aes(x = p, y = value, color = Model, lty = Component)) +
+    ggplot() +
+    aes(x = p, y = value, color = Model, lty = Component) +
     geom_vline(xintercept = m) +
     geom_hline(
       data = filter(mse, !proj),

@@ -923,7 +923,7 @@ tar_read(visnights_mse)
 
 ```{r}
 #| label: fred-md-plot
-#| fig-height: 4.8
+#| fig-height: 4.7
 tar_read(plot_fred_mse)
 ```
 
@@ -945,7 +945,7 @@ tar_read(plot_fred_mse)
 
 ```{r simulation}
 #| label: sim_mse
-#| fig-height: 4.8
+#| fig-height: 4.7
 tar_read(plot_sim_mse)
 ```
 
