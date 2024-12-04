@@ -284,7 +284,7 @@ fc <- fit |>
 
 ```{r fctourism1, echo=FALSE}
 #| label: fctourism
-fc
+print(fc, n = 5)
 ```
 
 ## Example: Australian tourism
@@ -298,7 +298,7 @@ fc |>
 
 ```{r}
 #| label: fctourism2
-#| fig-width: 12
+#| fig-width: 11
 #| fig-height: 4.5
 tar_read(fctourism2)
 ```
@@ -314,7 +314,7 @@ fc |>
 
 ```{r}
 #| label: fctourism3
-#| fig-width: 12
+#| fig-width: 11
 #| fig-height: 4.5
 tar_read(fctourism3)
 ```
@@ -330,7 +330,7 @@ fc |>
 
 ```{r}
 #| label: fctourism4
-#| fig-width: 12
+#| fig-width: 11
 #| fig-height: 4.5
 tar_read(fctourism4)
 ```
@@ -347,7 +347,7 @@ fc |>
 
 ```{r}
 #| label: fctourism5
-#| fig-width: 12
+#| fig-width: 11
 #| fig-height: 4.5
 tar_read(fctourism5)
 ```
@@ -364,7 +364,7 @@ fc |>
 
 ```{r}
 #| label: fctourism6
-#| fig-width: 12
+#| fig-width: 11
 #| fig-height: 4.5
 tar_read(fctourism6)
 ```
@@ -902,6 +902,8 @@ tar_read(components_plot)
 ## Monthly Australian regional tourism
 
 ```{r visnights}
+#| label: visnights
+#| fig-height: 4.8
 tar_read(visnights_mse)
 ```
 
@@ -942,6 +944,8 @@ tar_read(plot_fred_mse)
 ## Simulation
 
 ```{r simulation}
+#| label: sim_mse
+#| fig-height: 4.8
 tar_read(plot_sim_mse)
 ```
 

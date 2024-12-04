@@ -2,7 +2,7 @@ ae_table <- function() {
   tibble::tribble(
     ~`Aggregation Level`, ~h, ~Base, ~Reconciled, ~Change,
     "Annual", "1", 3.4, 1.9, -42.9,
-    "Weekly", "1--52", 2.0, 1.9, -5.0,
+    "Weekly", "1-52", 2.0, 1.9, -5.0,
     "Weekly", "13", 2.3, 1.9, -16.2,
     "Weekly", "4", 1.9, 1.5, -18.6,
     "Weekly", "1", 1.6, 1.3, -17.2
