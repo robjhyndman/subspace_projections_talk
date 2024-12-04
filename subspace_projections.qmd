@@ -2,7 +2,7 @@
 title: Improving forecasts via subspace projections
 author: Rob J Hyndman
 date: 19 September 2024
-toc: true
+toc: false
 format:
   presentation-beamer:
     pdf-engine: pdflatex
@@ -33,8 +33,25 @@ source("setup.R")
 library(fpp3)
 library(targets)
 
-tar_load(c(tourism,tourism_agg,fit,fc))
+tar_load(c(tourism, tourism_agg, fit, fc))
 ```
+
+## Sri Lankan PhD students and post-docs
+
+\placefig{0}{1.2}{height = 3.2cm}{arivalzahan}
+\placefig{3.2}{1.2}{height = 3.2cm}{thilaksha}
+\placefig{6.4}{1.2}{height = 3.2cm}{shanika}
+\placefig{9.6}{1.2}{height = 3.2cm}{dilini}
+\placefig{12.8}{1.2}{height = 3.2cm}{thiyanga}
+\placefig{0}{4.5}{height = 3.2cm}{sevvandi}
+\placefig{3.2}{4.5}{height = 3.2cm}{puwasala}
+\placefig{6.4}{4.5}{height = 3.2cm}{nuwani}
+\placefig{9.6}{4.5}{height = 3.2cm}{lakshan}
+
+## Outline
+
+\vspace*{0.7cm}
+\tableofcontents[hideallsubsections]
 
 # Improving hierarchical forecasts
 
