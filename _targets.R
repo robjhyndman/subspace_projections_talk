@@ -83,8 +83,7 @@ list(
   tar_target(fred_m, 122),
   tar_target(fred_mse_qs, here::here("output/fred_mse.qs"), format = "file"),
   tar_target(fred_mse, get_fred_mse(fred_mse_qs)),
-  tar_target(plot_fred_mse_arima, fred_mse_arima(fred_mse, fred_m)),
-  tar_target(plot_fred_mse_dfm, fred_mse_dfm(fred_mse, fred_m)),
+  tar_target(plot_fred_mse, fred_mse_plot(fred_mse, fred_m)),
 
   # Simulation
   tar_target(sim_m, 70),

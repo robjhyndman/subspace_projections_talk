@@ -917,19 +917,14 @@ tar_read(visnights_mse)
 
 * Expanding time series cross-validation with initial size of 25 years and forecast horizon 12 months.
 
-## FRED-MD (ARIMA)
+## FRED-MD
 
 ```{r}
-#| label: fred-md-arima
-tar_read(plot_fred_mse_arima)
+#| label: fred-md-plot
+#| fig-height: 4.8
+tar_read(plot_fred_mse)
 ```
 
-## FRED-MD (DFM)
-
-```{r}
-#| label: fred-md-dfm
-tar_read(plot_fred_mse_dfm)
-```
 
 ## Simulation
 

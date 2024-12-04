@@ -11,43 +11,30 @@ get_fred_mse <- function(qsfile) {
         Phi == "normal" ~ "Normal",
         Phi == "PCA_normal" ~ "PCA + Normal"
       )
-    )
+    ) |>
+    rename(Model = model)
 }
 
-fred_mse_arima <- function(mse, m) {
+fred_mse_plot <- function(mse, m) {
   mse |>
-    filter(model == "arima") |>
-    ggplot(aes(x = p, y = value, color = Component)) +
+    filter(Component != "Normal") |>
+    ggplot(aes(x = p, y = value, color = Model, lty = Component)) +
     geom_vline(xintercept = m) +
     geom_hline(
-      data = filter(mse, !proj & model == "arima"),
-      aes(yintercept = value, color = Component)
+      data = filter(mse, !proj),
+      aes(yintercept = value, color = Model, lty = Component)
     ) +
     geom_line() +
     facet_grid(rows = "h", scales = "free", labeller = label_both) +
     ylab("MSE") +
     scale_x_continuous(expand = expansion(mult = 0)) +
     scale_color_manual(
-      values = c("#D55E00", "#0072B2", "#009E73"),
-      breaks = c("No projection", "Normal", "PCA + Normal")
-    )
-}
-
-fred_mse_dfm <- function(mse, m) {
-  mse |>
-    filter(model == "dfm") |>
-    ggplot(aes(x = p, y = value, color = Component)) +
-    geom_vline(xintercept = m) +
-    geom_hline(
-      data = filter(mse, !proj & model == "dfm"),
-      aes(yintercept = value, color = Component)
+      values = c("#D55E00", "#0072B2"),
+      breaks = c("arima", "dfm"),
+      labels = c("ARIMA", "DFM"),
     ) +
-    geom_line() +
-    facet_grid(rows = "h", scales = "free", labeller = label_both) +
-    ylab("MSE") +
-    scale_x_continuous(expand = expansion(mult = 0)) +
-    scale_color_manual(
-      values = c("#D55E00", "#0072B2", "#009E73"),
-      breaks = c("No projection", "Normal", "PCA + Normal")
+    scale_linetype_manual(
+      values = c("dashed", "solid"),
+      breaks = c("No projection", "PCA + Normal")
     )
 }
