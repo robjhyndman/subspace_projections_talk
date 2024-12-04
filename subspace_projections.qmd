@@ -223,7 +223,7 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
   WLS(var)        & $\text{diag}(\bm{W}_1)$ \\
   WLS(struct)     & $\text{diag}(\bS\bm{1})$ \\
   MinT(sample)    & $\hat{\bm{W}}_{\text{sam}}$  \\
-  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$  
+  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$
 \end{tabular}
 \end{alertblock}
 \end{textblock}
@@ -538,9 +538,9 @@ $$
   \end{alertblock}
 \end{textblock}}
 
-\only<3->{\begin{textblock}{5}(10.3,7.9)
+\only<3->{\begin{textblock}{5}(10.3,8.3)
 \fontsize{11}{12}\sf
-$\tau=$ index of largest temporal aggregation level.
+$\tau=$ year
 \end{textblock}}
 
 
@@ -846,12 +846,12 @@ where $\bm{M}$ is a projection matrix onto the coherent subspace.
 
 ## Forecast error variance reduction
 
-If we know the covariance matrix $\bm{W}_h = \Var(\bm{z}_{t+h} - \basez)$, then 
+If we know the covariance matrix $\bm{W}_h = \Var(\bm{z}_{t+h} - \basez)$, then
 
 1. The forecast error variance is reduced:
 
    * $\Var(\bm{y}_{t+h} - \base) -\Var(\bm{y}_{t+h} - \reconciled)$ is positive semi-definite.
-  
+
 2. The forecast error variance of each series monotonically decreases with increasing number of components.
 
 \pause
@@ -949,17 +949,6 @@ tar_read(plot_fred_mse)
 tar_read(plot_sim_mse)
 ```
 
-## Future research directions
-
-* Investigate why PCA performs better than random weights
-
-* Find other components that are better than PCA
-
-* Find optimal components by minimising forecast error variance with respect to $\bm{\Phi}$
-
-* Use forecast projection and forecast reconciliation together
-
-
 # Final comments
 
 ## Software
@@ -1023,19 +1012,11 @@ Package                                                                      & L
 ## More information
 \fontsize{18}{20}\sf
 
-\href{https://robjhyndman.com}{\faicon{home} robjhyndman.com}
+\vspace*{3cm}
 
-\href{https://aus.social/@robjhyndman}{\includegraphics[width=0.5cm]{figs/mastodon}\, aus.social/@robjhyndman}
-
-\href{https://github.com/robjhyndman}{\faicon{github}  @robjhyndman}
-
-\href{mailto:rob.hyndman@monash.edu}{\faicon{envelope}  rob.hyndman@monash.edu}
-
-\vspace*{1cm}
-
-\begin{block}{}
-\centerline{\href{https://robjhyndman.com/curtin2024}{robjhyndman.com/curtin2024}}
-\end{block}
+\begin{alertblock}{}
+\centerline{\href{https://robjhyndman.com/srilanka2024}{robjhyndman.com/srilanka2024}}
+\end{alertblock}
 
 
 
