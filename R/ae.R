@@ -1,4 +1,5 @@
 ae_table <- function() {
+  options(knitr.kable.NA = "")
   tibble::tribble(
     ~`Aggregation Level`, ~h, ~Base, ~Reconciled, ~Change,
     "Annual", "1", 3.4, 1.9, -42.9,
@@ -13,6 +14,7 @@ ae_table <- function() {
 }
 
 ae_table2 <- function() {
+  options(knitr.kable.NA = "")
   tibble::tribble(
     ~`Agg.level`, ~h, ~BU1, ~WLSH1, ~WLSV1, ~WLSS1, ~BU2, ~WLSH2, ~WLSV2, ~WLSS2,
     "Annual", 1, -12.1, -17.9, -17.8, -18.5, -25.4, -29.9, -29.9, -30.2,

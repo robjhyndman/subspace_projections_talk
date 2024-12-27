@@ -79,9 +79,9 @@ tar_load(c(tourism, tourism_agg, fit, fc))
 
 ## Australian tourism data
 
-\placefig{0.2}{1.3}{width = 6.8cm, trim = 0 0 700 0, clip = true}{ausmap.png}
+\placefig{0.2}{1.3}{width = 9.0cm}{ausmap.png}
 
-\begin{textblock}{10}(8.1,1.4)
+\begin{textblock}{10}(10.1,1.4)
 \fontsize{11}{12}\sf
 \begin{tabular}{lr}
 \toprule
@@ -598,9 +598,9 @@ $$
   \end{alertblock}
 \end{textblock}
 
-\begin{textblock}{5}(10.3,7.9)
+\begin{textblock}{5}(10.3,8.3)
 \fontsize{11}{12}\sf
-$\tau=$ index of largest temporal aggregation level.
+$\tau=$ year
 \end{textblock}
 
 ## Temporal reconciliation: monthly data
@@ -808,7 +808,7 @@ tar_read(aetable)
 * Apply temporal reconciliation to all 1428 monthly series from M3 competition
 * Forecast horizon $h=18$ months
 * ETS and ARIMA models
-* Measure percentage difference to base forecasts
+* Measure percentage difference in MASE to base forecasts
 * Reconciliation methods:
   * WLS$_H$ (diagonal)
   * WLS$_V$ (diagonal with common variances for same frequency)
@@ -821,8 +821,8 @@ tar_read(aetable)
 \fontsize{11}{11}\sf
 \tabcolsep=0.15cm
 \centering
+
 ```{r}
-options(knitr.kable.NA = "")
 tar_read(tabm3)
 ```
 
