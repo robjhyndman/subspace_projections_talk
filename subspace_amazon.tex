@@ -1,0 +1,1612 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  14pt,
+  ignorenonframetext,
+  aspectratio=169,
+]{beamer}
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\newif\ifbibliography
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% Tikz plots
+
+\usepackage{tikz}
+\usepackage{forest}
+
+\usetikzlibrary{trees,shapes,arrows,matrix,shadows,positioning}
+\usetikzlibrary{decorations.pathreplacing, arrows, calc, fit, arrows.meta, decorations.pathmorphing, decorations.markings}
+
+\tikzstyle{decision} = [diamond, draw, fill=blue!20,
+    text width=4.5em, text badly centered, node distance=4cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=5cm, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, thick, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm,
+    minimum height=2em, text centered]
+\tikzstyle{connector} = [->,thick]
+
+\tikzset{
+  basic/.style = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
+  root/.style = {basic, text width=3cm, rounded corners=2pt, thin, align=center, fill=red!30},
+  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60, text width=4em},
+  level 3/.style = {basic, thin, align=left, fill=pink!60, text width=1.5em}
+  level 2a/.style = {basic, rounded corners=2pt, thin,align=center, fill=blue!50, text width=7em},
+  level 2b/.style = {basic, rounded corners=2pt, thin,align=center, fill=green!50, text width=7em},
+  level 3a/.style = {basic, rounded corners=2pt, thin, align=center, fill=blue!30, text width=4em},
+  level 3b/.style = {basic, rounded corners=2pt, thin, align=center, fill=green!30, text width=4em},
+  level 4a/.style = {basic, rounded corners=2pt, thin, align=left, fill=blue!10, text width=3.5em},
+  level 4b/.style = {basic, rounded corners=2pt, thin, align=left, fill=green!10, text width=3.5em},
+}
+\newcommand{\relation}[3]
+{
+	\draw (#3.south) -- +(0,-#1) -| ($ (#2.north) $)
+}
+\newcommand{\relationW}[2]
+{
+	\draw (#2.west) -| ($ (#1.north) $)
+}
+\newcommand{\relationE}[2]
+{
+	\draw (#2.east) -| ($ (#1.north) $)
+}
+
+\newcommand{\relationD}[3]
+{
+	\draw (#3.east) -- +(#1,0) |- (#2.west)
+}
+
+\pgfdeclareimage[height=0.65cm]{ngreen}{figs/boot/ngreen.pdf}
+\pgfdeclareimage[height=0.65cm]{nblue}{figs/boot/nblue.pdf}
+\pgfdeclareimage[height=0.65cm]{nred}{figs/boot/nred.pdf}
+\pgfdeclareimage[height=0.65cm]{nblack}{figs/boot/nblack.pdf}
+
+% My definitions
+
+\def\E{\text{E}}
+\def\V{\text{Var}}
+\def\bY{\bm{y}}
+\def\by{\bm{y}}
+\def\bS{\bm{S}}
+\def\bG{\bm{G}}
+\def\bI{\bm{I}}
+\def\bJ{\bm{J}}
+\def\bSigma{\bm{\Sigma}}
+\def\bLambda{\bm{\Lambda}}
+\def\Var{\text{Var}}
+\def\var{\text{Var}}
+\def\tr{\text{tr}}
+\newcommand{\btwocol}{\begin{multicols}{2}}
+\newcommand{\etwocol}{\end{multicols}}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+\definecolor{bottom}{HTML}{6600aa}
+\definecolor{summing}{HTML}{008800}
+\definecolor{base}{HTML}{0000bb}
+\definecolor{reconciled}{HTML}{bb0000}
+
+\def\base{\textcolor{base}{\hat{\bm{y}}_{t+h|t}}}
+\def\basez{\textcolor{base}{\hat{\bm{z}}_{t+h|t}}}
+\def\reconciled{\textcolor{reconciled}{\tilde{\bm{y}}_{t+h|t}}}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\usepackage[natbib,style=authoryear]{biblatex}
+\addbibresource{hts.bib}
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Improving forecasts via subspace projections},
+  pdfauthor={Rob J Hyndman},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\usetheme{Monash}
+
+% Outline at start of each section
+\AtBeginSection[]{
+   \begin{frame}{Outline}\vspace*{0.7cm}
+   \tableofcontents[currentsection,hideallsubsections]
+   \end{frame}
+  }
+
+% Packages
+\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,pifont,accents,mathtools,relsize,makecell}
+%\usepackage{enumitem,calc}
+\usepackage[bb=boondox]{mathalfa}
+\usepackage{url}
+\usepackage{multirow, booktabs, float, textcmds, siunitx}
+\usepackage{bm,booktabs,animate,ragged2e,multicol,microtype,hyperref}
+\usepackage{array,ifthen,colortbl,adjustbox}
+
+% Colors
+\definecolor{shadecolor}{RGB}{225,225,225}
+\definecolor{DarkBlue}{HTML}{2E4476}
+\definecolor{newred}{rgb}{0.8,0,0}
+\definecolor{avocado}{HTML}{2B7A0B}
+\definecolor{newblue}{HTML}{0270c0}
+\definecolor{LightOrange}{RGB}{255, 193, 7}
+\setbeamercolor{description item}{fg=Orange}
+\setbeamercolor{block title alerted}{fg=white,bg=DarkBlue}
+\setbeamercolor{block title}{fg=white,bg=DarkBlue}
+\setbeamercolor{frametitle}{bg=DarkBlue,fg=white}
+
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}m{#1}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\renewcommand<>\rowcolor[1]{\only#2{\\[-\normalbaselineskip]\beameroriginal\rowcolor{#1}}}
+\renewcommand<>\cellcolor[1]{\only#2{\beameroriginal\cellcolor{#1}}}
+
+% Figures
+\graphicspath{{figs/}}
+
+% Fonts
+\usepackage{fontawesome}
+
+% Monash title page
+\setbeamertemplate{title page}
+{\placefig{-0.01}{-0.01}{width=1.01\paperwidth,height=1.01\paperheight}{figs/operahouse_small.jpg}
+\begin{textblock}{15.5}(.5,0.3)
+\fontsize{20}{20}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\inserttitle}
+\end{textblock}
+\begin{textblock}{7.5}(.5,1.4)
+\fontsize{14}{14}\selectfont\bfseries\sffamily\textcolor[RGB]{204,89,0}{\insertauthor}
+\end{textblock}
+\placefig{.5}{8.4}{height=0.4cm, width=20cm, keepaspectratio}{monash_white}
+\placefig{4.5}{8.25}{height=0.6cm, width=20cm, keepaspectratio}{optima}
+\begin{textblock}{6.2}(13.4,8.75)
+\fontsize{4}{4}\sf\textcolor[HTML]{A0792E}{Photo by \href{https://unsplash.com/@stanleyc?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash}{Stanley Cheung} on \href{"https://unsplash.com/photos/people-standing-on-stadium-during-night-time-sJ064KhsMok?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"}{Unsplash}}
+\end{textblock}}
+
+%\renewenvironment{Shaded}{\color{black}\begin{snugshade}\color{black}}{\end{snugshade}\columnbreak}
+
+% Biblatex
+\ExecuteBibliographyOptions{bibencoding=utf8,url=true,doi=false,isbn=false,uniquename=false,uniquelist=false,firstinits=true,terseinits=true,giveninits=true,maxbibnames=99,maxcitenames=99,maxnames=99,sortcites=true,dashed=false}
+\renewcommand*{\bibfont}{\fontsize{11.5}{12.5}\sf}
+\setbeamercolor{biblography item}{fg=black}
+\setbeamerfont{bibliography item}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry author}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry title}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry location}{size=\fontsize{11.5}{12.5}\sf}
+\setbeamerfont{bibliography entry note}{size=\fontsize{11.5}{12.5}\sf}
+
+\DeclareFieldFormat{url}{\texttt{\url{#1}}}
+\DeclareFieldFormat[article]{pages}{\color{black}#1}
+\DeclareFieldFormat[inproceedings]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[incollection]{pages}{\color{black}\lowercase{pp.}#1}
+\DeclareFieldFormat[article]{journal}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{journaltitle}{\color{black}\mkbibemph{#1}}
+\DeclareFieldFormat[article]{volume}{\color{black}\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\color{black}\mkbibparens{#1}}
+\DeclareFieldFormat[article]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[unpublished]{title}{\fontsize{11.5}{12.5}\sf\MakeCapital{#1}}
+\DeclareFieldFormat[article]{author}{\fontsize{11.5}{12.5}\sf{#1}}
+\DeclareFieldFormat[article]{url}{}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat{shorthandwidth}{#1}
+\usepackage{xpatch}
+\xpatchbibmacro{volume+number+eid}{\setunit*{\adddot}}{}{}{}
+% Remove In: for an article.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+\AtEveryBibitem{\clearfield{month}}
+\AtEveryCitekey{\clearfield{month}}
+\DeclareDelimFormat[cbx@textcite]{nameyeardelim}{\addspace}
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
+\title{Improving forecasts via subspace projections}
+\author{Rob J Hyndman}
+\date{21 February 2025}
+\titlegraphic{\includegraphics{bg-02.png}}
+\begin{document}
+\frame{\titlepage}
+\begin{abstract}
+Univariate, multivariate, and hierarchical forecasts can all be improved
+using projections onto linear subspaces, regardless of what forecasting
+method is used. I will show some theoretical guarantees of this
+statement, and demonstrate using empirical applications how linear
+projections can lead to (sometimes dramatic) improvements in forecast
+accuracy.
+\end{abstract}
+
+
+\begin{frame}{Outline}
+\phantomsection\label{outline}
+\vspace*{0.7cm}
+\tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Improving hierarchical
+forecasts}\label{improving-hierarchical-forecasts}
+
+\begin{frame}{Australian tourism regions}
+\phantomsection\label{australian-tourism-regions}
+\placefig{0.3}{1.2}{height=7.7cm}{figs/ausmap.png}
+
+\only<2>{\begin{textblock}{6.5}(9.2,-0.15)
+\begin{block}{}\fontsize{12}{13}\sf
+  \begin{itemize}\itemsep=0cm\parskip=0cm
+    \item Monthly data on visitor nights: 1998 -- 2016
+    \item 7 states
+    \item 27 zones
+    \item 76 regions
+  \end{itemize}
+\end{block}
+\end{textblock}}
+\end{frame}
+
+\begin{frame}{Australian tourism data}
+\phantomsection\label{australian-tourism-data}
+\only<1>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism1}}
+\only<2>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism2}}
+\only<3>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism3}}
+\only<4>{\placefig{0.1}{1.4}{width=15.8cm, height=7.5cm, keepaspectratio}{tourism4}}
+\end{frame}
+
+\begin{frame}{Australian tourism data}
+\phantomsection\label{australian-tourism-data-1}
+\placefig{0.2}{1.3}{width = 9.0cm}{ausmap.png}
+
+\begin{textblock}{10}(10.1,1.4)
+\fontsize{11}{12}\sf
+\begin{tabular}{lr}
+\toprule
+\bf Aggregation level & \bf \# series \\
+\midrule
+National & 1 \\
+State & 7 \\
+Zone & 27 \\
+Region & 76 \\
+\midrule
+\bf Total & \bf 111 \\
+\bottomrule
+\end{tabular}
+\end{textblock}
+
+\begin{textblock}{9.2}(6.5,5.5)
+\begin{alertblock}{}\fontsize{12}{15}\sf
+\begin{itemize}
+\item Need forecasts at all levels of aggregation.
+\item Compute \textbf{base forecasts} using univariate models. These will not add up.
+\item Adjust base forecasts to ensure they are ``coherent'' giving \textbf{reconciled forecasts}.
+\end{itemize}
+\end{alertblock}
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Notation}
+\phantomsection\label{notation}
+\begin{textblock}{8.8}(0.2,1.5)
+Almost all collections of time series with linear constraints can be written \rlap{as}
+\centerline{\colorbox[RGB]{210,210,210}{$\bY_{t}=\color{summing}\bS\color{bottom}\bm{b}_{t}$}}
+\vspace*{-0.9cm}\begin{itemize}\parskip=0cm\itemsep=0cm
+\item $\by_t=$ vector of all series at time $t$
+\item $y_{\text{Total},t}=$ aggregate of all series at time $t$.
+\item $y_{X,t}=$ value of series $X$ at time $t$.
+\item $\color{bottom}{\bm{b}_t}=$ vector of most disaggregated series at time $t$
+\item $\color{summing}{\bS}=$ ``summing matrix'' containing the linear constraints.
+\end{itemize}
+\end{textblock}
+
+\begin{textblock}{5.7}(11.4,0.1)
+\begin{minipage}{4cm}
+\begin{block}{}\centering
+\begin{tikzpicture}
+\tikzstyle{every node}=[ellipse,draw,fill=red!15,inner sep=2pt]
+\tikzstyle[level distance=.3cm]
+\tikzstyle[sibling distance=12cm]
+\tikzstyle{level 1}=[sibling distance=10mm,font=\small,set style={{every node}+=[fill=blue!15]}]
+\node{Total}[edge from parent fork down]
+ child {node {A}
+ }
+ child {node {B}
+ };
+\end{tikzpicture}
+\end{block}
+\end{minipage}
+\end{textblock}
+
+\begin{textblock}{5.7}(9.4,2.8)\fontsize{15}{17}\sf
+\begin{align*}
+\bY_{t}&= \begin{pmatrix}
+  y_{\text{Total},t}\\
+  y_{A,t}\\
+  y_{B,t}
+  \end{pmatrix}  \\
+  &= {\color{summing}\underbrace{\begin{pmatrix}
+                1 & 1  \\
+                1 & 0  \\
+                0 & 1
+                \end{pmatrix}}_{\bm{S}}}
+     {\color{bottom}\underbrace{\begin{pmatrix}
+       y_{A,t}\\y_{B,t}
+       \end{pmatrix}}_{\bm{b}_t}}
+\end{align*}
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Projections onto the coherent subspace}
+\phantomsection\label{projections-onto-the-coherent-subspace}
+\placefig{0}{1.2}{width=7.4cm}{3D_hierarchy}
+
+\begin{textblock}{3}(2,7.5)\fontsize{13}{13}\sf
+\begin{block}{}
+\centerline{$y_{\text{Total}} = y_A + y_B$}
+\end{block}
+\end{textblock}
+
+\only<2->{\begin{textblock}{7.5}(8.3,1)\fontsize{13}{13}\sf
+\begin{alertblock}{Base forecasts}
+Let $\base$ be vector of \emph{incoherent} initial $h$-step forecasts.
+\end{alertblock}
+\end{textblock}}
+
+\only<3->{\begin{textblock}{7.5}(8.3,3.1)\fontsize{13}{13}\sf
+\begin{alertblock}{Reconciled forecasts}
+Let $\bm{M}$ be a projection matrix. $\reconciled = \bm{M} \base$ ``reconciles'' $\base$.
+\end{alertblock}
+\end{textblock}}
+
+\only<4>{\begin{textblock}{7.8}(8,5.4)\fontsize{13}{15}\sf
+\begin{itemize}\tightlist
+\item $\bm{S}$ forms a basis set for $\mathfrak{s}$
+\item All projections are of the form $\bm{M} = \bS(\bS'\bm{\Psi}\bS)^{-1}\bS'\bm{\Psi}$ where $\bm{\Psi}$ is a positive definite matrix.
+\item How to choose the best $\bm{\Psi}$?
+\end{itemize}
+\end{textblock}}
+\end{frame}
+
+\begin{frame}{Minimum trace reconciliation}
+\phantomsection\label{minimum-trace-reconciliation}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+Wickramasuriya et al (2019)
+\end{block}\end{textblock}
+
+\begin{block}{}
+\centerline{$\displaystyle\reconciled = \bm{M}\base$}
+\end{block}
+\centerline{\hspace*{1.4cm}\textcolor{reconciled}{Reconciled forecasts}\hfill\textcolor{base}{Base forecasts}\hspace*{2.6cm}}
+\pause
+
+\begin{itemize}
+\tightlist
+\item
+  Base forecast
+  covariance:\newline \(\bm{W}_h = \var[\by_{T+h} - \base \mid \by_1,\dots,\by_T]\)
+\item
+  Reconciled forecast
+  covariance:\newline \(\bm{V}_h = \var[\by_{T+h} - \reconciled \mid \by_1,\dots,\by_T])  = \bm{M}\bm{W}_h\bm{M}'\)
+\end{itemize}
+
+\pause
+\begin{alertblock}{Minimum trace (MinT) reconciliation}
+If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Psi} = \bm{W}_h$
+\centerline{$\bm{M} = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}$}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}{Linear projections}
+\phantomsection\label{linear-projections}
+\begin{textblock}{7}(7,-0.2)
+\begin{block}{}
+\centerline{$\reconciled = \bS(\bS'\bm{W}_h^{-1}\bS)^{-1}\bS'\bm{W}_h^{-1}\base$}
+\end{block}
+\end{textblock}
+
+\begin{textblock}{9.4}(1,1.15)
+\begin{alertblock}{Reconciliation method \hspace*{0.5cm} $\bm{W}_h$}
+\begin{tabular}{ll}
+  OLS             & $\bm{I}$ \\
+  WLS(var)        & $\text{diag}(\bm{W}_1)$ \\
+  WLS(struct)     & $\text{diag}(\bS\bm{1})$ \\
+  MinT(sample)    & $\hat{\bm{W}}_{\text{sam}}$  \\
+  MinT(shrink)\hspace*{2.5cm}    & $\hat{\bm{W}}_{\text{shr}}$
+\end{tabular}
+\end{alertblock}
+\end{textblock}
+\begin{textblock}{15}(.8,5.8)\fontsize{14}{16}\sf
+\begin{itemize}\parskip=0cm
+\item All approximate MinT by assuming $\bm{W}_h = k_h \bm{W}_1$.
+\item $\hat{\bm{W}}_{\text{sam}}$ is sample estimate of the residual covariance matrix
+\item $\hat{\bm{W}}_{\text{shr}}$ is shrinkage estimator $\tau \text{diag}(\hat{\bm{W}}_{\text{sam}})+(1-\tau)\hat{\bm{W}}_{\text{sam}}$\\ where $\tau$ selected optimally.
+\end{itemize}
+\end{textblock}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tourism}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tsibble: 17,328 x 5 [1M]
+# Key:       state, zone, region [76]
+   state zone  region      month visitors
+   <chr> <chr> <chr>       <mth>    <dbl>
+ 1 NSW   ACT   Canberra 1998 Jan     612.
+ 2 NSW   ACT   Canberra 1998 Feb     471.
+ 3 NSW   ACT   Canberra 1998 Mar     430.
+ 4 NSW   ACT   Canberra 1998 Apr     499.
+ 5 NSW   ACT   Canberra 1998 May     338.
+ 6 NSW   ACT   Canberra 1998 Jun     236.
+ 7 NSW   ACT   Canberra 1998 Jul     371.
+ 8 NSW   ACT   Canberra 1998 Aug     375.
+ 9 NSW   ACT   Canberra 1998 Sep     449.
+10 NSW   ACT   Canberra 1998 Oct     517.
+# i 17,318 more rows
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-1}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tourism\_agg }\OtherTok{\textless{}{-}}\NormalTok{ tourism }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{aggregate\_key}\NormalTok{(state }\SpecialCharTok{/}\NormalTok{ zone }\SpecialCharTok{/}\NormalTok{ region, }\AttributeTok{visitors =} \FunctionTok{sum}\NormalTok{(visitors))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tsibble: 25,308 x 5 [1M]
+# Key:       state, zone, region [111]
+      month state        zone         region       visitors
+      <mth> <chr*>       <chr*>       <chr*>          <dbl>
+ 1 1998 Jan <aggregated> <aggregated> <aggregated>   45151.
+ 2 1998 Feb <aggregated> <aggregated> <aggregated>   17295.
+ 3 1998 Mar <aggregated> <aggregated> <aggregated>   20725.
+ 4 1998 Apr <aggregated> <aggregated> <aggregated>   25389.
+ 5 1998 May <aggregated> <aggregated> <aggregated>   20330.
+ 6 1998 Jun <aggregated> <aggregated> <aggregated>   18238.
+ 7 1998 Jul <aggregated> <aggregated> <aggregated>   23005.
+ 8 1998 Aug <aggregated> <aggregated> <aggregated>   23033.
+ 9 1998 Sep <aggregated> <aggregated> <aggregated>   22483.
+10 1998 Oct <aggregated> <aggregated> <aggregated>   24845.
+# i 25,298 more rows
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-2}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit }\OtherTok{\textless{}{-}}\NormalTok{ tourism\_agg }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textless{}=} \DecValTok{2015}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{model}\NormalTok{(}\AttributeTok{ets =} \FunctionTok{ETS}\NormalTok{(visitors))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A mable: 111 x 4
+# Key:     state, zone, region [111]
+   state  zone            region                   ets
+   <chr*> <chr*>          <chr*>               <model>
+ 1 NSW    ACT             Canberra        <ETS(M,N,A)>
+ 2 NSW    ACT             <aggregated>    <ETS(M,N,A)>
+ 3 NSW    Metro NSW       Central Coast   <ETS(M,N,A)>
+ 4 NSW    Metro NSW       Sydney          <ETS(M,N,A)>
+ 5 NSW    Metro NSW       <aggregated>    <ETS(M,N,A)>
+ 6 NSW    North Coast NSW Hunter          <ETS(M,N,M)>
+ 7 NSW    North Coast NSW North Coast NSW <ETS(M,N,M)>
+ 8 NSW    North Coast NSW <aggregated>    <ETS(M,N,M)>
+ 9 NSW    North NSW       Blue Mountains  <ETS(M,N,M)>
+10 NSW    North NSW       Central NSW     <ETS(A,N,A)>
+# i 101 more rows
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-3}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}}\NormalTok{ fit }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{reconcile}\NormalTok{(}
+    \AttributeTok{ols =} \FunctionTok{min\_trace}\NormalTok{(ets, }\AttributeTok{method =} \StringTok{"ols"}\NormalTok{),}
+    \AttributeTok{mint\_s =} \FunctionTok{min\_trace}\NormalTok{(ets, }\AttributeTok{method =} \StringTok{"mint\_shrink"}\NormalTok{),}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{forecast}\NormalTok{(}\AttributeTok{h =} \StringTok{"2 years"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A fable: 7,992 x 7 [1M]
+# Key:     state, zone, region, .model [333]
+  state  zone   region   .model    month
+  <chr*> <chr*> <chr*>   <chr>     <mth>
+1 NSW    ACT    Canberra ets    2016 Jan
+2 NSW    ACT    Canberra ets    2016 Feb
+3 NSW    ACT    Canberra ets    2016 Mar
+4 NSW    ACT    Canberra ets    2016 Apr
+5 NSW    ACT    Canberra ets    2016 May
+# i 7,987 more rows
+# i 2 more variables: visitors <dist>, .mean <dbl>
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-4}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(}\FunctionTok{is\_aggregated}\NormalTok{(state)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{autoplot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(tourism\_agg, }\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textgreater{}} \DecValTok{2012}\NormalTok{), }\AttributeTok{level =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fctourism2-1.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-5}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(state }\SpecialCharTok{==} \StringTok{"NSW"} \SpecialCharTok{\&} \FunctionTok{is\_aggregated}\NormalTok{(zone)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{autoplot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(tourism\_agg, }\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textgreater{}} \DecValTok{2012}\NormalTok{), }\AttributeTok{level =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fctourism3-1.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-6}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(region }\SpecialCharTok{==} \StringTok{"Melbourne"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{autoplot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(tourism\_agg, }\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textgreater{}} \DecValTok{2012}\NormalTok{), }\AttributeTok{level =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fctourism4-1.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-7}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(region }\SpecialCharTok{==} \StringTok{"Snowy Mountains"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{autoplot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(tourism\_agg, }\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textgreater{}} \DecValTok{2012}\NormalTok{), }\AttributeTok{level =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fctourism5-1.pdf}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-8}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{filter}\NormalTok{(region }\SpecialCharTok{==} \StringTok{"Barossa"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{autoplot}\NormalTok{(}\FunctionTok{filter}\NormalTok{(tourism\_agg, }\FunctionTok{year}\NormalTok{(month) }\SpecialCharTok{\textgreater{}} \DecValTok{2012}\NormalTok{), }\AttributeTok{level =} \ConstantTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fctourism6-1.pdf}}
+\end{frame}
+
+\begin{frame}{Performance evaluation}
+\phantomsection\label{performance-evaluation}
+\vspace*{0.2cm}\begin{block}{}
+\centerline{$\text{RMSSE} = \sqrt{\text{mean}(q_{j}^2)}$}
+$$
+  q^2_{j} = \frac{ e^2_{j}}
+ {\displaystyle\frac{1}{T-m}\sum_{t=m+1}^T (y_{t}-y_{t-m})^2}
+$$
+\end{block}
+
+\begin{itemize}
+\tightlist
+\item
+  \(y_t=\) observation for period \(t\)
+\item
+  \(e_{j}=\) forecast error for forecast horizon \(j\)
+\item
+  \(T=\) size of training set
+\item
+  \(m = 12\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-9}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{accuracy}\NormalTok{(fc, tourism\_agg, }\AttributeTok{measures =} \FunctionTok{list}\NormalTok{(}\AttributeTok{rmsse =}\NormalTok{ RMSSE))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 333 x 7
+   .model state        zone         region       .type rmsse level   
+   <chr>  <chr*>       <chr*>       <chr*>       <chr> <dbl> <fct>   
+ 1 ets    <aggregated> <aggregated> <aggregated> Test  0.755 National
+ 2 mint_s <aggregated> <aggregated> <aggregated> Test  0.896 National
+ 3 ols    <aggregated> <aggregated> <aggregated> Test  0.768 National
+ 4 ets    NSW          <aggregated> <aggregated> Test  0.921 State   
+ 5 mint_s NSW          <aggregated> <aggregated> Test  0.893 State   
+ 6 ols    NSW          <aggregated> <aggregated> Test  0.881 State   
+ 7 ets    NT           <aggregated> <aggregated> Test  1.24  State   
+ 8 mint_s NT           <aggregated> <aggregated> Test  1.22  State   
+ 9 ols    NT           <aggregated> <aggregated> Test  1.18  State   
+10 ets    QLD          <aggregated> <aggregated> Test  0.860 State   
+# i 323 more rows
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-10}
+\fontsize{10}{11}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{accuracy}\NormalTok{(fc, tourism\_agg, }\AttributeTok{measures =} \FunctionTok{list}\NormalTok{(}\AttributeTok{rmsse =}\NormalTok{ RMSSE)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{rmsse =} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{(rmsse}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)), }\AttributeTok{.by =}\NormalTok{ .model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 3 x 2
+  .model rmsse
+  <chr>  <dbl>
+1 ols    0.863
+2 mint_s 0.866
+3 ets    0.880
+\end{verbatim}
+
+\only<2>{\begin{textblock}{7}(7,3)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{itemize}\tightlist
+\item Overall, both reconciliation methods are more accurate than the base ETS forecasts.
+\end{itemize}
+\end{block}
+\end{textblock}}
+\end{frame}
+
+\begin{frame}[fragile]{Example: Australian tourism}
+\phantomsection\label{example-australian-tourism-11}
+\fontsize{8}{7}\sf
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{accuracy}\NormalTok{(fc, tourism\_agg, }\AttributeTok{measures =} \FunctionTok{list}\NormalTok{(}\AttributeTok{rmsse =}\NormalTok{ RMSSE)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{rmsse =} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{(rmsse}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)), }\AttributeTok{.by =} \FunctionTok{c}\NormalTok{(.model, level)) }\SpecialCharTok{|\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 12 x 3
+   .model level    rmsse
+   <chr>  <fct>    <dbl>
+ 1 ets    National 0.755
+ 2 ols    National 0.768
+ 3 mint_s National 0.896
+ 4 ols    State    0.905
+ 5 ets    State    0.919
+ 6 mint_s State    0.953
+ 7 ols    Zone     0.912
+ 8 mint_s Zone     0.914
+ 9 ets    Zone     0.935
+10 mint_s Region   0.839
+11 ols    Region   0.843
+12 ets    Region   0.858
+\end{verbatim}
+
+\only<2>{\begin{textblock}{7}(7,3)
+\begin{block}{}\fontsize{13}{14}\sf
+\begin{itemize}\tightlist
+\item Reconciliation is best for all levels except national.
+\item Improvements due to reconciliation are greater at lower levels.
+\end{itemize}
+\end{block}
+\end{textblock}}
+\end{frame}
+
+\begin{frame}{Mean square error bounds}
+\phantomsection\label{mean-square-error-bounds}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+\citet{htsgeometry}
+\end{block}\end{textblock}
+
+\vspace*{0.2cm}\begin{alertblock}{Distance reducing property}
+Let $\|\bm{u}\|_{\bm{\Psi}} = \bm{u}'\bm{\Psi}\bm{u}$. Then
+  \centerline{$\|\bm{y}_{t+h}-\reconciled\|_{\bm{\Psi}}\le\|\bm{y}_{t+h}-\base\|_{\bm{\Psi}}$}
+\end{alertblock}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\bm{\Psi}\)-projection is guaranteed to improve forecast accuracy
+  over base forecasts \emph{using this distance measure}.
+\item
+  Distance reduction holds for any realisation and any forecast.
+\item
+  OLS reconciliation minimizes Euclidean distance.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mean square error bounds}
+\phantomsection\label{mean-square-error-bounds-1}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+\citet{wickramasuriya2021properties}
+\end{block}\end{textblock}
+
+\begin{block}{}\vspace*{-0.6cm}
+\begin{align*}
+\|\bm{y}_{t+h} - \reconciled\|_2^2
+ &= \|\bm{M}(\bm{y}_{t+h} - \base)\|_2^2 \\
+ &\le \|\bm{M}\|_2^2 \|\bm{y}_{t+h} - \base\|_2^2 \\
+ & = \sigma_{\text{max}}^2\|\bm{y}_{t+h} - \base\|_2^2
+\end{align*}
+\end{block}
+
+\begin{itemize}
+\tightlist
+\item
+  \(\sigma_{\text{max}}\) is the largest eigenvalue of \(\bm{M}\)
+\item
+  \(\sigma_{\text{max}}\ge1\) as \(\bm{M}\) is a projection matrix.
+\item
+  Every projection reconciliation is better than base forecasts using
+  Euclidean distance.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mean square error bounds}
+\phantomsection\label{mean-square-error-bounds-2}
+\begin{textblock}{6.4}(9,-0.1)\begin{block}{}
+\citet{wickramasuriya2021properties}
+\end{block}\end{textblock}
+\vspace*{0.2cm}\begin{block}{}\vspace*{-0.6cm}
+\begin{align*}
+    & \text{tr}\Big(\E[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{MinT}}]'[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{MinT}}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{OLS}}]'[\bm{y}_{t+h} - \reconciled^{\color{reconciled}\text{OLS}}]\Big) \\
+\le~ & \text{tr}\Big(\E[\bm{y}_{t+h} - \base]'[\bm{y}_{t+h} - \base]\Big)
+\end{align*}
+\end{block}
+
+Using sums of variances:
+
+\begin{itemize}
+\tightlist
+\item
+  MinT reconciliation is better than OLS reconciliation
+\item
+  OLS reconciliation is better than base forecasts
+\end{itemize}
+\end{frame}
+
+\section{Improving univariate
+forecasts}\label{improving-univariate-forecasts}
+
+\begin{frame}{Temporal reconciliation: quarterly data}
+\phantomsection\label{temporal-reconciliation-quarterly-data}
+\begin{textblock}{7}(1,1.9)
+\begin{tikzpicture}
+  \tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+  \tikzstyle[level distance=.1cm]
+  \tikzstyle[sibling distance=3cm]
+  \tikzstyle{level 1}=[sibling distance=18mm,set style={{every node}+=[fill=yellow]}]
+  \node{Annual}[edge from parent fork down]
+  child {node {Q$_1$}}
+  child {node {Q$_2$}}
+  child {node {Q$_3$}}
+  child {node {Q$_4$}};
+\end{tikzpicture}
+\end{textblock}
+
+\only<3>{\begin{textblock}{8.5}(8.3,1.1)\fontsize{14}{17}\sf
+$$\bm{y}_\tau =
+  \begin{bmatrix}
+    x_{\tau}^{[4]}  \\[0.2cm]
+    x_{\tau,1}^{[1]} \\[0.2cm]
+    x_{\tau,2}^{[1]} \\[0.2cm]
+    x_{\tau,3}^{[1]} \\[0.2cm]
+    x_{\tau,4}^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1 & 1 & 1 & 1 \\[0.2cm]
+    1 & 0 & 0 & 0 \\[0.2cm]
+    0 & 1 & 0 & 0 \\[0.2cm]
+    0 & 0 & 1 & 0 \\[0.2cm]
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$$
+\end{textblock}}
+
+\only<2->{\begin{textblock}{8}(.3,5.7)
+  \begin{alertblock}{}
+    \begin{itemize}
+      \item[\color{white}\ding{229}] Forecast series at each available frequency.
+      \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
+    \end{itemize}
+  \end{alertblock}
+\end{textblock}}
+
+\only<3->{\begin{textblock}{5}(10.3,8.3)
+\fontsize{11}{12}\sf
+$\tau=$ year
+\end{textblock}}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation: quarterly data}
+\phantomsection\label{temporal-reconciliation-quarterly-data-1}
+\begin{textblock}{7}(0.1,1.9)
+\begin{tikzpicture}
+  \tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+  \tikzstyle[level distance=.1cm]
+  \tikzstyle[sibling distance=3cm]
+  \tikzstyle{level 1}=[sibling distance=42mm,set style={{every node}+=[fill=blue!15]}]
+  \tikzstyle{level 2}=[sibling distance=18mm,set style={{every node}+=[fill=yellow]}]
+  \node{Annual}[edge from parent fork down]
+  child {node {Semi-Annual$_1$}
+      child {node {Q$_1$}}
+      child {node {Q$_2$}}
+    }
+  child {node {Semi-Annual$_2$}
+      child {node {Q$_3$}}
+      child {node {Q$_4$}}
+    };
+\end{tikzpicture}
+\end{textblock}
+
+\begin{textblock}{8.5}(8.3,1.1)\fontsize{14}{17}\sf
+$$\bm{y}_\tau =
+  \begin{bmatrix}
+    x_{\tau}^{[4]}  \\[0.2cm]
+    x_{\tau,1}^{[2]} \\[0.2cm]
+    x_{\tau,2}^{[2]} \\[0.2cm]
+    x_{\tau,1}^{[1]} \\[0.2cm]
+    x_{\tau,2}^{[1]} \\[0.2cm]
+    x_{\tau,3}^{[1]} \\[0.2cm]
+    x_{\tau,4}^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1 & 1 & 1 & 1 \\[0.2cm]
+    1 & 1 & 0 & 0 \\[0.2cm]
+    0 & 0 & 1 & 1 \\[0.2cm]
+    1 & 0 & 0 & 0 \\[0.2cm]
+    0 & 1 & 0 & 0 \\[0.2cm]
+    0 & 0 & 1 & 0 \\[0.2cm]
+    0 & 0 & 0 & 1
+  \end{bmatrix}
+$$
+\end{textblock}
+
+\begin{textblock}{8}(.3,5.7)
+  \begin{alertblock}{}
+    \begin{itemize}
+      \item[\color{white}\ding{229}] Forecast series at each available frequency.
+      \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
+    \end{itemize}
+  \end{alertblock}
+\end{textblock}
+
+\begin{textblock}{5}(10.3,8.3)
+\fontsize{11}{12}\sf
+$\tau=$ year
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation: monthly data}
+\phantomsection\label{temporal-reconciliation-monthly-data}
+\only<1>{\begin{tikzpicture}
+  \tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+  \tikzstyle[level distance=.1cm]
+  \tikzstyle[sibling distance=7cm]
+  \tikzstyle{level 1}=[sibling distance=72mm,set style={{every node}+=[fill=blue!15]}]
+  \tikzstyle{level 2}=[sibling distance=36mm,set style={{every node}+=[fill=yellow]}]
+  \tikzstyle{level 3}=[sibling distance=12mm,font=\scriptsize,set style={{every node}+=[fill=green]}]
+  \node{Annual}[edge from parent fork down]
+  child {node {Semi-Annual$_1$}
+      child {node {Q$_1$}
+          child {node {\scriptsize M$_1$}}
+          child {node {\scriptsize M$_2$}}
+          child {node {\scriptsize M$_3$}}
+        }
+      child {node {Q$_2$}
+          child {node {\scriptsize M$_4$}}
+          child {node {\scriptsize M$_5$}}
+          child {node {\scriptsize M$_6$}}
+        }
+    }
+  child {node {Semi-Annual$_2$}
+      child {node {Q$_3$}
+          child {node {\scriptsize M$_7$}}
+          child {node {\scriptsize M$_8$}}
+          child {node {\scriptsize M$_9$}}
+        }
+      child {node {Q$_4$}
+          child {node {\scriptsize M$_{10}$}}
+          child {node {\scriptsize M$_{11}$}}
+          child {node {\scriptsize M$_{12}$}}
+        }
+    };
+\end{tikzpicture}}
+\only<2->{\begin{tikzpicture}
+  \tikzstyle{every node}=[ellipse,draw,inner sep=0.2pt,fill=red!15,font=\small]
+  \tikzstyle[level distance=.1cm]
+  \tikzstyle[sibling distance=7cm]
+  \tikzstyle{level 1}=[sibling distance=48mm,set style={{every node}+=[fill=blue!15]}]
+  \tikzstyle{level 2}=[sibling distance=24mm,set style={{every node}+=[fill=yellow]}]
+  \tikzstyle{level 3}=[sibling distance=12mm,set style={{every node}+=[fill=green]}]
+  \node{Annual}[edge from parent fork down]
+  child {node {FourM$_1$}
+      child {node {BiM$_1$}
+          child {node {\scriptsize M$_1$}}
+          child {node {\scriptsize M$_2$}}
+        }
+      child {node {BiM$_2$}
+          child {node {\scriptsize M$_3$}}
+          child {node {\scriptsize M$_4$}}
+        }
+    }
+  child {node {FourM$_2$}
+      child {node {BiM$_3$}
+          child {node {\scriptsize M$_5$}}
+          child {node {\scriptsize M$_6$}}
+        }
+      child {node {BiM$_4$}
+          child {node {\scriptsize M$_7$}}
+          child {node {\scriptsize M$_8$}}
+        }
+    }
+  child {node {FourM$_3$}
+      child {node {BiM$_5$}
+          child {node {\scriptsize M$_9$}}
+          child {node {\scriptsize M$_{10}$}}
+        }
+      child {node {BiM$_6$}
+          child {node {\scriptsize M$_{11}$}}
+          child {node {\scriptsize M$_{12}$}}
+        }
+    };
+\end{tikzpicture}}\pause
+
+\begin{textblock}{14}(1,6.7)
+  \begin{alertblock}{}
+    \begin{itemize}
+      \item[\color{white}\ding{229}] Forecast series at each available frequency.
+      \item[\color{white}\ding{229}] Optimally combine forecasts within the same year.
+    \end{itemize}
+  \end{alertblock}
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation: monthly data}
+\phantomsection\label{temporal-reconciliation-monthly-data-1}
+\fontsize{11}{11}\sf
+
+\[
+  \bm{y}_\tau=\begin{bmatrix}
+    x_{\tau}^{[12]}     \\[0.2cm]
+    \bm{x}_{\tau}^{[6]} \\[0.2cm]
+    \bm{x}_{\tau}^{[4]} \\[0.2cm]
+    \bm{x}_{\tau}^{[3]} \\[0.2cm]
+    \bm{x}_\tau^{[2]}   \\[0.2cm]
+    \bm{x}_\tau^{[1]}
+  \end{bmatrix}
+  \qquad
+  \bm{S} = \begin{bmatrix}
+    1                & 1 & 1 & 1 & 1~~~1~~~1~~~1 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 1 & 1~~~1~~~0~~~0 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 0~~~0~~~1~~~1 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 1 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 1~~~1~~~1~~~1 & 0 & 0 & 0 & 0 \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 1 & 1 & 1 & 1 \\
+    1                & 1 & 1 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+                     &   &   &   & \vdots        &   &   &   &   \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 1 & 1 & 1 \\
+    1                & 1 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 0 & 0 \\
+                     &   &   &   & \vdots        &   &   &   &   \\
+    0                & 0 & 0 & 0 & 0~~~0~~~0~~~0 & 0 & 0 & 1 & 1 \\[0.2cm]
+    \phantom{\vdots} &   &   &   & \bm{I}_{12}   &   &   &   &
+  \end{bmatrix}
+\]
+\end{frame}
+
+\begin{frame}{Temporal reconciliation}
+\phantomsection\label{temporal-reconciliation}
+\fontsize{14}{15}\sf
+
+For a time series \(y_1,\dots,y_T\), observed at frequency \(m\):
+
+\begin{alertblock}{}\vspace*{-0.1cm}
+$$
+  x_j^{[k]} = \sum_{t = (j-1)k+1}^{jk} y_t\qquad \text{for $j = 1,\dots,\lfloor T/k\rfloor$}
+$$
+\end{alertblock}
+
+\begin{itemize}
+\tightlist
+\item
+  \(k \in \mathcal{K} = \{k_1,\dots,k_p\}\) denote the \(p\) factors of
+  \(m\) in ascending order, where \(k_1=1\) and \(k_p=m\)
+\item
+  \(x_j^{[1]} = y_t\)
+\item
+  A single unique hierarchy is only possible when there are no coprime
+  pairs in \(\mathcal{K}\).
+\item
+  \(M_k=m/k\) is seasonal period of aggregated series.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation}
+\phantomsection\label{temporal-reconciliation-1}
+\fontsize{14}{15}\sf\vspace*{-0.5cm}
+
+\[\bm{x}_\tau = \bm{S} \bm{x}_\tau^{[1]}, \qquad \bm{S} = \begin{bmatrix}\bm{A}\\\bm{I}\end{bmatrix}\]
+where \[
+\bm{x}_\tau = \begin{bmatrix*}[l]
+    {x_\tau^{[k_p]}}\\
+    {\bm{x}_\tau^{[k_{p-1}]}}\\
+    \quad\vdots\\
+    {\bm{x}_\tau^{[k_1]}}\\
+  \end{bmatrix*}\qquad
+  \bm{x}_\tau^{[k]} = \begin{bmatrix*}[l]
+    x_{M_k(\tau-1)+1}^{[k]}\\
+    x_{M_k(\tau-1)+2}^{[k]}\\
+    \quad\vdots\\
+    x_{M_k\tau}^{[k]}
+  \end{bmatrix*}\qquad
+\bm{A} =
+  \begin{bmatrix}
+    \bm{1}'_m                                    \\
+    \bm{I}_{m/k_{p-1}} \otimes \bm{1}'_{k_{p-1}} \\
+    \vdots                                       \\
+    \bm{I}_{m/k_{2}} \otimes \bm{1}'_{k_{2}}     \\
+  \end{bmatrix}
+\] \(\tau\) is time index for most aggregated series,
+
+\(k\in \mathcal{K} = \{k_1,\dots,k_p\}\),\quad \(k_1=1\),\quad \(k_p=m\),\quad \(\tau=1,\dots,T/m\).
+\end{frame}
+
+\begin{frame}{Example: Accident \& emergency services demand}
+\phantomsection\label{example-accident-emergency-services-demand}
+Weekly A\&E demand data: 7 November 2010 to 7 June
+2015.\fontsize{11}{11.5}\sf
+
+\begin{tabular}{l}
+  \toprule
+  Type 1 Departments --- Major A\&E                               \\
+  Type 2 Departments --- Single Specialty                         \\
+  Type 3 Departments --- Other A\&E/Minor Injury Unit             \\
+  Total Attendances                                               \\
+  Type 1 Departments --- Major A\&E $>$ 2 hours                   \\
+  Type 2 Departments --- Single Specialty $>$ 2 hours             \\
+  Type 3 Departments --- Other A\&E/Minor Injury Unit $>$ 2 hours \\
+  Total Attendances $>$ 2 hours                                   \\
+  Emergency Admissions via Type 1 A\&E                            \\
+  Total Emergency Admissions via A\&E                             \\
+  Other Emergency Admissions (i.e not via A\&E)                   \\
+  Total Emergency Admissions                                      \\
+  Number of patients spending $>$ 2 hours from decision to admit to admission
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Example: Accident \& emergency services demand}
+\phantomsection\label{example-accident-emergency-services-demand-1}
+\placefig{1}{2.2}{height=6.5cm, width=14cm}{AEexample.pdf}
+
+\begin{textblock}{10}(3,1)\fontsize{12}{12}\sf
+  \begin{block}{}\centering
+    Total emergency admissions via A\&E
+  \end{block}
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Example: Accident \& emergency services demand}
+\phantomsection\label{example-accident-emergency-services-demand-2}
+Test set: last 52 weeks
+
+\alert{MASE comparison} (ARIMA models)
+
+\begin{longtable}[]{@{}lrrrr@{}}
+\toprule\noalign{}
+Aggregation Level & h & Base & Reconciled & Change \\
+\midrule\noalign{}
+\endhead
+Annual & 1 & 3.4 & 1.9 & -42.9\% \\
+Weekly & 1-52 & 2.0 & 1.9 & -5.0\% \\
+Weekly & 13 & 2.3 & 1.9 & -16.2\% \\
+Weekly & 4 & 1.9 & 1.5 & -18.6\% \\
+Weekly & 1 & 1.6 & 1.3 & -17.2\% \\
+\bottomrule\noalign{}
+\end{longtable}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation: M3 monthly series}
+\phantomsection\label{temporal-reconciliation-m3-monthly-series}
+\begin{itemize}
+\tightlist
+\item
+  Apply temporal reconciliation to all 1428 monthly series from M3
+  competition
+\item
+  Forecast horizon \(h=18\) months
+\item
+  ETS and ARIMA models
+\item
+  Measure percentage difference in MASE to base forecasts
+\item
+  Reconciliation methods:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    WLS\(_H\) (diagonal)
+  \item
+    WLS\(_V\) (diagonal with common variances for same frequency)
+  \item
+    WLS\(_S\) (diagonal/structural)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Temporal reconciliation: M3 monthly series}
+\phantomsection\label{temporal-reconciliation-m3-monthly-series-1}
+\alert{Improvement in MASE relative to base forecasts}
+
+\fontsize{11}{11}\sf
+\tabcolsep=0.15cm
+\centering
+
+\begin{tabular}{lrrrr>{}rrrr>{}r}
+\toprule
+\multicolumn{2}{c}{ } & \multicolumn{4}{c}{ETS} & \multicolumn{4}{c}{ARIMA} \\
+\cmidrule(l{3pt}r{3pt}){3-6} \cmidrule(l{3pt}r{3pt}){7-10}
+Aggregation level & $h$ & BU & WLS$_H$ & WLS$_V$ & WLS$_S$ & BU & WLS$_H$ & WLS$_V$ & WLS$_S$\\
+\midrule
+Annual & 1 & -12.1 & -17.9 & -17.8 & \textbf{-18.5} & -25.4 & -29.9 & -29.9 & \textbf{-30.2}\\
+Semi-annual & 3 & 0.0 & -6.3 & -6.0 & \textbf{-6.9} & -2.9 & -8.1 & -8.2 & \textbf{-9.4}\\
+Four-monthly & 4 & 3.1 & -3.2 & -3.0 & \textbf{-3.4} & -1.8 & -6.2 & -6.5 & \textbf{-7.1}\\
+Quarterly & 6 & 3.2 & -2.8 & -2.7 & \textbf{-3.4} & -2.6 & -6.9 & -7.4 & \textbf{-8.1}\\
+Bi-monthly & 9 & 2.7 & -2.9 & -3.0 & \textbf{-3.7} & -1.3 & -5.0 & -5.5 & \textbf{-6.3}\\
+Monthly & 18 & 0.0 & -3.7 & -4.6 & \textbf{-5.0} & 0.0 & -1.9 & -3.2 & \textbf{-3.7}\\
+\midrule
+Average & NA & -0.5 & -6.1 & -6.2 & \textbf{-6.8} & -5.7 & -9.7 & -10.1 & \textbf{-10.8}\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\section{Improving multivariate
+forecasts}\label{improving-multivariate-forecasts}
+
+\begin{frame}{Forecast Linear Augmented Projection (FLAP)}
+\phantomsection\label{forecast-linear-augmented-projection-flap}
+\begin{itemize}
+\tightlist
+\item
+  We want to forecast multivariate series \(\bm{y}_t\).
+\item
+  Linear combinations of \(\bm{y}_t\) may have better signal-noise ratio
+\item
+  Construct many linear combinations \(\bm{c}_{t} = \bm{\Phi}\bm{y}_t\)
+  (e.g., principal components or random combinations)
+\item
+  Produce univariate forecasts of all series \(\base\) and all linear
+  combinations \(\textcolor{base}{\hat{\bm{c}}_{t+h|t}}\).
+\item
+  Reconcile forecasts so they are coherent
+  (\(\textcolor{reconciled}{\tilde{\bm{c}}_{t+h|t}} = \bm{\Phi}\reconciled\))
+\end{itemize}
+
+\pause\vspace*{-0.4cm}
+
+\[
+\bm{z}_t = \begin{bmatrix} \bm{y}_t\\ \bm{c}_t \end{bmatrix}
+\qquad \textcolor{reconciled}{\tilde{\bm{z}}_{t+h}} = \bm{M} \basez
+\] where \(\bm{M}\) is a projection matrix onto the coherent subspace.
+\end{frame}
+
+\begin{frame}{Forecast error variance reduction}
+\phantomsection\label{forecast-error-variance-reduction}
+If we know the covariance matrix
+\(\bm{W}_h = \Var(\bm{z}_{t+h} - \basez)\), then
+
+\begin{enumerate}
+\item
+  The forecast error variance is reduced:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Var(\bm{y}_{t+h} - \base) -\Var(\bm{y}_{t+h} - \reconciled)\) is
+    positive semi-definite.
+  \end{itemize}
+\item
+  The forecast error variance of each series monotonically decreases
+  with increasing number of components.
+\end{enumerate}
+
+\pause
+
+In practice, we need to:
+
+\begin{itemize}
+\tightlist
+\item
+  Estimate \(\bm{W}_h\) (use the MinT shrinkage estimator).
+\item
+  Construct the components, \(\bm{\Phi}\).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Construction of \(\bm{\Phi}\)}
+\phantomsection\label{construction-of-bmphi}
+\begin{block}{Principal component analysis (PCA)}
+\phantomsection\label{principal-component-analysis-pca}
+Finding the weights matrix \(\bm{\Phi}\) so that the resulting
+components \alert{\textbf{maximise variance}}
+\end{block}
+
+\begin{block}{Simulation}
+\phantomsection\label{simulation}
+Generating values of \(\bm{\Phi}\) from a random distribution and
+normalising them to unit vectors
+
+\begin{itemize}
+\tightlist
+\item
+  Normal distribution
+\item
+  Uniform distribution
+\item
+  Orthonormal matrix
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Monthly Australian regional tourism}
+\phantomsection\label{monthly-australian-regional-tourism}
+\begin{itemize}
+\item
+  Monthly Australian tourism data set aggregated by region giving 77
+  series, from Jan 1998 to Dec 2019.
+\item
+  Use expanding window time series cross-validation with \(T=84\)
+  observations in first training set, and forecast horizons
+  \(h=1,2,\dots,12\).
+\item
+  Fit univariate ETS models to each series.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Monthly Australian regional tourism}
+\phantomsection\label{monthly-australian-regional-tourism-1}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/series-1.pdf}}
+\end{frame}
+
+\begin{frame}{Monthly Australian regional tourism}
+\phantomsection\label{monthly-australian-regional-tourism-2}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/components-1.pdf}}
+\end{frame}
+
+\begin{frame}{Monthly Australian regional tourism}
+\phantomsection\label{monthly-australian-regional-tourism-3}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/visnights-1.pdf}}
+\end{frame}
+
+\begin{frame}{FRED-MD}
+\phantomsection\label{fred-md}
+\begin{itemize}
+\item
+  Monthly data of macroeconomic variables (McCracken and Ng, 2016).
+\item
+  Data from Jan 1959 -- Sep 2023. 777 observations on 122 series.
+\item
+  Same cleaning process as per McCracken and Ng (2016).
+\item
+  All series scaled to have mean 0 and variance 1.
+\item
+  Expanding time series cross-validation with initial size of 25 years
+  and forecast horizon 12 months.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{FRED-MD}
+\phantomsection\label{fred-md-1}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/fred-md-plot-1.pdf}}
+\end{frame}
+
+\begin{frame}{Simulation}
+\phantomsection\label{simulation-1}
+\begin{itemize}
+\item
+  Data generating process: VAR(\(3\)) with 70 variables
+\item
+  Sample size: \(T=400\)
+\item
+  Number of repeated samples: \(220\)
+\item
+  Base models:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    automatic ARIMA (based on AICc)
+  \item
+    DFM (structure chosen using BIC, different model for each horizon)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simulation}
+\phantomsection\label{simulation-2}
+\pandocbounded{\includegraphics[keepaspectratio]{subspace_amazon_files/figure-beamer/sim_mse-1.pdf}}
+\end{frame}
+
+\section{Final comments}\label{final-comments}
+
+\begin{frame}[fragile]{Software}
+\phantomsection\label{software}
+\fontsize{10}{12}\sf\vspace*{0.3cm}\tabcolsep=0.12cm
+
+\hspace*{-0.3cm}\begin{tabular}{@{}llP{1.4cm}cP{1.4cm}cc@{}}
+\toprule
+Package                                                                      & Language  & Cross-sectional  & Temporal    & Cross-temporal  & Probabilistic & Multivariate \\
+\midrule
+\texttt{\href{https://pkg.earo.me/hts/}{hts}}
+    & R         & \checkmark       &             &                 & \\
+\texttt{\href{http://pkg.robjhyndman.com/thief/}{thief}}
+    & R         &                  & \checkmark  &                 & \\
+\texttt{\href{https://fable.tidyverts.org}{fable}}
+    & R         & \checkmark       &             &                 & \checkmark\\
+\texttt{\href{https://danigiro.github.io/FoReco/}{FoReco}}
+    & R         & \checkmark       & \checkmark  & \checkmark      & \checkmark\\
+\texttt{\href{https://cran.r-project.org/package=flap}{flap}}
+    & R & & & & & \checkmark \\
+\texttt{\href{https://angelpone.github.io/pyhts/}{pyhts}}
+    & Python    & \checkmark       & \checkmark  &                 & \\
+\texttt{\href{https://nixtla.github.io/hierarchicalforecast/}{hierarchicalforecast}}
+    & Python    & \checkmark       &             &                 & \checkmark \\
+\bottomrule
+\end{tabular}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{hts}, \texttt{thief}, and \texttt{FoReco} use \texttt{ts}
+  objects
+\item
+  \texttt{fable} uses \texttt{tsibble} objects
+\item
+  \texttt{flap} uses matrices of base forecasts
+\item
+  \texttt{fable} has plans to implement temporal and cross-temporal
+  reconciliation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Thanks!}
+\phantomsection\label{thanks}
+\placefig{0}{1.2}{trim = 10 45 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{roman}
+\placefig{2}{1.2}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{george}
+\placefig{4}{1.2}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{hanlin}
+\placefig{6}{1.2}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{earowang}
+\placefig{8}{1.2}{trim = 0 15 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{alanlee}
+\placefig{10}{1.2}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mitch}
+\placefig{12}{1.2}{trim = 15 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{shanika}
+\placefig{14}{1.2}{trim = 0 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tas}
+
+\placefig{0}{3.8}{trim = 30 10 30 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{puwasala}
+\placefig{2}{3.8}{trim = 0 10 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fotios}
+\placefig{4}{3.8}{trim = 0 30 30 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{nikos}
+\placefig{6}{3.8}{trim = 50 30 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{souhaib}
+\placefig{8}{3.8}{trim = 110 40 50 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{james}
+\placefig{10}{3.8}{trim = 40 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahdi}
+\placefig{12}{3.8}{trim = 50 50 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{christoph}
+\placefig{14}{3.8}{trim = 50 50 0 20, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{fin}
+
+\placefig{0}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{berwin}
+\placefig{2}{6.4}{trim = 10 20 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{galit}
+\placefig{4}{6.4}{trim = 10 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{mahsa}
+\placefig{6}{6.4}{trim = 30 0 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{evan}
+\placefig{8}{6.4}{trim = 5 25 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{bahman}
+\placefig{10}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{pablo}
+\placefig{12}{6.4}{trim = 0 40 0 0, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{danielegiro}
+\placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tommy}
+\end{frame}
+
+\begin{frame}{More information}
+\phantomsection\label{more-information}
+\fontsize{18}{20}\sf
+
+\vspace*{3cm}
+
+\begin{alertblock}{}
+\centerline{\href{https://robjhyndman.com/amazon2025}{robjhyndman.com/amazon2025}}
+\end{alertblock}
+
+\nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
+\nocite{hierarchical,hfreview,coherentprob,htsgeometry,mint,flap}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{}
+  \bibliographytrue
+  \printbibliography[heading=none]
+\end{frame}
+
+
+
+\end{document}
