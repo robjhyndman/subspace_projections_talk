@@ -1003,7 +1003,7 @@ Package                                                                      & L
 \vspace*{3cm}
 
 \begin{alertblock}{}
-\centerline{\href{https://robjhyndman.com/amazon2025}{robjhyndman.com/vienna2025}}
+\centerline{\href{https://robjhyndman.com/vienna2025}{robjhyndman.com/vienna2025}}
 \end{alertblock}
 
 

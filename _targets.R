@@ -92,7 +92,7 @@ list(
   tar_target(plot_sim_mse, sim_mse_plot(sim_mse, sim_m)),
 
   # Slides ----------------------------------------------------------
-  tar_quarto(slides, "subspace_projections.qmd",
+  tar_quarto(slides, "subspace_vienna.qmd",
     extra_files = c("hts.bib", "setup.R", "before-title.tex", "header.tex")
   )
 )
