@@ -998,14 +998,21 @@ Package                                                                      & L
 \placefig{14}{6.4}{trim = 0 0 0 30, clip=TRUE, width=10cm, height=2.5cm, keepaspectratio}{tommy}
 
 ## More information
-\fontsize{18}{20}\sf
 
-\vspace*{3cm}
-
+\begin{textblock}{7.6}(4.2,3.6)
 \begin{alertblock}{}
-\centerline{\href{https://robjhyndman.com/ifs2025}{robjhyndman.com/ifs2025}}
+\fontsize{18}{22}\sf\bfseries\centering
+\href{https://robjhyndman.com/ifs2025}{robjhyndman.com/ifs2025}
 \end{alertblock}
+\end{textblock}
 
+
+\begin{textblock}{7.6}(4.2,5.6)
+\begin{block}{}
+\fontsize{18}{22}\sf\bfseries\centering
+\href{https://robjhyndman.com/postdoc}{robjhyndman.com/postdoc}
+\end{block}
+\end{textblock}
 
 
 \nocite{Di_FonGir2022a,temporal-hierarchies,ctprob}
