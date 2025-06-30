@@ -227,7 +227,9 @@ If $\bm{M}$ is a projection, then trace of $\bm{V}_h$ is minimized when $\bm{\Ps
 ## Example: Australian tourism
 \fontsize{10}{11}\sf
 
-```{r tourismdata00, echo=TRUE}
+```{r}
+#| label: tourismdata00
+#| echo: true
 tourism
 ```
 
@@ -239,8 +241,9 @@ tourism_agg <- tourism |>
   aggregate_key(state / zone / region, visitors = sum(visitors))
 ```
 
-```{r tourismagg2, echo=FALSE}
+```{r}
 #| label: tourismagg
+#| echo: false
 tourism_agg
 ```
 
@@ -253,8 +256,9 @@ fit <- tourism_agg |>
   model(ets = ETS(visitors))
 ```
 
-```{r tourismmodels1, echo=FALSE}
+```{r}
 #| label: tourismmodels
+#| echo: false
 fit
 ```
 
@@ -270,8 +274,9 @@ fc <- fit |>
   forecast(h = "2 years")
 ```
 
-```{r fctourism1, echo=FALSE}
+```{r}
 #| label: fctourism
+#| echo: false
 print(fc, n = 5)
 ```
 
@@ -414,7 +419,9 @@ accuracy(fc, tourism_agg, measures = list(rmsse = RMSSE)) |>
   summarise(rmsse = sqrt(mean(rmsse^2)), .by = c(.model, level)) |>
 ```
 
-```{r fcaccuracy3, echo=FALSE}
+```{r}
+#| label: fcaccuracy3
+#| echo: false
 tar_read(fcaccuracy3)
 ```
 
@@ -889,7 +896,7 @@ tar_read(components_plot)
 
 ## Monthly Australian regional tourism
 
-```{r visnights}
+```{r}
 #| label: visnights
 #| fig-height: 4.8
 tar_read(visnights_mse)
@@ -931,7 +938,7 @@ tar_read(plot_fred_mse)
 
 ## Simulation
 
-```{r simulation}
+```{r}
 #| label: sim_mse
 #| fig-height: 4.7
 tar_read(plot_sim_mse)
@@ -967,6 +974,16 @@ Package                                                                      & L
 * `fable` uses `tsibble` objects
 * `flap` uses matrices of base forecasts
 * `fable` has plans to implement temporal and cross-temporal reconciliation
+
+## Books
+
+\placefig{0}{1.1}{width=16cm}{figs/OTexts.png}
+\begin{textblock}{2.8}(12.5,0)\begin{block}{}\tt OTexts.com\end{block}\end{textblock}
+\begin{textblock}{3}(1.2,8.2)\begin{block}{}\fontsize{8}{9}\sf 1st ed 2013; 2nd ed 2018\end{block}\end{textblock}
+\begin{textblock}{1.4}(7.5,8.2)\begin{block}{}\fontsize{8}{9}\sf 3rd ed 2021\end{block}\end{textblock}
+\begin{textblock}{0.6}(13.2,8.2)\begin{block}{}\fontsize{8}{9}\sf 2025\end{block}\end{textblock}
+
+
 
 ## Thanks!
 
