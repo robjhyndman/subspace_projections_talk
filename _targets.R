@@ -15,7 +15,11 @@ list(
   tar_target(vndata_file, here::here("tourism/vndata.rds"), format = "file"),
   tar_target(vndata, readRDS(vndata_file)),
   tar_target(tourism, make_tourism(vndata)),
-  tar_target(tourism_regions, here::here("tourism/Tourism_Regions_2020.shp"), format = "file"),
+  tar_target(
+    tourism_regions,
+    here::here("tourism/Tourism_Regions_2020.shp"),
+    format = "file"
+  ),
   tar_target(ausmap, make_ausmap(tourism_regions)),
   tar_target(tourism_plots, make_tourism_plots(tourism)),
   tar_target(
@@ -36,7 +40,9 @@ list(
   ),
   tar_target(
     fctourism3,
-    fc |> filter(state == "NSW" & is_aggregated(zone)) |> tourism_plot(tourism_agg)
+    fc |>
+      filter(state == "NSW" & is_aggregated(zone)) |>
+      tourism_plot(tourism_agg)
   ),
   tar_target(
     fctourism4,
@@ -87,12 +93,18 @@ list(
 
   # Simulation
   tar_target(sim_m, 70),
-  tar_target(sim_mse_qs, here::here("output/simulation_mse.qs"), format = "file"),
+  tar_target(
+    sim_mse_qs,
+    here::here("output/simulation_mse.qs"),
+    format = "file"
+  ),
   tar_target(sim_mse, get_sim_mse(sim_mse_qs)),
   tar_target(plot_sim_mse, sim_mse_plot(sim_mse, sim_m)),
 
   # Slides ----------------------------------------------------------
- tar_quarto(slides, "subspace_renmin.qmd",
+  tar_quarto(
+    slides,
+    "subspace_renmin.qmd",
     extra_files = c("hts.bib", "setup.R", "before-title.tex", "header.tex")
   )
 )
